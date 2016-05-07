@@ -58,73 +58,77 @@ namespace ICE.World.Objects
 		/// <param name="_log">Log.</param>
 		public void PrintDebugLog( ICEObject _object, string _log )
 		{
-			if( EnableDebugLog || ParentEnabledDebugLog )
-				Debug.Log( ParentName + " (" + ParentInstanceID + ") - " + ( _object != null?_object.GetType().ToString() + " ":"" ) + _log );
+			if( EnableDebugLog || OwnerEnabledDebugLog )
+				Debug.Log( OwnerName + " (" + OwnerInstanceID + ") - " + ( _object != null?_object.GetType().ToString() + " ":"" ) + _log );
+		}
+
+		/// <summary>
+		/// m_Owner represents the owning GameObject
+		/// </summary>
+		protected GameObject m_Owner = null;
+		/// <summary>
+		/// Gets the owning GameObject.
+		/// </summary>
+		/// <value>The parent or null</value>
+
+		public GameObject Owner{
+			get{ return m_Owner = ( m_Owner == null ?( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null ):m_Owner ); }
 		}
 
 		/// <summary>
 		/// The m parent represents the owner component
 		/// </summary>
-		protected ICEComponent m_Parent = null;
+		protected ICEComponent m_OwnerComponent = null;
 		/// <summary>
 		/// Gets the owner component.
 		/// </summary>
 		/// <value>The parent or null</value>
-		public ICEComponent Parent{
-			get{ return m_Parent; }
+		public ICEComponent OwnerComponent{
+			get{ return m_OwnerComponent; }
 		}
 
 		/// <summary>
 		/// Gets the name of the parent.
 		/// </summary>
 		/// <value>The name of the parent.</value>
-		public string ParentName{
-			get{ return ( m_Parent != null ? m_Parent.name:"" ); }
+		public string OwnerName{
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.name:"" ); }
 		}
 
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="ICE.World.Objects.ICEObject"/> parent allows to print the debug log.
 		/// </summary>
 		/// <value><c>true</c> if parent print debug log; otherwise, <c>false</c>.</value>
-		public bool ParentEnabledDebugLog{
-			get{ return ( m_Parent != null ? m_Parent.EnableDebugLogs:false ); }
+		public bool OwnerEnabledDebugLog{
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.EnableDebugLogs:false ); }
 		}
 
 		/// <summary>
 		/// Gets the parent InstanceID.
 		/// </summary>
 		/// <value>The parent InstanceID or 0</value>
-		public int ParentInstanceID{
-			get{ return ( m_Parent != null ? m_Parent.InstanceID :0 ); }
+		public int OwnerInstanceID{
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.InstanceID :0 ); }
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ICE.World.Objects.ICEObject"/> class.
-		/// </summary>
 		public ICEObject(){}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ICE.World.Objects.ICEObject"/> class.
-		/// </summary>
-		/// <param name="_parent">Parent.</param>
-		public ICEObject( ICEComponent _parent ){
-			m_Parent = _parent;
+		public ICEObject( ICEComponent _component ){
+			m_OwnerComponent = _component;
+			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ICE.World.Objects.ICEObject"/> class.
-		/// </summary>
-		/// <param name="_object">Object.</param>
 		public ICEObject( ICEObject _object ){
-			m_Parent = ( _object != null?_object.Parent:null );
+			m_OwnerComponent = ( _object != null?_object.OwnerComponent:null );
+			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
 		}
 
 		/// <summary>
 		/// Default Init method to initiate the object.
 		/// </summary>
 		/// <param name="_parent">Parent.</param>
-		public virtual void Init( ICEComponent _parent ){
-			m_Parent = _parent;
+		public virtual void Init( ICEComponent _component ){
+			m_OwnerComponent = _component;
+			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿// ##############################################################################
 //
+// ICE.World.ICEImpulsTimer.cs
 // Version 1.1.21
 //
 // The MIT License (MIT)
@@ -35,6 +36,7 @@ namespace ICE.World.Objects
 	public abstract class ICEImpulsTimerObject : ICEObject
 	{
 		public ICEImpulsTimerObject(){}
+		public ICEImpulsTimerObject( ICEComponent _component ) : base( _component ){} 
 		public ICEImpulsTimerObject( ICEImpulsTimerObject _object ) : base( _object as ICEObject )
 		{
 			m_OwnerComponent = _object.OwnerComponent;
