@@ -36,15 +36,8 @@ using System.Xml.Serialization;
 namespace ICE.World.Objects
 {
 	[System.Serializable]
-	public class BasicStatusDataObject : System.Object
+	public class BasicStatusDataObject : ICEObject
 	{
-		protected GameObject m_Owner = null;
-		[XmlIgnore]
-		public GameObject Owner{
-			get{ return m_Owner; }
-		}
-
-
 		public float Integrity = 100;
 		public float MaxIntegrity = 100;
 		public float MaxIntegrityMaximum = 100;
@@ -68,11 +61,6 @@ namespace ICE.World.Objects
 	[System.Serializable]
 	public class BasicStatusObject : BasicStatusDataObject
 	{
-		public virtual void Init( GameObject _owner )
-		{
-			m_Owner = _owner;
-		}
-
 		public virtual void Reset()
 		{
 		}

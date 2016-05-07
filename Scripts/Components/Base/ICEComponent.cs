@@ -106,7 +106,7 @@ namespace ICE.World
 			if( OnUpdateBegin != null )
 				OnUpdateBegin();
 		}
-
+			
 		protected virtual void DoUpdate () {
 			if( OnUpdate != null )
 				OnUpdate();

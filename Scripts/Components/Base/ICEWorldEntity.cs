@@ -96,6 +96,13 @@ namespace ICE.World
 			base.OnDestroy();
 		}
 
+		public override void Update()
+		{
+			DoUpdateBegin();
+			DoUpdate();
+			DoUpdateComplete();
+		}
+
 		public virtual void Register(){
 			WorldRegister.Register( transform.gameObject );
 		}
