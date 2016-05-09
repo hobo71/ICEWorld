@@ -40,6 +40,14 @@ namespace ICE.World
 	/// </summary>
 	public abstract class ICEWorldEntity : ICEComponent {
 
+		[SerializeField]
+		protected StatusObject m_Integrity = null;
+		public virtual StatusObject Integrity{
+			set{ m_Integrity = value; }
+			get{ return m_Integrity = ( m_Integrity == null ? new StatusObject(this):m_Integrity ); }
+		}
+
+
 		private ICEWorld m_World = null;
 		/// <summary>
 		/// Gets the ICEWorld.
