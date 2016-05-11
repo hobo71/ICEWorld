@@ -29,6 +29,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ICE.World
 {
@@ -73,6 +74,48 @@ namespace ICE.World
 
 		public delegate void OnUpdateCompleteEvent();
 		public event OnUpdateCompleteEvent OnUpdateComplete;
+
+		// PUBLIC METHODS
+		protected List<string> m_PublicMethods = new List<string>();
+		public string[] PublicMethods{
+			get{
+				m_PublicMethods.Clear();
+				RegisterPublicMethods();
+				return m_PublicMethods.ToArray(); }
+		}
+
+
+
+		public string[] AllPublicMethods{
+			get{ 
+				List<string> _methods = new List<string>();
+
+				ICEComponent[] _components = GetComponentsInChildren<ICEComponent>();
+
+				foreach( ICEComponent _component in _components )
+					foreach( string _method in _component.PublicMethods )						
+						_methods.Add( _method );
+		
+				return _methods.ToArray();
+			}
+		}
+
+		/// <summary>
+		/// Register public methods. Override this method to register your own methods by using the RegisterPublicMethod();
+		/// </summary>
+		protected virtual void RegisterPublicMethods(){}
+
+		public void RegisterPublicMethod( string _method )
+		{
+			if( string.IsNullOrEmpty( _method ) )
+				return;
+
+			m_PublicMethods.Add( _method );
+		}
+
+		public void ClearPublicMethods(){
+			m_PublicMethods.Clear();
+		}
 
 		public virtual void Awake () {
 
