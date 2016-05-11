@@ -41,10 +41,10 @@ namespace ICE.World
 	public abstract class ICEWorldEntity : ICEComponent {
 
 		[SerializeField]
-		protected StatusObject m_Integrity = null;
-		public virtual StatusObject Integrity{
-			set{ m_Integrity = value; }
-			get{ return m_Integrity = ( m_Integrity == null ? new StatusObject(this):m_Integrity ); }
+		protected StatusObject m_Status = null;
+		public virtual StatusObject Status{
+			set{ m_Status = value; }
+			get{ return m_Status = ( m_Status == null ? new StatusObject(this):m_Status ); }
 		}
 
 
@@ -75,7 +75,7 @@ namespace ICE.World
 			get{ return m_Registry = ( m_Registry == null?ICEWorldRegister.Instance:m_Registry ); }
 		}
 
-		private Transform m_Transform = null;
+		protected Transform m_Transform = null;
 		/// <summary>
 		/// Gets the cached object transform.
 		/// </summary>

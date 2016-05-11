@@ -14,19 +14,23 @@ namespace ICE.World.Objects
 			Init( _component );
 		}
 
-	
-		protected float m_Integrity = 0;
-		public virtual float Integrity{
-			get{ return m_Integrity; }
+		public bool IsDestructible = true;
+
+		protected float m_Durability = 0;
+		public virtual float Durability{
+			get{ return m_Durability; }
 		}
-		public virtual float IntegrityMultiplier{
-			get{ return (m_Integrity > 0?100/m_Integrity:1); }
+		public virtual float DurabilityInPercent{
+			get{ return DefaultDurability / 100 * Durability; }
+		}
+		public virtual float DurabilityMultiplier{
+			get{ return (m_Durability > 0?100/m_Durability:1); }
 		}
 
-		public float DefaultIntegrity = 0;
-		public float DefaultIntegrityMin = 0;
-		public float DefaultIntegrityMax = 0;
-		public float DefaultIntegrityMaximum = 100;
+		public float DefaultDurability = 0;
+		public float DefaultDurabilityMin = 0;
+		public float DefaultDurabilityMax = 0;
+		public float DefaultDurabilityMaximum = 100;
 
 		public bool UseAging = false;
 		public float MaxAge = 60f;	
@@ -42,7 +46,7 @@ namespace ICE.World.Objects
 		/// </summary>
 		/// <value><c>true</c> if this instance is destroyed; otherwise, <c>false</c>.</value>
 		public virtual bool IsDestroyed{
-			get{ return ( m_Integrity <= 0 ? true:false ); }
+			get{ return ( IsDestructible && m_Durability <= 0 ? true:false ); }
 		}
 
 		public void SetAge( float _age )
@@ -60,8 +64,8 @@ namespace ICE.World.Objects
 
 		public virtual void Reset()
 		{
-			DefaultIntegrity = Random.Range( DefaultIntegrityMin, DefaultIntegrityMax );
-			m_Integrity = DefaultIntegrity;
+			DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
+			m_Durability = DefaultDurability;
 		}
 
 		public virtual void Update()
@@ -84,12 +88,12 @@ namespace ICE.World.Objects
 		/// <param name="_damage">Damage.</param>
 		protected virtual float ProcessDamage( float _damage )
 		{
-			m_Integrity -= _damage;
+			m_Durability -= _damage;
 
-			if( m_Integrity < 0 )
-				m_Integrity = 0;
+			if( m_Durability < 0 )
+				m_Durability = 0;
 
-			return m_Integrity;
+			return m_Durability;
 		}
 	}
 }
