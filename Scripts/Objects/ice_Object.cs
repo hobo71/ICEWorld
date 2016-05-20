@@ -30,6 +30,10 @@
 using UnityEngine;
 using System.Collections;
 
+using System.Xml;
+using System.Xml.Serialization;
+using System.Text.RegularExpressions;
+
 namespace ICE.World.Objects
 {
 	/// <summary>
@@ -65,12 +69,13 @@ namespace ICE.World.Objects
 		/// <summary>
 		/// m_Owner represents the owning GameObject
 		/// </summary>
+		[XmlIgnore]
 		protected GameObject m_Owner = null;
 		/// <summary>
 		/// Gets the owning GameObject.
 		/// </summary>
 		/// <value>The parent or null</value>
-
+		[XmlIgnore]
 		public GameObject Owner{
 			get{ return m_Owner = ( m_Owner == null ?( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null ):m_Owner ); }
 		}
@@ -78,11 +83,13 @@ namespace ICE.World.Objects
 		/// <summary>
 		/// The m parent represents the owner component
 		/// </summary>
+		[XmlIgnore]
 		protected ICEComponent m_OwnerComponent = null;
 		/// <summary>
 		/// Gets the owner component.
 		/// </summary>
 		/// <value>The parent or null</value>
+		[XmlIgnore]
 		public ICEComponent OwnerComponent{
 			get{ return m_OwnerComponent; }
 		}

@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorld.cs
+// ICE.World.ICEEntity.cs
 // Version 1.2.10
 //
 // The MIT License (MIT)
@@ -32,39 +32,24 @@ using System.Collections;
 
 namespace ICE.World
 {
-	/// <summary>
-	/// ICE World. 
-	/// </summary>
-	public abstract class ICEWorld : ICEComponent {
+	public class ICEWorldInfo {
 
-		public static bool IsMasterClient{
-			get{ return ICEWorldInfo.IsMasterClient; }
-		}
-
-		public static bool IsMultiplayer{
-			get{ return ICEWorldInfo.IsMultiplayer; }
-		}
-
-		public Vector3 GridSize = Vector3.one;
-
-		protected static ICEWorld m_Instance = null;
-		public static ICEWorld Instance
+		private static bool m_IsMultiplayer = false;
+		public static bool IsMultiplayer
 		{
-			get
-			{
-				if( m_Instance == null )
-					m_Instance = GameObject.FindObjectOfType<ICEWorld>();
+			get { return m_IsMultiplayer; }
+			set { m_IsMultiplayer = value; }
+		}
 
-				return m_Instance;
+		private static bool m_IsMasterClient = true;
+		public static bool IsMasterClient{
+			get{ return ( m_IsMultiplayer == false ? true:m_IsMasterClient ); }
+			set{
+				if( m_IsMultiplayer == false )
+					return;
+				
+				m_IsMasterClient = value;
 			}
-		}
-
-		public override void Start () {
-
-		}
-
-		public override void Update () {
-
 		}
 	}
 }

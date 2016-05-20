@@ -128,5 +128,7 @@ namespace ICE.World
 			WorldRegister.Remove( transform.gameObject );
 		}
 
+		public virtual void Reset(){}
+
 	}
 }
