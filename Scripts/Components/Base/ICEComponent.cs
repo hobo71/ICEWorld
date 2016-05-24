@@ -3,10 +3,9 @@
 // ICE.World.ICEComponent.cs
 // Version 1.2.10
 //
-// The MIT License (MIT)
-//
-// Copyright © Pit Vetterick, ICE Technologies Consulting LTD. 
-// http://www.icecreaturecontrol.com (mailto:support@icecreaturecontrol.com)
+// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// http://www.icecreaturecontrol.com
+// mailto:support@icecreaturecontrol.com
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy 
 // of this software and associated documentation files (the "Software"), to deal 
@@ -34,18 +33,22 @@ using System.Collections.Generic;
 namespace ICE.World
 {
 	/// <summary>
-	/// ICE component.
+	/// ICEComponent is the abstract base class of all ICEWorld based components.
 	/// </summary>
 	public abstract class ICEComponent : MonoBehaviour {
 
 		/// <summary>
+		/// Enables/disables available debug features
+		/// </summary>
+		public bool UseDebug = false;
+		/// <summary>
 		/// Enables debug logs.
 		/// </summary>
-		public bool EnableDebugLogs = false;
+		public bool UseDebugLogs = false;
 
 		public void PrintDebugLog( string _log )
 		{
-			if( EnableDebugLogs )
+			if( UseDebugLogs )
 				Debug.Log( name + " (" + InstanceID + ") - " + _log );
 		}
 
@@ -76,7 +79,14 @@ namespace ICE.World
 		public event OnUpdateCompleteEvent OnUpdateComplete;
 
 		// PUBLIC METHODS
+		/// <summary>
+		/// m_PublicMethods. PublicMethods represents a list of method names.
+		/// </summary>
 		protected List<string> m_PublicMethods = new List<string>();
+		/// <summary>
+		/// Gets the public methods.
+		/// </summary>
+		/// <value>The public methods.</value>
 		public string[] PublicMethods{
 			get{
 				m_PublicMethods.Clear();
@@ -85,7 +95,10 @@ namespace ICE.World
 		}
 
 
-
+		/// <summary>
+		/// Gets all public methods.
+		/// </summary>
+		/// <value>All public methods.</value>
 		public string[] AllPublicMethods{
 			get{ 
 				List<string> _methods = new List<string>();
