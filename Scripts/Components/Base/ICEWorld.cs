@@ -34,15 +34,7 @@ namespace ICE.World
 	/// <summary>
 	/// ICE World. 
 	/// </summary>
-	public abstract class ICEWorld : ICEComponent {
-
-		public static bool IsMasterClient{
-			get{ return ICEWorldInfo.IsMasterClient; }
-		}
-
-		public static bool IsMultiplayer{
-			get{ return ICEWorldInfo.IsMultiplayer; }
-		}
+	public abstract class ICEWorld : ICEWorldBehaviour {
 
 		public Vector3 GridSize = Vector3.one;
 

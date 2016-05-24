@@ -37,7 +37,7 @@ namespace ICE.World
 	/// <summary>
 	/// ICE World Entity represents the abstract base class for all ICE related world objects.
 	/// </summary>
-	public abstract class ICEWorldEntity : ICEComponent {
+	public abstract class ICEWorldEntity : ICEWorldBehaviour {
 
 		[SerializeField]
 		protected StatusObject m_Status = null;

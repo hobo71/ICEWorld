@@ -40,7 +40,7 @@ namespace ICE.World
 	/// ICEWorldAttribute is the base class for all ICEWorld based attributes. Attributes represents specific data classes 
 	/// to enhance ICEWorldEntity based objects.
 	/// </summary>
-	public class ICEWorldAttribute : ICEComponent {
+	public class ICEWorldAttribute : ICEWorldBehaviour {
 
 		/// <summary>
 		/// Gets the attributes.

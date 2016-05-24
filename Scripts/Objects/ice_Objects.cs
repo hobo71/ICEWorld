@@ -10,9 +10,23 @@ namespace ICE.World.Objects
 	[System.Serializable]
 	public abstract class ICEObject : System.Object 
 	{
-		public ICEObject(){}
-		public ICEObject( ICEObject _object )
+
+	}
+
+	[System.Serializable]
+	public abstract class ICEDataObject : ICEObject 
+	{
+		public ICEDataObject(){}
+		public ICEDataObject( ICEDataObject _object )
 		{
+			Copy( _object );
+		}
+
+		public void Copy( ICEDataObject _object )
+		{
+			if( _object == null )
+				return;
+			
 			Enabled = _object.Enabled;
 			Foldout = _object.Foldout;
 		}
@@ -30,12 +44,11 @@ namespace ICE.World.Objects
 
 	}
 
-
 	/// <summary>
 	/// ICEObject represents the abstract base class for all ICE related System Objects.
 	/// </summary>
 	[System.Serializable]
-	public abstract class ICEDataObject : ICEObject {
+	public abstract class ICEOwnerObject : ICEDataObject {
 
 		/// <summary>
 		/// Prints debug log.
@@ -46,7 +59,7 @@ namespace ICE.World.Objects
 		/// Prints the debug log.
 		/// </summary>
 		/// <param name="_log">Log.</param>
-		public void PrintDebugLog( ICEDataObject _object, string _log )
+		public void PrintDebugLog( ICEOwnerObject _object, string _log )
 		{
 			if( EnableDebugLog || OwnerEnabledDebugLog )
 				Debug.Log( OwnerName + " (" + OwnerInstanceID + ") - " + ( _object != null?_object.GetType().ToString() + " ":"" ) + _log );
@@ -70,13 +83,13 @@ namespace ICE.World.Objects
 		/// The m parent represents the owner component
 		/// </summary>
 		[XmlIgnore]
-		protected ICEComponent m_OwnerComponent = null;
+		protected ICEWorldBehaviour m_OwnerComponent = null;
 		/// <summary>
 		/// Gets the owner component.
 		/// </summary>
 		/// <value>The parent or null</value>
 		[XmlIgnore]
-		public ICEComponent OwnerComponent{
+		public ICEWorldBehaviour OwnerComponent{
 			get{ return m_OwnerComponent; }
 		}
 
@@ -104,12 +117,12 @@ namespace ICE.World.Objects
 			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.InstanceID :0 ); }
 		}
 
-		public ICEDataObject(){}
-		public ICEDataObject( ICEComponent _component ){
+		public ICEOwnerObject(){}
+		public ICEOwnerObject( ICEWorldBehaviour _component ){
 			m_OwnerComponent = _component;
 			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
 		}
-		public ICEDataObject( ICEDataObject _object ) : base( _object ){
+		public ICEOwnerObject( ICEOwnerObject _object ) : base( _object ){
 			m_OwnerComponent = ( _object != null?_object.OwnerComponent:null );
 			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
 
@@ -120,7 +133,7 @@ namespace ICE.World.Objects
 		/// Default Init method to initiate the object.
 		/// </summary>
 		/// <param name="_parent">Parent.</param>
-		public virtual void Init( ICEComponent _component ){
+		public virtual void Init( ICEWorldBehaviour _component ){
 			m_OwnerComponent = _component;
 			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
 		}

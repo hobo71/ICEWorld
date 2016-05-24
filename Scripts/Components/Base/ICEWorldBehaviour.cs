@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEComponent.cs
+// ICE.World.ICEWorldBehaviour.cs
 // Version 1.2.10
 //
 // © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -35,7 +35,15 @@ namespace ICE.World
 	/// <summary>
 	/// ICEComponent is the abstract base class of all ICEWorld based components.
 	/// </summary>
-	public abstract class ICEComponent : MonoBehaviour {
+	public abstract class ICEWorldBehaviour : MonoBehaviour {
+
+		public static bool IsMultiplayer{
+			get{ return ICEWorldInfo.IsMultiplayer; }
+		}
+
+		public static bool IsMasterClient{
+			get{ return ICEWorldInfo.IsMasterClient; }
+		}
 
 		/// <summary>
 		/// Enables/disables available debug features
@@ -45,7 +53,6 @@ namespace ICE.World
 		/// Enables debug logs.
 		/// </summary>
 		public bool UseDebugLogs = false;
-
 		public void PrintDebugLog( string _log )
 		{
 			if( UseDebugLogs )
@@ -103,9 +110,9 @@ namespace ICE.World
 			get{ 
 				List<string> _methods = new List<string>();
 
-				ICEComponent[] _components = GetComponentsInChildren<ICEComponent>();
+				ICEWorldBehaviour[] _components = GetComponentsInChildren<ICEWorldBehaviour>();
 
-				foreach( ICEComponent _component in _components )
+				foreach( ICEWorldBehaviour _component in _components )
 					foreach( string _method in _component.PublicMethods )						
 						_methods.Add( _method );
 		

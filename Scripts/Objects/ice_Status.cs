@@ -34,10 +34,10 @@ using ICE.World;
 
 namespace ICE.World.Objects
 {
-	public class StatusObject : ICEDataObject {
+	public class StatusObject : ICEOwnerObject {
 
 		public StatusObject(){}
-		public StatusObject( ICEComponent _component ) : base( _component )
+		public StatusObject( ICEWorldBehaviour _component ) : base( _component )
 		{
 			Init( _component );
 		}
@@ -83,7 +83,7 @@ namespace ICE.World.Objects
 				m_Age = _age;
 		}
 
-		public override void Init( ICEComponent _component )
+		public override void Init( ICEWorldBehaviour _component )
 		{
 			base.Init( _component );
 
