@@ -34,7 +34,7 @@ using ICE.World;
 
 namespace ICE.World.Objects
 {
-	public class StatusObject : ICEObject {
+	public class StatusObject : ICEDataObject {
 
 		public StatusObject(){}
 		public StatusObject( ICEComponent _component ) : base( _component )

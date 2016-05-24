@@ -32,11 +32,11 @@ using System.Collections;
 namespace ICE.World.Objects
 {
 	[System.Serializable]
-	public abstract class ICEImpulsTimerObject : ICEObject
+	public abstract class ICEImpulsTimerObject : ICEDataObject
 	{
 		public ICEImpulsTimerObject(){}
 		public ICEImpulsTimerObject( ICEComponent _component ) : base( _component ){} 
-		public ICEImpulsTimerObject( ICEImpulsTimerObject _object ) : base( _object as ICEObject )
+		public ICEImpulsTimerObject( ICEImpulsTimerObject _object ) : base( _object as ICEDataObject )
 		{
 			m_OwnerComponent = _object.OwnerComponent;
 
