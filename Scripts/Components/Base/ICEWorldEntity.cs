@@ -3,10 +3,9 @@
 // ICE.World.ICEEntity.cs
 // Version 1.2.10
 //
-// The MIT License (MIT)
-//
-// Copyright © Pit Vetterick, ICE Technologies Consulting LTD. 
-// http://www.icecreaturecontrol.com (mailto:support@icecreaturecontrol.com)
+// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// http://www.icecreaturecontrol.com
+// mailto:support@icecreaturecontrol.com
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy 
 // of this software and associated documentation files (the "Software"), to deal 
@@ -111,11 +110,11 @@ namespace ICE.World
 			DoUpdateComplete();
 		}
 
-		public virtual void Register(){
+		protected virtual void Register(){
 			WorldRegister.Register( transform.gameObject );
 		}
 
-		public virtual void Deregister(){
+		protected virtual void Deregister(){
 			WorldRegister.Deregister( transform.gameObject );
 		}
 
@@ -124,11 +123,55 @@ namespace ICE.World
 		/// WorldRegister. In cases UseSoftRespawn is active the target will be dactivate, 
 		/// stored and prepared for its next action, otherwise the object will be destroyed.
 		/// </summary>
-		public virtual void Remove(){
+		protected virtual void Remove(){
 			WorldRegister.Remove( transform.gameObject );
 		}
 
 		public virtual void Reset(){}
+
+		public virtual void ApplyDamage( float _damage ){
+			ApplyDamage( _damage, Vector3.zero, Vector3.zero, null, 0 );
+		}
+
+		public virtual void ApplyDamage( float _damage, Vector3 _damage_direction, Vector3 _attacker_position, Transform _attacker, float _force = 0  )
+		{
+		}
+
+		public virtual void OnCollisionEnter(Collision _collision) 
+		{
+
+		}
+
+		public virtual void OnCollisionStay(Collision _collision) 
+		{
+
+		}
+
+		public virtual void OnCollisionExit( Collision _collision ) 
+		{
+
+		}
+
+		public virtual void OnTriggerEnter( Collider _collider ) 
+		{
+
+		}
+
+		public virtual void OnTriggerStay( Collider _collider ) 
+		{
+
+		}
+
+		public virtual void OnTriggerExit( Collider _collider ) 
+		{
+
+		}
+
+		public virtual void OnControllerColliderHit( ControllerColliderHit hit ) 
+		{
+
+		}
+
 
 	}
 }

@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorldInfo.cs
+// ICE.World.ICEWorldAttribute.cs
 // Version 1.2.10
 //
 // © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -29,26 +29,44 @@
 using UnityEngine;
 using System.Collections;
 
+using ICE;
+using ICE.World;
+using ICE.World.Objects;
+using ICE.World.Utilities;
+
 namespace ICE.World
 {
-	public class ICEWorldInfo {
+	/// <summary>
+	/// ICEWorldAttribute is the base class for all ICEWorld based attributes. Attributes represents specific data classes 
+	/// to enhance ICEWorldEntity based objects.
+	/// </summary>
+	public class ICEWorldAttribute : ICEComponent {
 
-		private static bool m_IsMultiplayer = false;
-		public static bool IsMultiplayer
+		/// <summary>
+		/// Gets the attributes.
+		/// </summary>
+		/// <returns>The attributes.</returns>
+		public ICEWorldAttribute[] GetAttributes()
 		{
-			get { return m_IsMultiplayer; }
-			set { m_IsMultiplayer = value; }
+			return transform.GetComponents<ICEWorldAttribute>();
 		}
 
-		private static bool m_IsMasterClient = true;
-		public static bool IsMasterClient{
-			get{ return ( m_IsMultiplayer == false ? true:m_IsMasterClient ); }
-			set{
-				if( m_IsMultiplayer == false )
-					return;
-				
-				m_IsMasterClient = value;
-			}
+		/// <summary>
+		/// Gets the attributes in children.
+		/// </summary>
+		/// <returns>The attributes in children.</returns>
+		public ICEWorldAttribute[] GetAttributesInChildren()
+		{
+			return transform.GetComponentsInChildren<ICEWorldAttribute>();
+		}
+
+		/// <summary>
+		/// Gets the attributes in parent.
+		/// </summary>
+		/// <returns>The attributes in parent.</returns>
+		public ICEWorldAttribute[] GetAttributesInParent()
+		{
+			return transform.GetComponentsInParent<ICEWorldAttribute>();
 		}
 	}
 }

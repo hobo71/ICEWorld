@@ -3,10 +3,9 @@
 // ICE.World.ICEObject.cs
 // Version 1.2.10
 //
-// The MIT License (MIT)
-//
-// Copyright © Pit Vetterick, ICE Technologies Consulting LTD. 
-// http://www.icecreaturecontrol.com (mailto:support@icecreaturecontrol.com)
+// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// http://www.icecreaturecontrol.com
+// mailto:support@icecreaturecontrol.com
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy 
 // of this software and associated documentation files (the "Software"), to deal 

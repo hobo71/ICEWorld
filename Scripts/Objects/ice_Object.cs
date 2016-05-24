@@ -1,12 +1,11 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEObject.cs
+// ICE.World.Objects.ICEObject.cs
 // Version 1.2.10
 //
-// The MIT License (MIT)
-//
-// Copyright © Pit Vetterick, ICE Technologies Consulting LTD. 
-// http://www.icecreaturecontrol.com (mailto:support@icecreaturecontrol.com)
+// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// http://www.icecreaturecontrol.com
+// mailto:support@icecreaturecontrol.com
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy 
 // of this software and associated documentation files (the "Software"), to deal 
@@ -107,7 +106,7 @@ namespace ICE.World.Objects
 		/// </summary>
 		/// <value><c>true</c> if parent print debug log; otherwise, <c>false</c>.</value>
 		public bool OwnerEnabledDebugLog{
-			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.EnableDebugLogs:false ); }
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.UseDebugLogs:false ); }
 		}
 
 		/// <summary>
