@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ice_converter.cs | ICE.World.Utilities.Converter
+// ice_date.cs | ICE.World.Utilities.DateTools
 // Version 1.2.10
 //
 // © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -26,29 +26,28 @@
 //
 // ##############################################################################
 
+using UnityEngine;
+using System;
+using System.Globalization;
+
 namespace ICE.World.Utilities
 {
-	/// <summary>
-	/// Converter contains several converter tools 
-	/// </summary>
-	public static class Converter 
+	public static class DateTools
 	{
 		/// <summary>
-		/// Fahrenheits to celsius.
+		/// Localizes the date time.
 		/// </summary>
-		/// <returns>The to celsius.</returns>
-		/// <param name="_fahrenheit">Fahrenheit.</param>
-		public static float FahrenheitToCelsius( float _fahrenheit ){
-			return (5f / 9f) * (_fahrenheit - 32f);
-		}
+		/// <returns>The date time.</returns>
+		/// <param name="_key">Key.</param>
+		/// <param name="_datetime">Datetime.</param>
+		public static string LocalizeDateTime( string _key, DateTime _datetime )
+		{
+			//       en-US: 6/19/2015 10:03:06 AM
+			//       en-GB: 19/06/2015 10:03:06
+			//       fr-FR: 19/06/2015 10:03:06
+			//       de-DE: 19.06.2015 10:03:06
 
-		/// <summary>
-		/// Celsiuses to fahrenheit.
-		/// </summary>
-		/// <returns>The to fahrenheit.</returns>
-		/// <param name="_celsius">Celsius.</param>
-		public static float CelsiusToFahrenheit( float _celsius ){
-			return _celsius * (9f / 5f) + 32f;
+			return _datetime.ToString( new CultureInfo( _key ) );
 		}
 	}
 }

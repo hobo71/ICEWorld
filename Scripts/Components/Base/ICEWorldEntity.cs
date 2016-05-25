@@ -40,10 +40,10 @@ namespace ICE.World
 	public abstract class ICEWorldEntity : ICEWorldBehaviour {
 
 		[SerializeField]
-		protected StatusObject m_Status = null;
-		public virtual StatusObject Status{
+		protected ICEStatusObject m_Status = null;
+		public virtual ICEStatusObject Status{
 			set{ m_Status = value; }
-			get{ return m_Status = ( m_Status == null ? new StatusObject(this):m_Status ); }
+			get{ return m_Status = ( m_Status == null ? new ICEStatusObject(this):m_Status ); }
 		}
 
 

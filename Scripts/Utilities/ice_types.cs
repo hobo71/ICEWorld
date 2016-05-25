@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ice_converter.cs | ICE.World.Utilities.Converter
+// ICE.World.ICEWorldCamera.cs
 // Version 1.2.10
 //
 // © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -26,29 +26,32 @@
 //
 // ##############################################################################
 
-namespace ICE.World.Utilities
-{
-	/// <summary>
-	/// Converter contains several converter tools 
-	/// </summary>
-	public static class Converter 
-	{
-		/// <summary>
-		/// Fahrenheits to celsius.
-		/// </summary>
-		/// <returns>The to celsius.</returns>
-		/// <param name="_fahrenheit">Fahrenheit.</param>
-		public static float FahrenheitToCelsius( float _fahrenheit ){
-			return (5f / 9f) * (_fahrenheit - 32f);
-		}
+using UnityEngine;
+using System.Collections;
 
-		/// <summary>
-		/// Celsiuses to fahrenheit.
-		/// </summary>
-		/// <returns>The to fahrenheit.</returns>
-		/// <param name="_celsius">Celsius.</param>
-		public static float CelsiusToFahrenheit( float _celsius ){
-			return _celsius * (9f / 5f) + 32f;
-		}
+namespace ICE.World
+{
+
+	/// <summary>
+	/// Header type.
+	/// </summary>
+	public enum EditorHeaderType{
+		TOGGLE,
+		TOGGLE_LEFT,
+		TOGGLE_LEFT_BOLD,
+		FOLDOUT,
+		FOLDOUT_BOLD,
+		FOLDOUT_ENABLED,
+		FOLDOUT_ENABLED_BOLD,
+		NONE
 	}
+
+	public enum GroundCheckType
+	{
+		NONE,
+		RAYCAST,
+		SAMPLEHEIGHT
+	}
+
+
 }

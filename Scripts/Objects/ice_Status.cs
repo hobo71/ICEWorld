@@ -34,10 +34,10 @@ using ICE.World;
 
 namespace ICE.World.Objects
 {
-	public class StatusObject : ICEOwnerObject {
+	public class ICEStatusObject : ICEOwnerObject {
 
-		public StatusObject(){}
-		public StatusObject( ICEWorldBehaviour _component ) : base( _component )
+		public ICEStatusObject(){}
+		public ICEStatusObject( ICEWorldBehaviour _component ) : base( _component )
 		{
 			Init( _component );
 		}

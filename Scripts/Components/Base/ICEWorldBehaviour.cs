@@ -76,6 +76,9 @@ namespace ICE.World
 			get{  return m_InstanceID = ( m_InstanceID == 0 ? transform.gameObject.GetInstanceID():m_InstanceID ); }
 		}
 
+		public delegate void OnLateUpdateEvent();
+		public event OnLateUpdateEvent OnLateUpdate;
+
 		public delegate void OnUpdateBeginEvent();
 		public event OnUpdateBeginEvent OnUpdateBegin;
 
@@ -84,6 +87,15 @@ namespace ICE.World
 
 		public delegate void OnUpdateCompleteEvent();
 		public event OnUpdateCompleteEvent OnUpdateComplete;
+
+		public delegate void OnFixedUpdateBeginEvent();
+		public event OnFixedUpdateBeginEvent OnFixedUpdateBegin;
+
+		public delegate void OnFixedUpdateEvent();
+		public event OnFixedUpdateEvent OnFixedUpdate;
+
+		public delegate void OnFixedUpdateCompleteEvent();
+		public event OnFixedUpdateCompleteEvent OnFixedUpdateComplete;
 
 		// PUBLIC METHODS
 		/// <summary>
@@ -159,25 +171,79 @@ namespace ICE.World
 
 		}
 
+		/// <summary>
+		/// Update this instance.
+		/// </summary>
 		public virtual void Update () {
 			DoUpdateBegin();
 			DoUpdate();
 			DoUpdateComplete();
 		}
-
+			
+		/// <summary>
+		/// Dos the update begin.
+		/// </summary>
 		protected virtual void DoUpdateBegin () {
 			if( OnUpdateBegin != null )
 				OnUpdateBegin();
 		}
 			
+		/// <summary>
+		/// Dos the update.
+		/// </summary>
 		protected virtual void DoUpdate () {
 			if( OnUpdate != null )
 				OnUpdate();
 		}
 
+		/// <summary>
+		/// Dos the update complete.
+		/// </summary>
 		protected virtual void DoUpdateComplete () {
 			if( OnUpdateComplete != null )
 				OnUpdateComplete();
+		}
+
+		public virtual void LateUpdate () {
+			DoLateUpdate();
+		}
+
+		protected virtual void DoLateUpdate () {
+			if( OnLateUpdate != null )
+				OnLateUpdate();
+		}
+
+		/// <summary>
+		/// Fixeds the update.
+		/// </summary>
+		public virtual void FixedUpdate () {
+			DoFixedUpdateBegin();
+			DoFixedUpdate();
+			DoFixedUpdateComplete();
+		}
+
+		/// <summary>
+		/// Dos the fixed update begin.
+		/// </summary>
+		protected virtual void DoFixedUpdateBegin () {
+			if( OnFixedUpdateBegin != null )
+				OnFixedUpdateBegin();
+		}
+
+		/// <summary>
+		/// Dos the fixed update.
+		/// </summary>
+		protected virtual void DoFixedUpdate () {
+			if( OnFixedUpdate != null )
+				OnFixedUpdate();
+		}
+
+		/// <summary>
+		/// Dos the fixed update complete.
+		/// </summary>
+		protected virtual void DoFixedUpdateComplete () {
+			if( OnFixedUpdateComplete != null )
+				OnFixedUpdateComplete();
 		}
 	}
 }
