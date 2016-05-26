@@ -32,21 +32,6 @@ using System.Collections;
 namespace ICE.World
 {
 
-	/// <summary>
-	/// Header type.
-	/// </summary>
-	public enum EditorHeaderType{
-		TOGGLE,
-		TOGGLE_LEFT,
-		TOGGLE_LEFT_BOLD,
-		TOGGLE_CUSTOM,
-		FOLDOUT,
-		FOLDOUT_BOLD,
-		FOLDOUT_ENABLED,
-		FOLDOUT_ENABLED_BOLD,
-		FOLDOUT_CUSTOM,
-		NONE
-	}
 
 	public enum GroundCheckType
 	{

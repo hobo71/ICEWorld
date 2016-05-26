@@ -21,6 +21,7 @@ using UnityEditor.AnimatedValues;
 
 using ICE;
 using ICE.World;
+using ICE.World.EditorUtilities;
 using ICE.World.Utilities;
 
 namespace ICE.World
