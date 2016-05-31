@@ -32,6 +32,45 @@ using System.Collections.Generic;
 
 namespace ICE.World
 {
+	[System.Serializable]
+	public struct MethodDataContainer
+	{
+		public string ComponentName;
+		public string MethodName;
+		public MethodParameterType MethodType;
+
+		/*
+		public PublicMethodData()
+		{
+			this.MethodName = "";
+			this.MethodType = MethodParameterType.None;
+		}*/
+		public MethodDataContainer( string _component, string _name, MethodParameterType _type )
+		{
+			this.ComponentName = _component;
+			this.MethodName = _name;
+			this.MethodType = _type;
+		}
+
+		public MethodDataContainer( MethodDataContainer _method )
+		{
+			this.ComponentName = _method.ComponentName;
+			this.MethodName = _method.MethodName;
+			this.MethodType = _method.MethodType;
+		}
+
+		public void Copy( MethodDataContainer _method )
+		{
+			this.ComponentName = _method.ComponentName;
+			this.MethodName = _method.MethodName;
+			this.MethodType = _method.MethodType;
+		}
+
+		public string MethodKey{
+			get{ return ComponentName + "." + MethodName; }
+		}
+	}
+
 	/// <summary>
 	/// ICEComponent is the abstract base class of all ICEWorld based components.
 	/// </summary>
@@ -101,16 +140,23 @@ namespace ICE.World
 		/// <summary>
 		/// m_PublicMethods. PublicMethods represents a list of method names.
 		/// </summary>
-		protected List<string> m_PublicMethods = new List<string>();
+		protected List<MethodDataContainer> m_PublicMethods = new List<MethodDataContainer>();
 		/// <summary>
 		/// Gets the public methods.
 		/// </summary>
 		/// <value>The public methods.</value>
-		public string[] PublicMethods{
+		public MethodDataContainer[] PublicMethods{
 			get{
+				List<MethodDataContainer> _methods = new List<MethodDataContainer>();
+
 				m_PublicMethods.Clear();
 				RegisterPublicMethods();
-				return m_PublicMethods.ToArray(); }
+
+				foreach( MethodDataContainer _method in m_PublicMethods )						
+					_methods.Add( new MethodDataContainer( _method ) );
+
+				return _methods.ToArray();
+			}
 		}
 
 
@@ -118,16 +164,18 @@ namespace ICE.World
 		/// Gets all public methods.
 		/// </summary>
 		/// <value>All public methods.</value>
-		public string[] AllPublicMethods{
+		public MethodDataContainer[] AllPublicMethods{
 			get{ 
-				List<string> _methods = new List<string>();
+				List<MethodDataContainer> _methods = new List<MethodDataContainer>();
 
 				ICEWorldBehaviour[] _components = GetComponentsInChildren<ICEWorldBehaviour>();
+				if( _components != null )
+				{
+					foreach( ICEWorldBehaviour _component in _components )
+						foreach( MethodDataContainer _method in _component.PublicMethods )						
+							_methods.Add( new MethodDataContainer( _method ) );
+				}
 
-				foreach( ICEWorldBehaviour _component in _components )
-					foreach( string _method in _component.PublicMethods )						
-						_methods.Add( _method );
-		
 				return _methods.ToArray();
 			}
 		}
@@ -137,12 +185,15 @@ namespace ICE.World
 		/// </summary>
 		protected virtual void RegisterPublicMethods(){}
 
-		public void RegisterPublicMethod( string _method )
-		{
+		public void RegisterPublicMethod( string _method ){
+			RegisterPublicMethod( _method, MethodParameterType.None );
+		}
+
+		public void RegisterPublicMethod( string _method, MethodParameterType _type ){
 			if( string.IsNullOrEmpty( _method ) )
 				return;
 
-			m_PublicMethods.Add( _method );
+			m_PublicMethods.Add( new MethodDataContainer( this.name, _method, _type ) );
 		}
 
 		public void ClearPublicMethods(){
