@@ -29,7 +29,6 @@ namespace ICE.World
 	[CustomEditor(typeof(ICEWorldBehaviour))]
 	public class ICEWorldBehaviourEditor : Editor 
 	{
-		private ICEWorldBehaviour m_target;
 		protected EditorHeaderType m_HeaderType = EditorHeaderType.TOGGLE;
 
 		/// <summary>
@@ -37,9 +36,9 @@ namespace ICE.World
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
-			m_target = DrawDefaultHeader<ICEWorldBehaviour>();
+			ICEWorldBehaviour _target = DrawDefaultHeader<ICEWorldBehaviour>();
 
-			DrawDefaultFooter( m_target );
+			DrawDefaultFooter( _target );
 
 		}
 
@@ -50,6 +49,7 @@ namespace ICE.World
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public virtual T DrawDefaultHeader<T>() where T : ICEWorldBehaviour
 		{
+			ICEEditorLayout.Init();
 			T _target = (T)target;
 
 			GUI.changed = false;
