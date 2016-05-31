@@ -171,6 +171,8 @@ namespace ICE.World
 			}
 			else 
 			{
+				bool _enabled = _object.Enabled;
+
 				EditorGUI.BeginDisabledGroup( _object.Enabled == false );
 				if( _type == EditorHeaderType.FOLDOUT_ENABLED_BOLD )
 					_object.Foldout = ICEEditorLayout.Foldout( _object.Foldout, _title, _help, true );
@@ -179,6 +181,10 @@ namespace ICE.World
 				EditorGUI.EndDisabledGroup();
 
 				_object.Enabled = ICEEditorLayout.ButtonCheck( "ENABLED", "Enables/disables this feature", _object.Enabled, ICEEditorStyle.ButtonMiddle );
+			
+				// Auto foldout if the feature was enabled by the user
+				if( _enabled != _object.Enabled && _object.Enabled == true )
+					_object.Foldout = true;
 			}
 		}
 	}
