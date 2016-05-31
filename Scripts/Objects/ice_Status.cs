@@ -49,15 +49,18 @@ namespace ICE.World.Objects
 			get{ return m_Durability; }
 		}
 		public virtual float DurabilityInPercent{
-			get{ return DefaultDurability / 100 * Durability; }
+			get{ return ( m_DefaultDurability > 0 ? 100 / m_DefaultDurability * Durability:100 ); }
 		}
 		public virtual float DurabilityMultiplier{
 			get{ return (m_Durability > 0?100/m_Durability:1); }
 		}
 
-		public float DefaultDurability = 0;
-		public float DefaultDurabilityMin = 0;
-		public float DefaultDurabilityMax = 0;
+		protected float m_DefaultDurability = 100;
+		public virtual float DefaultDurability{
+			get{ return m_DefaultDurability; }
+		}
+		public float DefaultDurabilityMin = 100;
+		public float DefaultDurabilityMax = 100;
 		public float DefaultDurabilityMaximum = 100;
 
 		public bool UseAging = false;
@@ -92,8 +95,8 @@ namespace ICE.World.Objects
 
 		public virtual void Reset()
 		{
-			DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
-			m_Durability = DefaultDurability;
+			m_DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
+			m_Durability = m_DefaultDurability;
 		}
 
 		public virtual void Update()
