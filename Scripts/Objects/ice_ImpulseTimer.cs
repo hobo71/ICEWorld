@@ -41,7 +41,7 @@ namespace ICE.World.Objects
 			m_OwnerComponent = _object.OwnerComponent;
 
 			if( m_OwnerComponent != null )
-				m_OwnerComponent.OnUpdateBegin += Update;
+				m_OwnerComponent.OnLateUpdate += Update;
 
 			ImpulseIntervalMin = _object.ImpulseIntervalMin;
 			ImpulseIntervalMax = _object.ImpulseIntervalMax;
