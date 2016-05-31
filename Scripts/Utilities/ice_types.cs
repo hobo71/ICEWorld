@@ -31,7 +31,14 @@ using System.Collections;
 
 namespace ICE.World
 {
-
+	public enum MethodParameterType
+	{
+		None=0,
+		Float,
+		Integer,
+		String,
+		Boolean
+	}
 
 	public enum GroundCheckType
 	{
