@@ -46,6 +46,11 @@ namespace ICE.World
 			get{ return m_Status = ( m_Status == null ? new ICEStatusObject(this):m_Status ); }
 		}
 
+		protected override void RegisterPublicMethods()
+		{
+			RegisterPublicMethod( "ApplyDamage", MethodParameterType.Float );
+		}
+
 
 		private ICEWorld m_World = null;
 		/// <summary>
@@ -135,6 +140,7 @@ namespace ICE.World
 
 		public virtual void ApplyDamage( float _damage, Vector3 _damage_direction, Vector3 _attacker_position, Transform _attacker, float _force = 0  )
 		{
+			Status.ApplyDamage( _damage );
 		}
 
 		public virtual void OnCollisionEnter(Collision _collision) 
