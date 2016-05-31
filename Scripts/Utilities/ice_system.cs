@@ -451,7 +451,7 @@ namespace ICE.World.Utilities
 		/// <param name="_parent">Parent.</param>
 		public static Transform FindChildByName( string _name, Transform _parent )
 		{
-			if( _name == null || _name.Trim() == "" || _parent == null )
+			if( string.IsNullOrEmpty( _name ) || _parent == null )
 				return null;
 
 			if( _parent.name == _name )
