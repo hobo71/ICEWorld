@@ -80,9 +80,14 @@ namespace ICE.World.EditorUtilities
 		public static Color InfoColor = new HSBColor( 0.15f ,0.25f, 1 ).ToColor();
 
 		static ICEEditorLayout() {	
+			Init();
+		}
+
+		public static void Init(){
 			DefaultGUIColor = GUI.color;
 			DefaultBackgroundColor = GUI.backgroundColor;
 		}
+
 		/*
 		public static Object ObjectField(Object obj, iOS.ADBannerView.Type objType, bool allowSceneObjects, params GUILayoutOption[] options);
 		public static Object ObjectField(string label, Object obj, iOS.ADBannerView.Type objType, bool allowSceneObjects, params GUILayoutOption[] options);
