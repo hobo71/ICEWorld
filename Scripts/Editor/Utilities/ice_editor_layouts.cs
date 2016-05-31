@@ -1553,6 +1553,14 @@ namespace ICE.World.EditorUtilities
 			return (string)options[ options_index ];
 		}
 
+		public static void DrawProgressBarFull( string _title, float _value, string _help = "" )
+		{
+			BeginHorizontal();					
+			Rect _rect = GUILayoutUtility.GetRect(0,15);
+			EditorGUI.ProgressBar( _rect, _value/100, _title + " (" +_value + "%)" );			
+			EndHorizontalInfo( _help );
+		}
+
 		public static void DrawProgressBar( string _title, float _value, string _help = "" )
 		{
 			BeginHorizontal();			
