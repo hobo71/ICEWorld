@@ -25,7 +25,7 @@ using ICE.World.Objects;
 using ICE.World.Utilities;
 using ICE.World.EditorUtilities;
 
-namespace ICE.World
+namespace ICE.World.EditorUtilities
 {
 	public class DataObjectEditor {
 
