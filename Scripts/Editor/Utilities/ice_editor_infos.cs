@@ -33,6 +33,9 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
 
+using ICE;
+using ICE.World;
+
 namespace ICE.World.EditorUtilities
 {
 	/// <summary>
