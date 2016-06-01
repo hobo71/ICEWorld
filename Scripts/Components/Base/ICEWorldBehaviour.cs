@@ -69,6 +69,13 @@ namespace ICE.World
 		public string MethodKey{
 			get{ return ComponentName + "." + MethodName; }
 		}
+
+		public void Reset()
+		{
+			this.ComponentName = "";
+			this.MethodName = "";
+			this.MethodType = MethodParameterType.None;
+		}
 	}
 
 	/// <summary>

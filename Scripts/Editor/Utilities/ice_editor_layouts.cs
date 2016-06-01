@@ -644,11 +644,11 @@ namespace ICE.World.EditorUtilities
 			return _value;
 		}
 			
-		public static string AnimationPopup( Animation _animation, string _name, string _title = "" )
+		public static string AnimationPopup( Animation _animation, string _name, string _title = "", string _help = "" )
 		{
 			ICEEditorLayout.BeginHorizontal();
 			_name = AnimationPopupBase( _animation, _name, _title );
-			ICEEditorLayout.EndHorizontal();
+			ICEEditorLayout.EndHorizontal( _help );
 
 			return _name;
 		}
