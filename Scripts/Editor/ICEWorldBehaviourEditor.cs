@@ -29,7 +29,7 @@ namespace ICE.World
 	[CustomEditor(typeof(ICEWorldBehaviour))]
 	public class ICEWorldBehaviourEditor : Editor 
 	{
-		protected EditorHeaderType m_HeaderType = EditorHeaderType.TOGGLE;
+		protected EditorHeaderType m_HeaderType = EditorHeaderType.FOLDOUT_ENABLED_BOLD;
 
 		/// <summary>
 		/// Raises the inspector GUI event.

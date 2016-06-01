@@ -31,13 +31,45 @@ using System.Collections;
 
 namespace ICE.World
 {
-	public enum MethodParameterType
+	public enum AnimatorControlType
 	{
-		None=0,
-		Float,
-		Integer,
-		String,
-		Boolean
+		DIRECT,
+		ADVANCED
+	}
+
+	public enum AnimationInterfaceType
+	{
+		NONE=0,
+		MECANIM,
+		LEGACY,
+		CLIP,
+		CUSTOM
+	}
+
+	public enum DynamicBooleanValueType
+	{
+		IsGrounded,
+		IsJumping,
+		Deadlocked,
+		MovePositionReached,
+		MovePositionUpdateRequired,
+		TargetMovePositionReached
+	}
+
+	public enum DynamicIntegerValueType
+	{
+		undefined
+	}
+
+	public enum DynamicFloatValueType
+	{
+		ForwardSpeed,
+		AngularSpeed,
+		FallSpeed,
+		Direction,
+		Altitude,
+		AbsoluteAltitude,
+		MovePositionDistance
 	}
 
 	public enum GroundCheckType
@@ -47,5 +79,12 @@ namespace ICE.World
 		SAMPLEHEIGHT
 	}
 
-
+	public enum MethodParameterType
+	{
+		None=0,
+		Float,
+		Integer,
+		String,
+		Boolean
+	}
 }
