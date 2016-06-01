@@ -59,6 +59,20 @@ namespace ICE.World.EditorInfos
 			"works like the animation list. Simply assign the desired animation clip, set the correct WrapMode and go.";
 		public static readonly string ANIMATION_CUSTOM = "";
 
+		public static readonly string METHODS = "TODO";
+		public static readonly string METHOD = "TODO";
+		public static readonly string METHOD_POPUP = "TODO";
+		public static readonly string METHOD_PARAMETER_BOOLEAN = "TODO";
+		public static readonly string METHOD_PARAMETER_INTEGER = "TODO";
+		public static readonly string METHOD_PARAMETER_FLOAT = "TODO";
+		public static readonly string METHOD_PARAMETER_STRING = "TODO";
+		public static readonly string MESSAGE_NAME = "TODO";
+
+		public static readonly string IMPULSE_TIMER = "TODO";
+		public static readonly string IMPULSE_TIMER_INTERVAL = "TODO";
+		public static readonly string IMPULSE_TIMER_LIMITS = "TODO";
+		public static readonly string IMPULSE_TIMER_BREAK_LENGTH = "TODO";
+
 	}
 }
 
