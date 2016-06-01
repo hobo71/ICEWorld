@@ -1,5 +1,6 @@
 ﻿// ##############################################################################
 //
+// ice_Methods.cs
 // Version 1.2.10
 //
 // © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -21,6 +22,7 @@ using ICE.World;
 using ICE.World.Utilities;
 using ICE.World.Objects;
 
+namespace ICE.World.Objects
 {
 
 	[System.Serializable]
