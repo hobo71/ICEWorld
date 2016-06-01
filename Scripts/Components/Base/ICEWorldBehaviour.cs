@@ -207,6 +207,74 @@ namespace ICE.World
 			m_PublicMethods.Clear();
 		}
 
+		public virtual bool GetDynamicBooleanValue( DynamicBooleanValueType _type )
+		{
+			/*
+			switch( _type )
+			{
+			case DynamicBooleanValueType.IsGrounded:
+				return Creature.Move.IsGrounded;
+			case DynamicBooleanValueType.Deadlocked:
+				return Creature.Move.Deadlocked;
+			case DynamicBooleanValueType.MovePositionReached:
+				return Creature.Move.MovePositionReached;
+			case DynamicBooleanValueType.TargetMovePositionReached:
+				return Creature.Move.TargetMovePositionReached;
+			case DynamicBooleanValueType.MovePositionUpdateRequired:
+				return Creature.Move.MovePositionUpdateRequired;
+			case DynamicBooleanValueType.IsJumping:
+				return Creature.Move.IsJumping;
+
+
+			}*/
+
+			return false;
+		}
+
+		public virtual int GetDynamicIntegerValue( DynamicIntegerValueType _type )
+		{/*
+			switch( _type )
+			{
+
+			case DynamicIntegerValueType.CreatureForwardSpeed:
+				return MoveForwardVelocity;
+			case DynamicIntegerValueType.CreatureAngularSpeed:
+				return MoveAngularVelocity;
+			case DynamicIntegerValueType.CreatureDirection:
+				return MoveDirection;
+			}*/
+
+			return 0;
+		}
+
+		public virtual float GetDynamicFloatValue( DynamicFloatValueType _type )
+		{
+			/*
+			switch( _type )
+			{
+			case DynamicFloatValueType.ForwardSpeed:
+				return MoveForwardVelocity;
+			case DynamicFloatValueType.AngularSpeed:
+				return MoveAngularVelocity;
+			case DynamicFloatValueType.Direction:
+				return MoveDirection;
+
+			case DynamicFloatValueType.FallSpeed:
+				return Creature.Move.FallSpeed;
+
+			case DynamicFloatValueType.Altitude:
+				return MoveAltitude;
+			case DynamicFloatValueType.AbsoluteAltitude:
+				return MoveAbsoluteAltitude;
+
+			case DynamicFloatValueType.MovePositionDistance:
+				return Creature.Move.MovePositionDistance;
+			}*/
+
+			return 0;
+		}
+
+
 		public virtual void Awake () {
 
 			if( UseDontDestroyOnLoad )
