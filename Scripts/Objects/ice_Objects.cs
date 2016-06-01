@@ -44,11 +44,43 @@ namespace ICE.World.Objects
 
 	}
 
+	[System.Serializable]
+	public abstract class ICEInfoDataObject : ICEDataObject 
+	{
+		public ICEInfoDataObject(){}
+		public ICEInfoDataObject( ICEInfoDataObject _object ) : base( _object )
+		{
+			Copy( _object );
+		}
+
+		public void Copy( ICEInfoDataObject _object )
+		{
+			if( _object == null )
+				return;
+
+			base.Copy( _object );
+
+			InfoText = _object.InfoText;
+			ShowInfoText = _object.ShowInfoText;
+		}
+
+		/// <summary>
+		/// The info text.
+		/// </summary>
+		public string InfoText = "";
+
+		/// <summary>
+		/// The info text enabled.
+		/// </summary>
+		public bool ShowInfoText = false;
+
+	}
+
 	/// <summary>
 	/// ICEObject represents the abstract base class for all ICE related System Objects.
 	/// </summary>
 	[System.Serializable]
-	public abstract class ICEOwnerObject : ICEDataObject {
+	public abstract class ICEOwnerObject : ICEInfoDataObject {
 
 		/// <summary>
 		/// Prints debug log.

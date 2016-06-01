@@ -36,6 +36,7 @@ using System.Linq;
 
 using ICE.World.EditorUtilities;
 using ICE.World.Utilities;
+using ICE.World.Objects;
 //using ICE.Creatures;
 //using ICE.Creatures.EnumTypes;
 //using ICE.Creatures.EditorInfos;
@@ -997,6 +998,14 @@ namespace ICE.World.EditorUtilities
 		public static Rect BeginHorizontal()
 		{
 			return EditorGUILayout.BeginHorizontal();
+		}
+
+		public static void EndHorizontal( ICEInfoDataObject _object, string _help = "" )
+		{
+			if( _object != null )
+				EndHorizontal( ref _object.ShowInfoText , ref _object.InfoText, _help  );
+			else
+				EndHorizontal( _help  );
 		}
 
 		public static void EndHorizontal( ref bool _show_info , ref string _info, string _help = "" )
