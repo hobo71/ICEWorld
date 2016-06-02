@@ -30,6 +30,24 @@ namespace ICE.World.EditorUtilities
 {
 	public class WorldObjectEditor : DataObjectEditor
 	{	
+
+		/// <summary>
+		/// Draws the initial durability.
+		/// </summary>
+		/// <param name="_status">Status.</param>
+		public static void DrawInitialDurability( ICE.World.Objects.ICEStatusObject _status )
+		{
+			ICEEditorLayout.BeginHorizontal();
+			ICEEditorLayout.MinMaxGroupSimple( "Initial Durability (" + ( Mathf.Round( _status.DefaultDurability / 0.01f ) * 0.01f ) + ")", "Defines the default physical integrity of the creature.", 
+				ref _status.DefaultDurabilityMin, 
+				ref _status.DefaultDurabilityMax,
+				1, ref _status.DefaultDurabilityMaximum, 1, 40, "" );
+
+			ICEEditorLayout.ButtonMinMaxDefault( ref _status.DefaultDurabilityMin, ref _status.DefaultDurabilityMax, 100, 100 );
+			ICEEditorLayout.EndHorizontal( Info.STATUS_INITIAL_DURABILITY  );
+			EditorGUILayout.Separator();
+		}
+
 		/// <summary>
 		/// Draws the impuls timer object.
 		/// </summary>
