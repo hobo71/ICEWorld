@@ -73,6 +73,10 @@ namespace ICE.World.EditorUtilities
 		NONE
 	}
 
+	/// <summary>
+	/// ICEEditorLayout contains a collection of methods to standardize the layout of ICE components and to 
+	/// simplify the GUI design. Here you will find methods for drawing standard controls 
+	/// </summary>
 	public static class ICEEditorLayout
 	{
 		public static Color DefaultBackgroundColor;
