@@ -28,10 +28,30 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+using ICE;
+using ICE.World;
+using ICE.World.Utilities;
 
 namespace ICE.World
 {
 	public class ICEWorldRegister : ICEWorld {
+
+		[SerializeField]
+		private List<string> m_GroundLayers = new List<string>();
+		public List<string> GroundLayers{
+			get{ return m_GroundLayers; }
+		}
+
+		public GroundCheckType GroundCheck = GroundCheckType.NONE;
+		private LayerMask m_GroundLayerMask = -1;
+		public LayerMask GroundLayerMask{
+			get{
+				m_GroundLayerMask = SystemTools.GetLayerMask( GroundLayers, m_GroundLayerMask );
+				return m_GroundLayerMask;
+			}
+		}
 
 		protected static new ICEWorldRegister m_Instance = null;
 		public static new ICEWorldRegister Instance{
@@ -51,9 +71,14 @@ namespace ICE.World
 		{
 			DestroyObject( _object );
 		}
+
+		public virtual Color GetDebugDefaultColor( GameObject _object )
+		{
+			return Color.red;
+		}
 	}
 
-	public static class WorldRegister{
+	public class WorldRegister{
 
 		public static void Register( GameObject _object )
 		{
@@ -71,6 +96,50 @@ namespace ICE.World
 		{
 			if( ICEWorldRegister.Instance != null )
 				ICEWorldRegister.Instance.Remove( _object );
+		}
+
+		/// <summary>
+		/// Gets the default color of the gizmo.
+		/// </summary>
+		/// <returns>The debug default color.</returns>
+		/// <param name="_object">Object.</param>
+		public static Color GetDebugDefaultColor( GameObject _object ) 
+		{
+			if( ICEWorldRegister.Instance != null )
+				return ICEWorldRegister.Instance.GetDebugDefaultColor( _object );
+			else
+				return Color.red;
+		}
+
+		/// <summary>
+		/// Sets the ground level.
+		/// </summary>
+		/// <param name="_transform">Transform.</param>
+		/// <param name="_offset">Offset.</param>
+		public static void SetGroundLevel( Transform _transform, float _offset ) 
+		{
+			SystemTools.EnableColliders( _transform, false );
+			float _ground_level = GetGroundLevel( _transform.position, _offset );
+
+			_transform.position = new Vector3( 
+				_transform.position.x,
+				_ground_level + _offset, 
+				_transform.position.z );
+			SystemTools.EnableColliders( _transform, true );
+		}
+
+		/// <summary>
+		/// Gets the ground level.
+		/// </summary>
+		/// <returns>The ground level.</returns>
+		/// <param name="_position">Position.</param>
+		/// <param name="_offset">Offset.</param>
+		public static float GetGroundLevel( Vector3 _position, float _offset = 0 ) 
+		{
+			if( ICEWorldRegister.Instance != null && ICEWorldRegister.Instance.GroundCheck == GroundCheckType.RAYCAST )
+				return PositionTools.GetGroundLevel( _position, ICEWorldRegister.Instance.GroundCheck , ICEWorldRegister.Instance.GroundLayerMask, 0.5f, 1000, _offset );
+			else
+				return PositionTools.GetGroundLevel( _position, 0.5f, 1000, _offset );
 		}
 	}
 }
