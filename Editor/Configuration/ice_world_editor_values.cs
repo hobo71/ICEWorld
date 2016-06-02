@@ -1,9 +1,9 @@
-﻿// ##############################################################################
+// ##############################################################################
 //
-// ice_converter.cs | ICE.World.Utilities.Converter
+// ice_world_editor_values.cs | Init
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //
@@ -26,29 +26,15 @@
 //
 // ##############################################################################
 
-namespace ICE.World.Utilities
-{
-	/// <summary>
-	/// Converter contains several converter tools 
-	/// </summary>
-	public static class Converter 
-	{
-		/// <summary>
-		/// Fahrenheits to celsius.
-		/// </summary>
-		/// <returns>The to celsius.</returns>
-		/// <param name="_fahrenheit">Fahrenheit.</param>
-		public static float FahrenheitToCelsius( float _fahrenheit ){
-			return (5f / 9f) * (_fahrenheit - 32f);
-		}
+using UnityEngine;
+using UnityEditor;
 
-		/// <summary>
-		/// Celsiuses to fahrenheit.
-		/// </summary>
-		/// <returns>The to fahrenheit.</returns>
-		/// <param name="_celsius">Celsius.</param>
-		public static float CelsiusToFahrenheit( float _celsius ){
-			return _celsius * (9f / 5f) + 32f;
-		}
+namespace ICE.World.EditorInfos
+{
+	public static class Init
+	{
+		public static readonly float TARGET_OFFSET_DISTANCE_DEFAULT = 0;
+
+
 	}
 }

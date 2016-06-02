@@ -1,9 +1,9 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorldInfo.cs
+// ice_utilities_converter.cs | ICE.World.Utilities.Converter
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //
@@ -26,29 +26,29 @@
 //
 // ##############################################################################
 
-using UnityEngine;
-using System.Collections;
-
-namespace ICE.World
+namespace ICE.World.Utilities
 {
-	public class ICEWorldInfo {
-
-		private static bool m_IsMultiplayer = false;
-		public static bool IsMultiplayer
-		{
-			get { return m_IsMultiplayer; }
-			set { m_IsMultiplayer = value; }
+	/// <summary>
+	/// Converter contains several converter tools 
+	/// </summary>
+	public static class Converter 
+	{
+		/// <summary>
+		/// Fahrenheits to celsius.
+		/// </summary>
+		/// <returns>The to celsius.</returns>
+		/// <param name="_fahrenheit">Fahrenheit.</param>
+		public static float FahrenheitToCelsius( float _fahrenheit ){
+			return (5f / 9f) * (_fahrenheit - 32f);
 		}
 
-		private static bool m_IsMasterClient = true;
-		public static bool IsMasterClient{
-			get{ return ( m_IsMultiplayer == false ? true:m_IsMasterClient ); }
-			set{
-				if( m_IsMultiplayer == false )
-					return;
-				
-				m_IsMasterClient = value;
-			}
+		/// <summary>
+		/// Celsiuses to fahrenheit.
+		/// </summary>
+		/// <returns>The to fahrenheit.</returns>
+		/// <param name="_celsius">Celsius.</param>
+		public static float CelsiusToFahrenheit( float _celsius ){
+			return _celsius * (9f / 5f) + 32f;
 		}
 	}
 }

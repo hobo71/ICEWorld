@@ -1,9 +1,9 @@
 ﻿// ##############################################################################
 //
-// ice_object.cs | ICE.World.Utilities.ObjectTools
+// ice_utilities_object.cs | ICE.World.Utilities.ObjectTools
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //

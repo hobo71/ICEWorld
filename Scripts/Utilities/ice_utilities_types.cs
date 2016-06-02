@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorldCamera.cs
+// ice_utilities_types.cs
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -29,19 +29,62 @@
 using UnityEngine;
 using System.Collections;
 
-using ICE.World.Objects;
-using ICE.World.Utilities;
-
 namespace ICE.World
 {
-	using UnityEngine;
-	using System.Collections;
+	public enum AnimatorControlType
+	{
+		DIRECT,
+		ADVANCED
+	}
 
-	/// <summary>
-	/// ICE world camera.
-	/// </summary>
-	public class ICEWorldCamera : ICEWorldBehaviour {
+	public enum AnimationInterfaceType
+	{
+		NONE=0,
+		MECANIM,
+		LEGACY,
+		CLIP,
+		CUSTOM
+	}
 
+	public enum DynamicBooleanValueType
+	{
+		IsGrounded,
+		IsJumping,
+		Deadlocked,
+		MovePositionReached,
+		MovePositionUpdateRequired,
+		TargetMovePositionReached
+	}
 
+	public enum DynamicIntegerValueType
+	{
+		undefined
+	}
+
+	public enum DynamicFloatValueType
+	{
+		ForwardSpeed,
+		AngularSpeed,
+		FallSpeed,
+		Direction,
+		Altitude,
+		AbsoluteAltitude,
+		MovePositionDistance
+	}
+
+	public enum GroundCheckType
+	{
+		NONE,
+		RAYCAST,
+		SAMPLEHEIGHT
+	}
+
+	public enum MethodParameterType
+	{
+		None=0,
+		Float,
+		Integer,
+		String,
+		Boolean
 	}
 }

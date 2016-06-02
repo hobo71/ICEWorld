@@ -1,14 +1,28 @@
 ﻿// ##############################################################################
 //
-// ice_DataObjectEditor.cs
+// ice_editor_animation.cs | AnimationEditor
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
-// 
-// Unity Asset Store End User License Agreement (EULA)
-// http://unity3d.com/legal/as_terms
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy 
+// of this software and associated documentation files (the "Software"), to deal 
+// in the Software without restriction, including without limitation the rights 
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+// copies of the Software, and to permit persons to whom the Software is furnished 
+// to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all 
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // ##############################################################################
 
@@ -51,17 +65,17 @@ namespace ICE.World.EditorUtilities
 
 			ICEEditorLayout.BeginHorizontal();
 
-			if( DataObjectEditor.IsEnabledFoldoutType( _type ) )
+			if( WorldObjectEditor.IsEnabledFoldoutType( _type ) )
 			{
 				EditorGUI.BeginDisabledGroup( _anim.Enabled == false );
 			}		
 
-			DataObjectEditor.DrawObjectHeaderLine( _anim, DataObjectEditor.GetSimpleFoldout( _type ), _title , _hint );		
+			WorldObjectEditor.DrawObjectHeaderLine( _anim, WorldObjectEditor.GetSimpleFoldout( _type ), _title , _hint );		
 			GUILayout.FlexibleSpace();
 			if( _anim.Enabled )
 				_anim.AllowInterfaceSelector = ICEEditorLayout.ButtonCheck( "SELECTOR", "", _anim.AllowInterfaceSelector, ICEEditorStyle.ButtonMiddle );
 
-			if( DataObjectEditor.IsEnabledFoldoutType( _type ) )
+			if( WorldObjectEditor.IsEnabledFoldoutType( _type ) )
 			{
 				EditorGUI.EndDisabledGroup();
 				_anim.Enabled = ICEEditorLayout.ButtonEnabled( _anim.Enabled );
@@ -74,7 +88,7 @@ namespace ICE.World.EditorUtilities
 
 
 			// CONTENT BEGIN
-			if( DataObjectEditor.BeginObjectContentOrReturn( _type, _anim ) )
+			if( WorldObjectEditor.BeginObjectContentOrReturn( _type, _anim ) )
 				return;
 
 			if( ( _component.GetComponentInChildren<Animator>() != null && _component.GetComponentInChildren<Animation>() != null ) || _anim.AllowInterfaceSelector )
@@ -117,7 +131,7 @@ namespace ICE.World.EditorUtilities
 			else
 				Info.Help ( Info.ANIMATION_NONE );
 
-			DataObjectEditor.EndObjectContent();
+			WorldObjectEditor.EndObjectContent();
 			// CONTENT END
 		}
 

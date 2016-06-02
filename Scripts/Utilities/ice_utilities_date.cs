@@ -1,9 +1,9 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorldCamera.cs
+// ice_utilities_date.cs | ICE.World.Utilities.DateTools
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //
@@ -27,64 +27,27 @@
 // ##############################################################################
 
 using UnityEngine;
-using System.Collections;
+using System;
+using System.Globalization;
 
-namespace ICE.World
+namespace ICE.World.Utilities
 {
-	public enum AnimatorControlType
+	public static class DateTools
 	{
-		DIRECT,
-		ADVANCED
-	}
+		/// <summary>
+		/// Localizes the date time.
+		/// </summary>
+		/// <returns>The date time.</returns>
+		/// <param name="_key">Key.</param>
+		/// <param name="_datetime">Datetime.</param>
+		public static string LocalizeDateTime( string _key, DateTime _datetime )
+		{
+			//       en-US: 6/19/2015 10:03:06 AM
+			//       en-GB: 19/06/2015 10:03:06
+			//       fr-FR: 19/06/2015 10:03:06
+			//       de-DE: 19.06.2015 10:03:06
 
-	public enum AnimationInterfaceType
-	{
-		NONE=0,
-		MECANIM,
-		LEGACY,
-		CLIP,
-		CUSTOM
-	}
-
-	public enum DynamicBooleanValueType
-	{
-		IsGrounded,
-		IsJumping,
-		Deadlocked,
-		MovePositionReached,
-		MovePositionUpdateRequired,
-		TargetMovePositionReached
-	}
-
-	public enum DynamicIntegerValueType
-	{
-		undefined
-	}
-
-	public enum DynamicFloatValueType
-	{
-		ForwardSpeed,
-		AngularSpeed,
-		FallSpeed,
-		Direction,
-		Altitude,
-		AbsoluteAltitude,
-		MovePositionDistance
-	}
-
-	public enum GroundCheckType
-	{
-		NONE,
-		RAYCAST,
-		SAMPLEHEIGHT
-	}
-
-	public enum MethodParameterType
-	{
-		None=0,
-		Float,
-		Integer,
-		String,
-		Boolean
+			return _datetime.ToString( new CultureInfo( _key ) );
+		}
 	}
 }

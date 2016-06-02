@@ -1,9 +1,9 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEAnimatedObject.cs
+// ICE.World.ICEWorldInfo.cs
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //
@@ -28,23 +28,27 @@
 
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace ICE.World
 {
-	public class ICEAnimatedObject : ICEWorldObject {
+	public class ICEWorldInfo {
 
-		private Animator m_Animator = null;
-		public Animator ObjectAnimator{
-			get{ return m_Animator = ( m_Animator == null?GetComponent<Animator>():m_Animator ); }
+		private static bool m_IsMultiplayer = false;
+		public static bool IsMultiplayer
+		{
+			get { return m_IsMultiplayer; }
+			set { m_IsMultiplayer = value; }
 		}
 
-		public override void Start () {
-			base.Start();
-		}
-
-		public override void Update () {
-
+		private static bool m_IsMasterClient = true;
+		public static bool IsMasterClient{
+			get{ return ( m_IsMultiplayer == false ? true:m_IsMasterClient ); }
+			set{
+				if( m_IsMultiplayer == false )
+					return;
+				
+				m_IsMasterClient = value;
+			}
 		}
 	}
 }

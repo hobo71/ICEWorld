@@ -1,9 +1,9 @@
 ﻿// ##############################################################################
 //
-// ice_math.cs | ICE.World.Utilities.MathTools
+// ice_utilities_math.cs | ICE.World.Utilities.MathTools
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //

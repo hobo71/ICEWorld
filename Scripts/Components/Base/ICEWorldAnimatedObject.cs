@@ -1,9 +1,9 @@
 ﻿// ##############################################################################
 //
-// ice_date.cs | ICE.World.Utilities.DateTools
+// ICE.World.ICEAnimatedObject.cs
 // Version 1.2.10
 //
-// © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
 // http://www.icecreaturecontrol.com
 // mailto:support@icecreaturecontrol.com
 //
@@ -27,27 +27,24 @@
 // ##############################################################################
 
 using UnityEngine;
-using System;
-using System.Globalization;
+using System.Collections;
+using System.Collections.Generic;
 
-namespace ICE.World.Utilities
+namespace ICE.World
 {
-	public static class DateTools
-	{
-		/// <summary>
-		/// Localizes the date time.
-		/// </summary>
-		/// <returns>The date time.</returns>
-		/// <param name="_key">Key.</param>
-		/// <param name="_datetime">Datetime.</param>
-		public static string LocalizeDateTime( string _key, DateTime _datetime )
-		{
-			//       en-US: 6/19/2015 10:03:06 AM
-			//       en-GB: 19/06/2015 10:03:06
-			//       fr-FR: 19/06/2015 10:03:06
-			//       de-DE: 19.06.2015 10:03:06
+	public class ICEAnimatedObject : ICEWorldObject {
 
-			return _datetime.ToString( new CultureInfo( _key ) );
+		private Animator m_Animator = null;
+		public Animator ObjectAnimator{
+			get{ return m_Animator = ( m_Animator == null?GetComponent<Animator>():m_Animator ); }
+		}
+
+		public override void Start () {
+			base.Start();
+		}
+
+		public override void Update () {
+
 		}
 	}
 }
