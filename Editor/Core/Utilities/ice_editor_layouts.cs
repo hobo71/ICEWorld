@@ -34,14 +34,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using ICE.World.EditorUtilities;
+using ICE;
+using ICE.World;
 using ICE.World.Utilities;
 using ICE.World.Objects;
-//using ICE.Creatures;
-//using ICE.Creatures.EnumTypes;
-//using ICE.Creatures.EditorInfos;
-//using ICE.Creatures.Attributes;
-
+using ICE.World.EditorUtilities;
+using ICE.World.EditorInfos;
 
 namespace ICE.World.EditorUtilities
 {
@@ -77,7 +75,7 @@ namespace ICE.World.EditorUtilities
 	/// ICEEditorLayout contains a collection of methods to standardize the layout of ICE components and to 
 	/// simplify the GUI design. Here you will find methods for drawing standard controls 
 	/// </summary>
-	public static class ICEEditorLayout
+	public class ICEEditorLayout
 	{
 		public static Color DefaultBackgroundColor;
 		public static Color DefaultGUIColor;
@@ -85,10 +83,10 @@ namespace ICE.World.EditorUtilities
 		public static Color InfoColor = new HSBColor( 0.15f ,0.25f, 1 ).ToColor();
 
 		static ICEEditorLayout() {	
-			Init();
+			SetDefaults();
 		}
 
-		public static void Init(){
+		public static void SetDefaults(){
 			DefaultGUIColor = GUI.color;
 			DefaultBackgroundColor = GUI.backgroundColor;
 		}
@@ -461,6 +459,139 @@ namespace ICE.World.EditorUtilities
 			return _name;
 		}
 
+		/// <summary>
+		/// Draws the ground check.
+		/// </summary>
+		/// <param name="_type">Type.</param>
+		/// <param name="_layers">Layers.</param>
+		/// <param name="_help">Help.</param>
+		public static void DrawGroundCheck( ref GroundCheckType _type, List<string> _layers, string _help = "" )
+		{
+			ICEEditorLayout.BeginHorizontal();
+			_type = (GroundCheckType)ICEEditorLayout.EnumPopup("Ground Check", "Method to handle ground related checks and movements", _type );
+			if( _type == GroundCheckType.RAYCAST )
+			{
+				if (GUILayout.Button("Add Layer", ICEEditorStyle.ButtonMiddle ))
+					_layers.Add( (LayerMask.NameToLayer("Terrain") != -1?"Terrain":"Default") );
+
+			}				
+			ICEEditorLayout.EndHorizontal( _help );
+
+			if( _type == GroundCheckType.RAYCAST )
+			{
+				EditorGUI.indentLevel++;
+					DrawLayersList( _layers );
+				EditorGUI.indentLevel--;
+			}
+		}
+
+		/// <summary>
+		/// Draws the layers list.
+		/// </summary>
+		/// <param name="_layers">Layers.</param>
+		public static void DrawLayersList( List<string> _layers )
+		{
+			if( _layers.Count == 0 )
+			{
+				ICEEditorLayout.BeginHorizontal();
+				GUILayout.FlexibleSpace();					
+				EditorGUILayout.LabelField( new GUIContent( " - No Layer defined -", "" ) );
+				GUILayout.FlexibleSpace();
+				ICEEditorLayout.EndHorizontal();
+			}
+			else
+			{
+				for( int i = 0 ; i < _layers.Count; i++ )
+				{
+					ICEEditorLayout.BeginHorizontal();
+					GUI.backgroundColor = new Vector4( 0.7f, 0.9f, 0.9f, 0.5f);
+
+					string _title = "Layer";
+					if( _layers[i] == "Water" )
+						_title = "Water Layer";
+
+					int _layer = LayerMask.NameToLayer(_layers[i]);
+
+					if( _layer == -1 )
+					{
+						GUI.backgroundColor = Color.red;
+						EditorGUILayout.PrefixLabel( new GUIContent( _title + " (MISSING)", "CREATE MISSING '" + _layers[i] + "' LAYER" ) );
+						if( GUILayout.Button("CREATE MISSING '" + _layers[i] + "' LAYER", ICEEditorStyle.ButtonFlex ) )
+						{
+							EditorTools.AddLayer( _layers[i] );
+						}
+					}
+					else
+					{
+						_layers[i] = LayerMask.LayerToName( EditorGUILayout.LayerField( _title, _layer ) );
+					}
+
+					GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
+					if (GUILayout.Button("X", ICEEditorStyle.CMDButton ))
+					{
+						_layers.RemoveAt(i);
+						--i;
+						return;
+					}
+					ICEEditorLayout.EndHorizontal();
+				}
+			}
+		}
+
+		public static float DrawBaseOffset( Transform _transform, string _title, string _hint, float _offset, ref float _maximum, string _help = "" )
+		{
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Base Offset";
+
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.BASE_OFFSET ;
+
+			ICEEditorLayout.BeginHorizontal();
+			_offset = ICEEditorLayout.MaxBasicSlider( _title, _hint, _offset, 0.01f, -_maximum, ref _maximum, "" );
+			_offset = ICEEditorLayout.ButtonDefault( _offset, 0 );
+			ICEEditorLayout.EndHorizontal( _help );
+
+			return _offset;
+		}
+
+		/// <summary>
+		/// Draws the base offset.
+		/// </summary>
+		/// <returns>The base offset.</returns>
+		/// <param name="_transform">Transform.</param>
+		/// <param name="_title">Title.</param>
+		/// <param name="_hint">Hint.</param>
+		/// <param name="_offset">Offset.</param>
+		/// <param name="_maximum">Maximum.</param>
+		/// <param name="_grounded">Grounded.</param>
+		/// <param name="_help">Help.</param>
+		public static float DrawBaseOffsetGround( Transform _transform, string _title, string _hint, float _offset, ref float _maximum, ref bool _grounded, string _help = "" )
+		{
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Base Offset";
+
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.BASE_OFFSET ;
+
+			if(  _transform.parent != null)
+				_grounded = false;
+
+			ICEEditorLayout.BeginHorizontal();
+			_offset = ICEEditorLayout.MaxBasicSlider( _title, _hint, _offset, 0.01f, -_maximum, ref _maximum, "" );
+			_offset = ICEEditorLayout.ButtonDefault( _offset, 0 );
+			EditorGUI.BeginDisabledGroup( _transform.parent != null );
+			_grounded = ICEEditorLayout.ButtonCheck( "GND", "Grounded In Editor Mode" , _grounded , ICEEditorStyle.CMDButtonDouble );
+			EditorGUI.EndDisabledGroup();
+			ICEEditorLayout.EndHorizontal( _help );
+
+			return _offset;
+		}
 
 
 		public static string CameraPopup( string _title, string _hint, string _camera )
