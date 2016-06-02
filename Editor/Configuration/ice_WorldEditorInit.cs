@@ -15,7 +15,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace ICE.World.EditorInfo
+namespace ICE.World.EditorInfos
 {
 	public static class Init
 	{

@@ -49,7 +49,7 @@ namespace ICE.World
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public virtual T DrawDefaultHeader<T>() where T : ICEWorldBehaviour
 		{
-			ICEEditorLayout.Init();
+			ICEEditorLayout.SetDefaults();
 			T _target = (T)target;
 
 			GUI.changed = false;

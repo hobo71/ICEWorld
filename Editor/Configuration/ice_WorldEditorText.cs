@@ -29,6 +29,8 @@ namespace ICE.World.EditorInfos
 	{
 		public static string Version = "1.2.10";
 
+		public static readonly string BASE_OFFSET = "Base Offset defines the relative vertical displacement of the owning GameObject.";
+
 		public static readonly string ANIMATION = "Here you can define the desired animation you want use for the selected rule. " +
 			"Simply choose the desired type and adapt the required settings.";
 
@@ -72,6 +74,15 @@ namespace ICE.World.EditorInfos
 		public static readonly string IMPULSE_TIMER_INTERVAL = "TODO";
 		public static readonly string IMPULSE_TIMER_LIMITS = "TODO";
 		public static readonly string IMPULSE_TIMER_BREAK_LENGTH = "TODO";
+
+		public static readonly string STATUS_INITIAL_DURABILITY = "Initial Durability defines the fundamental capability of resistance of a creature in terms of " +
+			"physical integrity and its vital fitness. The durability will be affected by several influences (e.g. damage, age etc. ) during the runtime and the " +
+			"creature will die as soon as its durability is exhausted. By default the Initial Durability is adjusted to 100 but you are free to define a suitable " +
+			"value according to your needs and requirements; the lower the value, the greater the impact of several influences and vice versa (e.g. increase this " +
+			"value to 1000 for your level boss or decrease it to 10 for homely antagonists). Please note that changing the durability value is ineffective while " +
+			"using influence values in percent, in such a case a damage of 50% for example will also reduce the durability value to 50%, independent of the defined " +
+			"initial durability value. \n\nThe Initial Durability based on a minimum and maximum value, which allows you to define a random range. If you prefer to " +
+			"define a fixed value, simply set minimum and maximum to the same value, also you can adapt the third field to modify the range of the slider. ";
 
 	}
 }
