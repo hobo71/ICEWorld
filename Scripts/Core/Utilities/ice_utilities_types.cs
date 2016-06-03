@@ -79,6 +79,16 @@ namespace ICE.World
 		SAMPLEHEIGHT
 	}
 
+	public enum LogicalOperatorType
+	{
+		EQUAL = 0,
+		NOT = 1,
+		LESS = 2,
+		LESS_OR_EQUAL = 3,
+		GREATER = 4,
+		GREATER_OR_EQUAL = 5
+	}
+
 	public enum MethodParameterType
 	{
 		None=0,

@@ -50,8 +50,7 @@ namespace ICE.World
 		{
 			RegisterPublicMethod( "ApplyDamage", MethodParameterType.Float );
 		}
-
-
+			
 		private ICEWorld m_World = null;
 		/// <summary>
 		/// Gets the ICEWorld.

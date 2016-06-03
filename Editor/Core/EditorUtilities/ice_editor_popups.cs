@@ -47,6 +47,41 @@ namespace ICE.World.EditorUtilities
 	/// </summary>
 	public class WorldPopups
 	{
+
+		/// <summary>
+		/// Logicals the operator popup.
+		/// </summary>
+		/// <returns>The operator popup.</returns>
+		/// <param name="_selected">Selected.</param>
+		/// <param name="_options">Options.</param>
+		public static LogicalOperatorType LogicalOperatorPopup( LogicalOperatorType _selected, params GUILayoutOption[] _options )
+		{
+			string[] _values = new string[6];
+			_values[(int)LogicalOperatorType.EQUAL ] = "==";
+			_values[(int)LogicalOperatorType.NOT ] = "!=";
+			_values[(int)LogicalOperatorType.LESS ] = "<";
+			_values[(int)LogicalOperatorType.LESS_OR_EQUAL ] = "<=";
+			_values[(int)LogicalOperatorType.GREATER ] = ">";
+			_values[(int)LogicalOperatorType.GREATER_OR_EQUAL ] = ">=";
+
+			return (LogicalOperatorType)EditorGUILayout.Popup( (int)_selected, _values, _options ); 
+		}
+
+		/// <summary>
+		/// Operators the popup.
+		/// </summary>
+		/// <returns>The popup.</returns>
+		/// <param name="_selected">Selected.</param>
+		/// <param name="_options">Options.</param>
+		public static LogicalOperatorType OperatorPopup( LogicalOperatorType _selected, params GUILayoutOption[] _options )
+		{
+			string[] _values = new string[2];
+			_values[(int)LogicalOperatorType.EQUAL ] = "IS";
+			_values[(int)LogicalOperatorType.NOT ] = "NOT";
+
+			return (LogicalOperatorType)EditorGUILayout.Popup( (int)_selected, _values, _options ); 
+		}
+
 		/// <summary>
 		/// Draws the message popup.
 		/// </summary>
