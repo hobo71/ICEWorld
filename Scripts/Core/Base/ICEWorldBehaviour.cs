@@ -102,7 +102,7 @@ namespace ICE.World
 		public void PrintDebugLog( string _log )
 		{
 			if( UseDebugLogs )
-				Debug.Log( name + " (" + InstanceID + ") - " + _log );
+				Debug.Log( name + " (" + ObjectInstanceID + ") - " + _log );
 		}
 
 		/// <summary>
@@ -113,13 +113,13 @@ namespace ICE.World
 		/// <summary>
 		/// The cached InstanceID.
 		/// </summary>
-		private int m_InstanceID = 0;
+		private int m_ObjectInstanceID = 0;
 		/// <summary>
 		/// Gets the cached InstanceID.
 		/// </summary>
 		/// <value>The ID.</value>
-		public int InstanceID{
-			get{  return m_InstanceID = ( m_InstanceID == 0 ? transform.gameObject.GetInstanceID():m_InstanceID ); }
+		public int ObjectInstanceID{
+			get{  return m_ObjectInstanceID = ( m_ObjectInstanceID == 0 ? transform.gameObject.GetInstanceID():m_ObjectInstanceID ); }
 		}
 
 		public delegate void OnLateUpdateEvent();

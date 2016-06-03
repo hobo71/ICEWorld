@@ -174,7 +174,7 @@ namespace ICE.World.Objects
 		/// </summary>
 		/// <value>The parent InstanceID or 0</value>
 		public int OwnerInstanceID{
-			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.InstanceID :0 ); }
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.ObjectInstanceID :0 ); }
 		}
 
 		public ICEOwnerObject(){}
