@@ -1,42 +1,50 @@
-﻿// ##############################################################################
+﻿// *** ##############################################################################
 //
-// ice_utilities_types.cs
-// Version 1.2.10
+// *** ice_utilities_types.cs
+// *** Version 1.2.10
 //
-// Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
-// http://www.icecreaturecontrol.com
-// mailto:support@icecreaturecontrol.com
+// *** Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
+// *** http://www.icecreaturecontrol.com
+// *** mailto:support@icecreaturecontrol.com
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy 
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is furnished 
-// to do so, subject to the following conditions:
+// *** Permission is hereby granted, free of charge, to any person obtaining a copy 
+// *** of this software and associated documentation files (the "Software"), to deal 
+// *** in the Software without restriction, including without limitation the rights 
+// *** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+// *** copies of the Software, and to permit persons to whom the Software is furnished 
+// *** to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all 
-// copies or substantial portions of the Software.
+// *** The above copyright notice and this permission notice shall be included in all 
+// *** copies or substantial portions of the Software.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// *** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// *** INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+// *** PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+// *** HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+// *** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+// *** SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// ##############################################################################
+// *** ##############################################################################
 
 using UnityEngine;
 using System.Collections;
 
 namespace ICE.World
 {
+	// *** A ***
+
+	/// <summary>
+	/// Animator control type.
+	/// </summary>
 	public enum AnimatorControlType
 	{
 		DIRECT,
 		ADVANCED
 	}
-
+		
+	/// <summary>
+	/// Animation interface type.
+	/// </summary>
 	public enum AnimationInterfaceType
 	{
 		NONE=0,
@@ -46,6 +54,13 @@ namespace ICE.World
 		CUSTOM
 	}
 
+	// *** B *** 
+	// *** C *** 
+	// *** D *** 
+
+	/// <summary>
+	/// Dynamic boolean value type.
+	/// </summary>
 	public enum DynamicBooleanValueType
 	{
 		IsGrounded,
@@ -56,11 +71,17 @@ namespace ICE.World
 		TargetMovePositionReached
 	}
 
+	/// <summary>
+	/// Dynamic integer value type.
+	/// </summary>
 	public enum DynamicIntegerValueType
 	{
 		undefined
 	}
 
+	/// <summary>
+	/// Dynamic float value type.
+	/// </summary>
 	public enum DynamicFloatValueType
 	{
 		ForwardSpeed,
@@ -72,6 +93,13 @@ namespace ICE.World
 		MovePositionDistance
 	}
 
+	// *** E *** 
+	// *** F *** 
+	// *** G *** 
+
+	/// <summary>
+	/// Ground check type.
+	/// </summary>
 	public enum GroundCheckType
 	{
 		NONE,
@@ -79,6 +107,15 @@ namespace ICE.World
 		SAMPLEHEIGHT
 	}
 
+	// *** H *** 
+	// *** I *** 
+	// *** J *** 
+	// *** K *** 
+	// *** L *** 
+
+	/// <summary>
+	/// Logical operator type.
+	/// </summary>
 	public enum LogicalOperatorType
 	{
 		EQUAL = 0,
@@ -88,7 +125,11 @@ namespace ICE.World
 		GREATER = 4,
 		GREATER_OR_EQUAL = 5
 	}
+	// *** M *** 
 
+	/// <summary>
+	/// Method parameter type.
+	/// </summary>
 	public enum MethodParameterType
 	{
 		None=0,
@@ -97,4 +138,26 @@ namespace ICE.World
 		String,
 		Boolean
 	}
+	// *** N *** 
+	// *** O *** 
+	// *** P *** 
+	// *** Q *** 
+	// *** R *** 
+
+	/// <summary>
+	/// Random offset type.
+	/// </summary>
+	public enum RandomOffsetType
+	{
+		EXACT,
+		CIRCLE,
+		HEMISPHERE,
+		SPHERE
+	}
+	// *** S *** 
+	// *** T *** 
+	// *** U *** 
+	// *** V *** 
+	// *** W *** 
+	// *** XYZ *** 
 }

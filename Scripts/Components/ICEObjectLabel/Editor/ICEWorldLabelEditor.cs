@@ -22,7 +22,7 @@ using UnityEditor.AnimatedValues;
 using ICE.World;
 using ICE.World.EditorUtilities;
 
-using ICE.Creatures.EnumTypes;
+using ICE.Creatures.Utilities;
 using ICE.Creatures.Objects;
 
 namespace ICE.Creatures

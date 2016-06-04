@@ -129,10 +129,10 @@ namespace ICE.World.Objects
 	}
 	
 	[System.Serializable]
-	public class AudioSourceObject : ICEOwnerObject
+	public class AudioPlayerObject : ICEOwnerObject
 	{
-		public AudioSourceObject(){}
-		public AudioSourceObject( ICEWorldBehaviour _component  ) : base( _component )
+		public AudioPlayerObject(){}
+		public AudioPlayerObject( ICEWorldBehaviour _component  ) : base( _component )
 		{ Init( _component ); }
 			
 		private AudioSource m_AudioSource = null;

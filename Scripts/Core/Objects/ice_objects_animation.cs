@@ -264,10 +264,10 @@ namespace ICE.World.Objects
 	}
 
 	[System.Serializable]
-	public class AnimationObject : ICEOwnerObject
+	public class AnimationPlayerObject : ICEOwnerObject
 	{
-		public AnimationObject(){}
-		public AnimationObject( ICEWorldBehaviour _component ) : base( _component )
+		public AnimationPlayerObject(){}
+		public AnimationPlayerObject( ICEWorldBehaviour _component ) : base( _component )
 		{
 			Init( _component );
 		}
