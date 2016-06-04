@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorld.cs
+// ICEWorldSingleton.cs | ICEWorldSingleton
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -34,28 +34,11 @@ namespace ICE.World
 	/// <summary>
 	/// ICE World. 
 	/// </summary>
-	public abstract class ICEWorld : ICEWorldBehaviour {
+	public abstract class ICEWorldSingleton : ICEWorldBehaviour {
 
-		public Vector3 GridSize = Vector3.one;
-
-		protected static ICEWorld m_Instance = null;
-		public static ICEWorld Instance
-		{
-			get
-			{
-				if( m_Instance == null )
-					m_Instance = GameObject.FindObjectOfType<ICEWorld>();
-
-				return m_Instance;
-			}
-		}
-
-		public override void Start () {
-
-		}
-
-		public override void Update () {
-
+		protected static ICEWorldSingleton m_Instance = null;
+		public static ICEWorldSingleton Instance{
+			get { return m_Instance = ( m_Instance == null ? GameObject.FindObjectOfType<ICEWorldSingleton>():m_Instance ); }
 		}
 	}
 }

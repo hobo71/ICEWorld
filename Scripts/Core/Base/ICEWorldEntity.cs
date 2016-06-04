@@ -46,18 +46,25 @@ namespace ICE.World
 			get{ return m_Status = ( m_Status == null ? new ICEStatusObject(this):m_Status ); }
 		}
 
-		protected override void RegisterPublicMethods()
+		/// <summary>
+		/// OnRegisterPublicMethods is called within the GetPublicMethods() method to update the 
+		/// m_PublicMethods list. Override this event to register your own methods by using the 
+		/// RegisterPublicMethod(); while doing so you can use base.OnRegisterPublicMethods(); 
+		/// to call the event in the base classes too.
+		/// </summary>
+		protected override void OnRegisterPublicMethods()
 		{
+			//base.OnRegisterPublicMethods(); 
 			RegisterPublicMethod( "ApplyDamage", MethodParameterType.Float );
 		}
 			
-		private ICEWorld m_World = null;
+		private ICEWorldSingleton m_World = null;
 		/// <summary>
 		/// Gets the ICEWorld.
 		/// </summary>
 		/// <value>The current ICEWorld</value>
-		public ICEWorld World{
-			get{ return m_World = ( m_World == null?ICEWorld.Instance:m_World ); }
+		public ICEWorldSingleton World{
+			get{ return m_World = ( m_World == null?ICEWorldSingleton.Instance:m_World ); }
 		}
 			
 		private ICEWorldEnvironment m_Environment = null;

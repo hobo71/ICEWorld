@@ -40,7 +40,7 @@ namespace ICE.World
 	/// <summary>
 	/// ICE world camera.
 	/// </summary>
-	public class ICEWorldCamera : ICEWorldBehaviour {
+	public abstract class ICEWorldCamera : ICEWorldBehaviour {
 
 
 	}

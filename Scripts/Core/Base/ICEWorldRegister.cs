@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorldRegistry.cs
+// ICEWorldRegister.cs | ICEWorldRegister
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -36,7 +36,10 @@ using ICE.World.Utilities;
 
 namespace ICE.World
 {
-	public class ICEWorldRegister : ICEWorld {
+	public class ICEWorldRegister : ICEWorldSingleton {
+
+		public Vector3 GridSize = Vector3.one;
+
 
 		[SerializeField]
 		private List<string> m_GroundLayers = new List<string>();

@@ -153,17 +153,19 @@ namespace ICE.World
 		/// </summary>
 		/// <value>The public methods.</value>
 		public MethodDataContainer[] PublicMethods{
-			get{
-				List<MethodDataContainer> _methods = new List<MethodDataContainer>();
+			get{ return GetPublicMethods(); }
+		}
 
-				m_PublicMethods.Clear();
-				RegisterPublicMethods();
+		protected MethodDataContainer[] GetPublicMethods()
+		{
+			m_PublicMethods.Clear();
+			OnRegisterPublicMethods();
 
-				foreach( MethodDataContainer _method in m_PublicMethods )						
-					_methods.Add( new MethodDataContainer( _method ) );
+			List<MethodDataContainer> _methods = new List<MethodDataContainer>();
+			foreach( MethodDataContainer _method in m_PublicMethods )						
+				_methods.Add( new MethodDataContainer( _method ) );
 
-				return _methods.ToArray();
-			}
+			return _methods.ToArray();
 		}
 
 
@@ -188,9 +190,12 @@ namespace ICE.World
 		}
 
 		/// <summary>
-		/// Register public methods. Override this method to register your own methods by using the RegisterPublicMethod();
+		/// OnRegisterPublicMethods is called whithin the GetPublicMethods() method to update the 
+		/// m_PublicMethods list. Override this event to register your own methods by using the 
+		/// RegisterPublicMethod(); while doing so you can use base.OnRegisterPublicMethods(); 
+		/// to call the event in the base classes too.
 		/// </summary>
-		protected virtual void RegisterPublicMethods(){}
+		protected virtual void OnRegisterPublicMethods(){}
 
 		public void RegisterPublicMethod( string _method ){
 			RegisterPublicMethod( _method, MethodParameterType.None );

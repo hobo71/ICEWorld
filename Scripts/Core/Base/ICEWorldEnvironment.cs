@@ -65,7 +65,7 @@ namespace ICE.World
 	/// You can use ICEWorldEnvironment as base class for your own Day&Night Cycle and/or Weather System, so it will be automatically 
 	/// compatible with the rest of the ICE world. 
 	/// <description>
-	public class ICEWorldEnvironment : ICEWorld {
+	public class ICEWorldEnvironment : ICEWorldSingleton {
 
 		protected static new ICEWorldEnvironment m_Instance = null;
 		public static new ICEWorldEnvironment Instance{
