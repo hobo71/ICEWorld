@@ -104,6 +104,62 @@ namespace ICE.World.Objects
 
 	}
 
+	[System.Serializable]
+	public abstract class ICEEntityObject : ICEInfoDataObject 
+	{
+		public ICEEntityObject(){}
+		public ICEEntityObject( ICEEntityObject _object ) : base( _object )
+		{
+			Copy( _object );
+		}
+
+		public void Copy( ICEInfoDataObject _object )
+		{
+			if( _object == null )
+				return;
+
+			base.Copy( _object );
+		}
+
+		[SerializeField, XmlIgnore]
+		protected GameObject m_EntityGameObject = null;
+		[XmlIgnore]
+		public GameObject EntityGameObject{
+			get{ return m_EntityGameObject = ( m_EntityGameObject == null ?( m_EntityComponent != null ? m_EntityComponent.gameObject:null ):m_EntityGameObject ); }
+		}
+
+		public void SetEntityGameObject( GameObject _object )
+		{
+			m_EntityGameObject = _object;
+			m_EntityComponent = ( m_EntityGameObject != null ? m_EntityGameObject.GetComponent<ICEWorldEntity>():null );
+		}
+
+		[SerializeField, XmlIgnore]
+		protected ICEWorldEntity m_EntityComponent = null;
+		public virtual ICEWorldEntity EntityComponent{
+			get{ return m_EntityComponent = ( m_EntityGameObject != null && m_EntityComponent == null ? m_EntityGameObject.GetComponent<ICEWorldEntity>():m_EntityComponent ); }
+		}
+
+		public virtual void Init( ICEWorldEntity _component ){
+			m_EntityComponent = _component;
+			m_EntityGameObject = ( m_EntityComponent != null ? m_EntityComponent.gameObject:null );
+		}
+
+		public string Name{
+			get{ return ( EntityGameObject != null ? EntityGameObject.name:"" ); }
+		}
+
+		public string Tag{
+			get{ return ( EntityGameObject != null ? EntityGameObject.tag:"" ); }
+		}
+
+		public int ID{
+			get{ return ( EntityGameObject != null ? EntityGameObject.GetInstanceID():0 ); }
+		}
+
+	}
+
+
 	/// <summary>
 	/// ICEObject represents the abstract base class for all ICE related System Objects.
 	/// </summary>
@@ -162,11 +218,11 @@ namespace ICE.World.Objects
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this <see cref="ICE.World.Objects.ICEObject"/> parent allows to print the debug log.
+		/// Gets the tag of the parent.
 		/// </summary>
-		/// <value><c>true</c> if parent print debug log; otherwise, <c>false</c>.</value>
-		public bool OwnerEnabledDebugLog{
-			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.UseDebugLogs:false ); }
+		/// <value>The name of the parent.</value>
+		public string OwnerTag{
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.tag:"" ); }
 		}
 
 		/// <summary>
@@ -177,6 +233,14 @@ namespace ICE.World.Objects
 			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.ObjectInstanceID :0 ); }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="ICE.World.Objects.ICEObject"/> parent allows to print the debug log.
+		/// </summary>
+		/// <value><c>true</c> if parent print debug log; otherwise, <c>false</c>.</value>
+		public bool OwnerEnabledDebugLog{
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.UseDebugLogs:false ); }
+		}
+			
 		public ICEOwnerObject(){}
 		public ICEOwnerObject( ICEWorldBehaviour _component ){
 			m_OwnerComponent = _component;
@@ -196,6 +260,12 @@ namespace ICE.World.Objects
 		public virtual void Init( ICEWorldBehaviour _component ){
 			m_OwnerComponent = _component;
 			m_Owner = ( m_OwnerComponent != null ? m_OwnerComponent.gameObject:null );
+		}
+
+		public void SetOwner( GameObject _object )
+		{
+			m_Owner = _object;
+			m_OwnerComponent = ( m_Owner != null ? m_Owner.GetComponent<ICEWorldBehaviour>():null );
 		}
 	}
 
