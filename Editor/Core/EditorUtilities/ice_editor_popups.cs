@@ -81,6 +81,20 @@ namespace ICE.World.EditorUtilities
 
 			return (LogicalOperatorType)EditorGUILayout.Popup( (int)_selected, _values, _options ); 
 		}
+		public static MethodDataContainer MethodPopup( ICEWorldBehaviour _component, MethodDataContainer _method, MethodDataContainer[] _methods, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
+		{
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Method";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.METHOD;
+
+			ICEEditorLayout.BeginHorizontal();
+				_method = MethodPopupLine( _component, _method, _component.PublicMethods, ref _custom, _help, _title, _hint );
+			ICEEditorLayout.EndHorizontal( _help );
+			return _method;
+		}
 
 		/// <summary>
 		/// Draws the message popup.
@@ -93,24 +107,15 @@ namespace ICE.World.EditorUtilities
 		/// <param name="_messages">Messages.</param>
 		/// <param name="_custom">Custom.</param>
 		/// <param name="_help">Help.</param>
-		public static MethodDataContainer MethodPopup( ICEWorldBehaviour _component, MethodDataContainer _method, MethodDataContainer[] _methods, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
+		public static MethodDataContainer MethodPopupLine( ICEWorldBehaviour _component, MethodDataContainer _method, MethodDataContainer[] _methods, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
 		{
-			if( string.IsNullOrEmpty( _title ) )
-				_title = "Method";
-			if( string.IsNullOrEmpty( _hint ) )
-				_hint = "";
-			if( string.IsNullOrEmpty( _help ) )
-				_help = Info.METHOD;
-
-			ICEEditorLayout.BeginHorizontal();
-
 			if( _custom || _methods.Length == 0 )
 			{
 				_method.ComponentName = "";
 				_method.MethodName = ICEEditorLayout.Text( _title, _hint, _method.MethodName, "" );
 				int indent = EditorGUI.indentLevel;
 				EditorGUI.indentLevel = 0;
-				_method.MethodType = (MethodParameterType)EditorGUILayout.EnumPopup( _method.MethodType, GUILayout.Width( 60 ) );
+				_method.ParameterType = (MethodParameterType)EditorGUILayout.EnumPopup( _method.ParameterType, GUILayout.Width( 60 ) );
 				EditorGUI.indentLevel = indent;
 			}
 			else
@@ -140,7 +145,7 @@ namespace ICE.World.EditorUtilities
 			}
 
 			_custom = ICEEditorLayout.ButtonCheck( "CUSTOM", "", _custom, ICEEditorStyle.ButtonMiddle );
-			ICEEditorLayout.EndHorizontal( _help );
+
 			return _method;
 		}
 
