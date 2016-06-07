@@ -63,11 +63,11 @@ namespace ICE.World.Objects
 
 		public void SetActive( bool _active ){
 
-			if( _active && ! m_Active )
+			if( _active && ! m_Active && Enabled )
 			{
 				m_Active = true;
+				m_ImpulseInterval = ( InitialImpulsTime > 0 ? InitialImpulsTime: Random.Range( ImpulseIntervalMin, ImpulseIntervalMax ) );
 				m_ImpulseSequenceLimit = Random.Range( ImpulseSequenceLimitMin, ImpulseSequenceLimitMax );
-				m_ImpulseInterval = Random.Range( ImpulseIntervalMin, ImpulseIntervalMax );
 				m_ImpulseBreakLength = Random.Range( ImpulseBreakLengthMin, ImpulseBreakLengthMax );
 				m_ImpulseIntervalTimer = m_ImpulseInterval;
 			}
@@ -80,6 +80,9 @@ namespace ICE.World.Objects
 				m_ImpulseIntervalTimer = 0;
 			}
 		}
+
+		public float InitialImpulsTime = 0;
+		public float InitialImpulsTimeMaximum = 60;
 
 		private float m_ImpulseIntervalTimer = 0;
 		private float m_ImpulseInterval = 0;
@@ -100,7 +103,7 @@ namespace ICE.World.Objects
 		public float ImpulseBreakLengthMaximum = 10;
 
 		public virtual void Start(){
-			SetActive( true );
+			SetActive( Enabled );
 		}
 
 		public virtual void Stop(){
