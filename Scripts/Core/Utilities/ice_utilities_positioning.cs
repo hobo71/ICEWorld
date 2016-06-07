@@ -41,13 +41,13 @@ namespace ICE.World.Utilities
 		/// <param name="_start">Start.</param>
 		/// <param name="_end">End.</param>
 		/// <param name="_level">Level.</param>
-		/// <param name="_step">Step.</param>
-		public static Vector3 GetClampedPosition( Vector3 _start, Vector3 _end, float _level, float _step = 45 )
+		/// <param name="_precision">Step.</param>
+		public static Vector3 GetClampedPosition( Vector3 _start, Vector3 _end, float _level, float _step_angle = 45 )
 		{
 			float _distance = Vector3.Distance( _start, _end );
 			Quaternion _rot = Quaternion.FromToRotation( Vector3.right, _end - _start );
 			Vector3 _euler = _rot.eulerAngles;
-			float _angle = _step * (int)Mathf.Round( _euler.y / _step );
+			float _angle = _step_angle * (int)Mathf.Round( _euler.y / _step_angle );
 			float _end_x = _start.x + _distance * Mathf.Cos(_angle * (Mathf.PI / 180f));
 			float _end_z = _start.z + _distance * Mathf.Sin(-_angle * (Mathf.PI / 180f));
 			return new Vector3( _end_x, _level, _end_z );
