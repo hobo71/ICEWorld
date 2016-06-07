@@ -119,12 +119,12 @@ namespace ICE.World.EditorUtilities
 			GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
 		}
 
-		public static float Round( float _value, float _step )
+		public static float Round( float _value, float _precision )
 		{
 			if( Application.isPlaying )
 				return _value;
 			else
-				return Mathf.Round( _value / _step ) * _step;
+				return Mathf.Round( _value / _precision ) * _precision;
 		}
 
 		public static bool ButtonUp(){
@@ -1184,11 +1184,11 @@ namespace ICE.World.EditorUtilities
 	
 		}
 
-		public static float DurationSlider( string _title, string _tooltip, float _value, float _step, float _min, float _max, float _default, ref bool _transit, string _help = ""  )
+		public static float DurationSlider( string _title, string _tooltip, float _value, float _precision, float _min, float _max, float _default, ref bool _transit, string _help = ""  )
 		{
 			BeginHorizontal();
 				EditorGUI.BeginDisabledGroup( _transit == true );				
-					_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+					_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 					
 					if( _default != _value )
 						GUI.backgroundColor = Color.yellow;
@@ -1216,10 +1216,10 @@ namespace ICE.World.EditorUtilities
 			
 		}
 
-		public static float MaxDefaultSlider( string _title, string _tooltip, float _value, float _step, float _min, ref float _max, float _default = 0 , string _help = "" )
+		public static float MaxDefaultSlider( string _title, string _tooltip, float _value, float _precision, float _min, ref float _max, float _default = 0 , string _help = "" )
 		{
 			BeginHorizontal();
-			_value = MaxBasicSlider( _title, _tooltip, _value, _step, _min, ref _max );
+			_value = MaxBasicSlider( _title, _tooltip, _value, _precision, _min, ref _max );
 			_value = ButtonDefault( _value, _default );
 			EndHorizontalInfo( _help );
 			return _value;
@@ -1254,12 +1254,12 @@ namespace ICE.World.EditorUtilities
 		}
 
 
-		public static float DefaultSlider( string _title, string _tooltip, float _value, float _step, float _min = 0, float _max = 0, float _default = 0 , string _help = "" )
+		public static float DefaultSlider( string _title, string _tooltip, float _value, float _precision, float _min = 0, float _max = 0, float _default = 0 , string _help = "" )
 		{
-			_default = Round( _default, _step );
+			_default = Round( _default, _precision );
 
 			BeginHorizontal();
-				_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+				_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 				_value = ButtonDefault( _value, _default );
 			EndHorizontalInfo( _help );
 			return _value;
@@ -1269,25 +1269,25 @@ namespace ICE.World.EditorUtilities
 
 
 
-		public static float BasicDefaultSlider( string _title, string _tooltip, float _value, float _step, float _min = 0, float _max = 0, float _default = 0 )
+		public static float BasicDefaultSlider( string _title, string _tooltip, float _value, float _precision, float _min = 0, float _max = 0, float _default = 0 )
 		{
-			_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+			_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 			_value = ButtonDefault( _value, _default );
 
 			return _value;			
 		}
 
-		public static float Slider( string _title, string _tooltip, float _value, float _step, float _min = 0, float _max = 0, string _help = ""  )
+		public static float Slider( string _title, string _tooltip, float _value, float _precision, float _min = 0, float _max = 0, string _help = ""  )
 		{
 			BeginHorizontal();
-				_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+				_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 			EndHorizontalInfo( _help );
 			return _value;
 		}
 
-		public static float MaxBasicSlider( string _title, string _tooltip, float _value, float _step, float _min, ref float _max, string _help = ""  )
+		public static float MaxBasicSlider( string _title, string _tooltip, float _value, float _precision, float _min, ref float _max, string _help = ""  )
 		{
-			_value = Round( _value, _step );
+			_value = Round( _value, _precision );
 			_value = MinMaxCheck( _value, _min, _max  );
 			_value = EditorGUILayout.Slider( new GUIContent( _title, _tooltip ),_value,_min, _max );
 
@@ -1296,27 +1296,27 @@ namespace ICE.World.EditorUtilities
 			_max = EditorGUILayout.FloatField( _max, GUILayout.Width( 50 ));
 			EditorGUI.indentLevel = _indent;
 
-			_value = PlusMinusGroup( _value, _step  );
+			_value = PlusMinusGroup( _value, _precision  );
 			_value = MinMaxCheck( _value, _min, _max  );
-			_value = Round( _value, _step );
+			_value = Round( _value, _precision );
 			return _value;
 		}
 
-		public static float BasicSlider( string _title, string _tooltip, float _value, float _step, float _min = 0, float _max = 0, string _help = ""  )
+		public static float BasicSlider( string _title, string _tooltip, float _value, float _precision, float _min = 0, float _max = 0, string _help = ""  )
 		{
-			_value = Round( _value, _step );
+			_value = Round( _value, _precision );
 			_value = MinMaxCheck( _value, _min, _max  );
 			_value = EditorGUILayout.Slider( new GUIContent( _title, _tooltip ),_value,_min, _max );			
-			_value = PlusMinusGroup( _value, _step  );
+			_value = PlusMinusGroup( _value, _precision  );
 			_value = MinMaxCheck( _value, _min, _max  );
-			_value = Round( _value, _step );
+			_value = Round( _value, _precision );
 			return _value;
 		}
 
-		public static void MinMaxGroupSimple( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, ref float _max_value, float _step, float _size = 40, string _help = "" )
+		public static void MinMaxGroupSimple( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, ref float _max_value, float _precision, float _size = 40, string _help = "" )
 		{
-			_min = Round( _min, _step );
-			_max = Round( _max, _step );
+			_min = Round( _min, _precision );
+			_max = Round( _max, _precision );
 
 			ICEEditorLayout.BeginHorizontal();			
 				EditorGUILayout.PrefixLabel( new GUIContent( _title, _tooltip ) );				
@@ -1332,21 +1332,21 @@ namespace ICE.World.EditorUtilities
 				EditorGUI.indentLevel = _indent;
 			ICEEditorLayout.EndHorizontal( _help );
 
-			_min = Round( _min, _step );
-			_max = Round( _max, _step );
+			_min = Round( _min, _precision );
+			_max = Round( _max, _precision );
 		}
 
-		public static void MinMaxGroup( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, float _max_value, float _step, string _help = "" )
+		public static void MinMaxGroup( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, float _max_value, float _precision, string _help = "" )
 		{
 			ICEEditorLayout.BeginHorizontal();			
 			EditorGUILayout.PrefixLabel( new GUIContent( _title, _tooltip ) );				
 			int _indent = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
-			_min = ICEEditorLayout.PlusMinusGroup( _min, _step );
+			_min = ICEEditorLayout.PlusMinusGroup( _min, _precision );
 			_min = EditorGUILayout.FloatField( _min , GUILayout.Width( 40 ) );				
 			EditorGUILayout.MinMaxSlider( ref _min, ref _max, _min_value, _max_value ); 				
 			_max = EditorGUILayout.FloatField( _max , GUILayout.Width( 40 ) );
-			_max = ICEEditorLayout.PlusMinusGroup( _max, _step );
+			_max = ICEEditorLayout.PlusMinusGroup( _max, _precision );
 			
 			_min = MinMaxCheck( _min, _min_value, _max );
 			_max = MinMaxCheck( _max, _min, _max_value );
@@ -1354,17 +1354,17 @@ namespace ICE.World.EditorUtilities
 			ICEEditorLayout.EndHorizontal( _help );
 		}
 
-		public static void RandomMinMaxGroupExt( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, ref float _max_value,float _min_default, float _max_default, float _size, float _step, string _help = "" )
+		public static void RandomMinMaxGroupExt( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, ref float _max_value,float _min_default, float _max_default, float _size, float _precision, string _help = "" )
 		{
 			ICEEditorLayout.BeginHorizontal();			
 			EditorGUILayout.PrefixLabel( new GUIContent( _title, _tooltip ) );				
 			int _indent = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
-			_min = ICEEditorLayout.PlusMinusGroup( _min, _step );
+			_min = ICEEditorLayout.PlusMinusGroup( _min, _precision );
 			_min = EditorGUILayout.FloatField( _min , GUILayout.MinWidth( _size ) );				
 			EditorGUILayout.MinMaxSlider( ref _min, ref _max, _min_value, _max_value ); 				
 			_max = EditorGUILayout.FloatField( _max , GUILayout.MinWidth( _size ) );
-			_max = ICEEditorLayout.PlusMinusGroup( _max, _step );
+			_max = ICEEditorLayout.PlusMinusGroup( _max, _precision );
 			_max_value = EditorGUILayout.FloatField( _max_value, GUILayout.MinWidth( _size ) ); 
 
 
@@ -1383,17 +1383,17 @@ namespace ICE.World.EditorUtilities
 			ICEEditorLayout.EndHorizontal( _help );
 		}
 
-		public static void RandomMinMaxGroup( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, float _max_value,float _min_default, float _max_default, float _step, string _help = "" )
+		public static void RandomMinMaxGroup( string _title, string _tooltip, ref float _min, ref float _max, float _min_value, float _max_value,float _min_default, float _max_default, float _precision, string _help = "" )
 		{
 			ICEEditorLayout.BeginHorizontal();			
 			EditorGUILayout.PrefixLabel( new GUIContent( _title, _tooltip ) );				
 			int _indent = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
-			_min = ICEEditorLayout.PlusMinusGroup( _min, _step );
+			_min = ICEEditorLayout.PlusMinusGroup( _min, _precision );
 			_min = EditorGUILayout.FloatField( _min , GUILayout.Width( 40 ) );				
 			EditorGUILayout.MinMaxSlider( ref _min, ref _max, _min_value, _max_value ); 				
 			_max = EditorGUILayout.FloatField( _max , GUILayout.Width( 40 ) );
-			_max = ICEEditorLayout.PlusMinusGroup( _max, _step );
+			_max = ICEEditorLayout.PlusMinusGroup( _max, _precision );
 
 
 
@@ -1423,28 +1423,28 @@ namespace ICE.World.EditorUtilities
 			return _value;
 		}
 
-		public static float PlusMinusGroup( float _value, float _step )
+		public static float PlusMinusGroup( float _value, float _precision )
 		{
-			return PlusMinusGroup( _value, _step, ICEEditorStyle.CMDButton );
+			return PlusMinusGroup( _value, _precision, ICEEditorStyle.CMDButton );
 		}
 
-		public static float PlusMinusGroup( float _value, float _step, GUIStyle _style  )
+		public static float PlusMinusGroup( float _value, float _precision, GUIStyle _style  )
 		{
-			if( GUILayout.Button( new GUIContent( "<", "minus " + _step ), _style ) )
-				_value -= _step;
+			if( GUILayout.Button( new GUIContent( "<", "minus " + _precision ), _style ) )
+				_value -= _precision;
 			
-			if( GUILayout.Button( new GUIContent( ">", "plus " + _step ), _style ) )
-				_value += _step; 
+			if( GUILayout.Button( new GUIContent( ">", "plus " + _precision ), _style ) )
+				_value += _precision; 
 
 			return _value;
 		}
 
-		public static float ToggleSlider( string _title, string _tooltip, float _value, float _step, float _min, float _max, float _default, ref bool _toggle, string _toggle_title, string _toggle_tooltip, string _help = ""  )
+		public static float ToggleSlider( string _title, string _tooltip, float _value, float _precision, float _min, float _max, float _default, ref bool _toggle, string _toggle_title, string _toggle_tooltip, string _help = ""  )
 		{
 			BeginHorizontal();
 			
 			EditorGUI.BeginDisabledGroup( _toggle == true );
-			_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+			_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 			_value = ButtonDefault( _value, _default );
 			EditorGUI.EndDisabledGroup();
 			
@@ -1462,12 +1462,12 @@ namespace ICE.World.EditorUtilities
 			return _value;
 		}
 
-		public static float RandomSlider( string _title, string _tooltip, float _value, float _step, float _min, float _max, ref bool _toggle, float _default, string _help = ""  )
+		public static float RandomSlider( string _title, string _tooltip, float _value, float _precision, float _min, float _max, ref bool _toggle, float _default, string _help = ""  )
 		{
 			BeginHorizontal();
 			
 			EditorGUI.BeginDisabledGroup( _toggle == true );
-			_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+			_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 			_value = ButtonDefault( _value, _default );
 			EditorGUI.EndDisabledGroup();
 			
@@ -1485,12 +1485,12 @@ namespace ICE.World.EditorUtilities
 			return _value;
 		}
 
-		public static float AutoSlider( string _title, string _tooltip, float _value, float _step, float _min, float _max, ref bool _toggle, float _default, string _help = ""  )
+		public static float AutoSlider( string _title, string _tooltip, float _value, float _precision, float _min, float _max, ref bool _toggle, float _default, string _help = ""  )
 		{
 			BeginHorizontal();
 			
 			EditorGUI.BeginDisabledGroup( _toggle == true );
-				_value = BasicSlider( _title, _tooltip, _value, _step, _min, _max );
+				_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 				_value = ButtonDefault( _value, _default );
 			EditorGUI.EndDisabledGroup();
 			
@@ -1501,26 +1501,26 @@ namespace ICE.World.EditorUtilities
 			return _value;
 		}
 
-		public static Vector3 Velocity( string _title, string _tooltip, Vector3 _velocity, float _step, float _min, float _max, Vector3 _default_velocity )
+		public static Vector3 Velocity( string _title, string _tooltip, Vector3 _velocity, float _precision, float _min, float _max, Vector3 _default_velocity )
 		{
 			Label( _title, false );
 			EditorGUI.indentLevel++;
 
 			bool _toggle = false;
 
-			_velocity.x = AutoSlider( "Sidewards \t(x)", "x-Velocity", _velocity.x, _step, _min, _max, ref _toggle, 0 );
+			_velocity.x = AutoSlider( "Sidewards \t(x)", "x-Velocity", _velocity.x, _precision, _min, _max, ref _toggle, 0 );
 
 			if( _toggle )
 				_velocity.x = _default_velocity.x;
 			_toggle = false;
 
-			_velocity.y = AutoSlider( "Vertical \t(y)", "y-Velocity", _velocity.y, _step, _min, _max, ref _toggle,0 );
+			_velocity.y = AutoSlider( "Vertical \t(y)", "y-Velocity", _velocity.y, _precision, _min, _max, ref _toggle,0 );
 
 			if( _toggle )
 				_velocity.y = _default_velocity.y;
 			_toggle = false;
 
-			_velocity.z = AutoSlider( "Forwards \t(z)", "z-Velocity", _velocity.z, _step, _min, _max, ref _toggle, 0 );
+			_velocity.z = AutoSlider( "Forwards \t(z)", "z-Velocity", _velocity.z, _precision, _min, _max, ref _toggle, 0 );
 
 			if( _toggle )
 				_velocity.z = _default_velocity.z;
