@@ -41,7 +41,7 @@ namespace ICE.World.EditorInfos
 {
 	public class Info : ICEEditorInfo
 	{
-		public static string Version = "1.2.10";
+		public static string Version = "1.0.1025";
 
 		public static readonly string BASE_OFFSET = "Base Offset defines the relative vertical displacement of the owning GameObject.";
 
@@ -75,25 +75,35 @@ namespace ICE.World.EditorInfos
 			"works like the animation list. Simply assign the desired animation clip, set the correct WrapMode and go.";
 		public static readonly string ANIMATION_CUSTOM = "While using CUSTOM animation you could handle the desired animation for this behaviour rule by your own " +
 			"script. OnCustomAnimation and OnCustomAnimationUpdate ";
-		public static readonly string ANIMATION_EVENTS = "AnimationEvent lets you call a script function similar to SendMessage " +
-			"as part of playing back an animation. Animation events support functions that take zero or one parameter. The parameter can " +
-			"be a float, an int or a string. In cases you would like to use also events with an object reference or an AnimationEvent you " +
-			"have to define such events directly in the Animation Window.\n\n" +
-			"Please note that Animation Events calls their methods on every MonoBehaviour in this GameObject only, if you want " +
-			"to call a method within one of its children you could use the Methods feature instead.";
-		public static readonly string ANIMATION_EVENTS_METHOD = "The name of the function that will be called.";
-		public static readonly string ANIMATION_EVENTS_TIME = "The time at which the event will be fired off.";
+		public static readonly string ANIMATION_EVENTS = "AnimationEvent lets you call a script function similar to SendMessage as part of playing back an " +
+			"animation. Animation events support functions that take zero or one parameter. The parameter can be a float, an integer or a string. In cases " +
+			"you would like to use also events with an object reference or an AnimationEvent you have to define such events directly in the Animation Window. \n\n" +
+			"Please note that Animation Events calls their methods on MonoBehaviours of the ‘animated’ GameObject only, if you want to call a method within " +
+			"one of its children you could use the Methods feature instead. Also please consider that AnimationEvents will be assigned directly to the " +
+			"associated animation and will try to call their defined methods on each GameObject which used these animation, so please be careful by " +
+			"defining such events.";
+		public static readonly string ANIMATION_EVENTS_METHOD = "Use the Event section to define as much events as you want. For this simply enable the " +
+			"section and ADD a new event. Disabling the section will deactivate all listed events, which means that all defined events will be activated in " +
+			"the list and removed from the animation. To reset the complete Event section press the RES button, this removes all listed events completely.";
+		public static readonly string ANIMATION_EVENTS_METHOD_POPUP = "The Event Popup provides you a preselected list with available methods. These methods " +
+			"represents registered PublicMethods which are directly related to the game play and suitable to steering movements and/or behaviour (see also: ICE World, PublicMethods).\n\n" +
+			"In addition to the listed methods, you can activate CUSTOM to enter arbitrary function names, in doing so you can define each available function you want. \n\n" +
+			"By default a new created event will be inactive and not assigned to the animation, so you have to press ACTIVE first to assign an event to the selected " +
+			"animation, also deactivate the ACTION flag to remove an event from the animation. To remove obsolete events completely from list press " +
+			"the X button, this will removes both the listed event template and the assigned AnimationEvent.";
+		public static readonly string ANIMATION_EVENTS_METHOD_TIME = "The time at which the event will be fired off.";
 
-		public static readonly string METHODS = "TODO";
-		public static readonly string METHOD = "TODO";
-		public static readonly string METHOD_POPUP = "The Method Popup displays all available PublicMethods ";
-		public static readonly string METHOD_PARAMETER_BOOLEAN = "Boolean parameter that is stored in the event and will be sent to the function.";
-		public static readonly string METHOD_PARAMETER_INTEGER = "Int parameter that is stored in the event and will be sent to the function.";
-		public static readonly string METHOD_PARAMETER_FLOAT = "Float parameter that is stored in the event and will be sent to the function.";
-		public static readonly string METHOD_PARAMETER_STRING = "String parameter that is stored in the event and will be sent to the function.";
-		public static readonly string MESSAGE_NAME = "TODO";
+		public static readonly string EVENTS = "TODO";
+		public static readonly string EVENT = "TODO";
+		public static readonly string EVENT_POPUP = "The Method Popup displays all available PublicMethods ";
+		public static readonly string EVENT_PARAMETER_BOOLEAN = "Boolean parameter that is stored in the event and will be sent to the function.";
+		public static readonly string EVENT_PARAMETER_INTEGER = "Int parameter that is stored in the event and will be sent to the function.";
+		public static readonly string EVENT_PARAMETER_FLOAT = "Float parameter that is stored in the event and will be sent to the function.";
+		public static readonly string EVENT_PARAMETER_STRING = "String parameter that is stored in the event and will be sent to the function.";
+		public static readonly string EVENT_NAME = "TODO";
 
 		public static readonly string IMPULSE_TIMER = "TODO";
+		public static readonly string IMPULSE_TIMER_TIME = "TODO";
 		public static readonly string IMPULSE_TIMER_INTERVAL = "TODO";
 		public static readonly string IMPULSE_TIMER_LIMITS = "TODO";
 		public static readonly string IMPULSE_TIMER_BREAK_LENGTH = "TODO";

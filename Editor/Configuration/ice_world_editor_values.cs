@@ -31,8 +31,15 @@ using UnityEditor;
 
 namespace ICE.World.EditorInfos
 {
-	public static class Init
+	public class Init
 	{
+		public static readonly float DECIMAL_PRECISION = 0.001f;
+		public static readonly float DECIMAL_PRECISION_TIMER = 0.001f;
+		public static readonly float DECIMAL_PRECISION_DISTANCES = 0.001f;
+
+		public static readonly float SLIDER_MIN = 0;
+		public static readonly float SLIDER_MAX_PERCENT = 0;
+
 		public static readonly float TARGET_OFFSET_DISTANCE_DEFAULT = 0;
 
 
