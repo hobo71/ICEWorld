@@ -73,15 +73,24 @@ namespace ICE.World.EditorInfos
 		public static readonly string ANIMATION_CLIP = "The direct use of animation clips is inadvisable and here only " +
 			"implemented for the sake of completeness and for some single cases it could be helpful to have it. But apart from that it " +
 			"works like the animation list. Simply assign the desired animation clip, set the correct WrapMode and go.";
-		public static readonly string ANIMATION_CUSTOM = "";
+		public static readonly string ANIMATION_CUSTOM = "While using CUSTOM animation you could handle the desired animation for this behaviour rule by your own " +
+			"script. OnCustomAnimation and OnCustomAnimationUpdate ";
+		public static readonly string ANIMATION_EVENTS = "AnimationEvent lets you call a script function similar to SendMessage " +
+			"as part of playing back an animation. Animation events support functions that take zero or one parameter. The parameter can " +
+			"be a float, an int or a string. In cases you would like to use also events with an object reference or an AnimationEvent you " +
+			"have to define such events directly in the Animation Window.\n\n" +
+			"Please note that Animation Events calls their methods on every MonoBehaviour in this GameObject only, if you want " +
+			"to call a method within one of its children you could use the Methods feature instead.";
+		public static readonly string ANIMATION_EVENTS_METHOD = "The name of the function that will be called.";
+		public static readonly string ANIMATION_EVENTS_TIME = "The time at which the event will be fired off.";
 
 		public static readonly string METHODS = "TODO";
 		public static readonly string METHOD = "TODO";
-		public static readonly string METHOD_POPUP = "TODO";
-		public static readonly string METHOD_PARAMETER_BOOLEAN = "TODO";
-		public static readonly string METHOD_PARAMETER_INTEGER = "TODO";
-		public static readonly string METHOD_PARAMETER_FLOAT = "TODO";
-		public static readonly string METHOD_PARAMETER_STRING = "TODO";
+		public static readonly string METHOD_POPUP = "The Method Popup displays all available PublicMethods ";
+		public static readonly string METHOD_PARAMETER_BOOLEAN = "Boolean parameter that is stored in the event and will be sent to the function.";
+		public static readonly string METHOD_PARAMETER_INTEGER = "Int parameter that is stored in the event and will be sent to the function.";
+		public static readonly string METHOD_PARAMETER_FLOAT = "Float parameter that is stored in the event and will be sent to the function.";
+		public static readonly string METHOD_PARAMETER_STRING = "String parameter that is stored in the event and will be sent to the function.";
 		public static readonly string MESSAGE_NAME = "TODO";
 
 		public static readonly string IMPULSE_TIMER = "TODO";
