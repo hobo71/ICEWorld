@@ -38,6 +38,7 @@ using ICE.World.Objects;
 
 namespace ICE.World.Objects
 {
+
 	/// <summary>
 	/// The BehaviourEventsObject contains and handles the list of defined BehaviourEventObjects
 	/// </summary>
@@ -89,33 +90,32 @@ namespace ICE.World.Objects
 		public BehaviourEventObject( BehaviourEventObject _event ) : base( _event as ICEImpulsTimerObject )
 		{
 			Enabled = _event.Enabled;
-			StartEvent.Copy( _event.StartEvent );
-			ImpulseEvent.Copy( _event.ImpulseEvent );
-			StopEvent.Copy( _event.StopEvent );
+			Event.Copy( _event.Event );
 		}
-			
-		public BehaviourEvent StartEvent = new BehaviourEvent(); 
-		public BehaviourEvent ImpulseEvent = new BehaviourEvent(); 
-		public BehaviourEvent StopEvent = new BehaviourEvent(); 
+
+		[SerializeField]
+		private BehaviourEvent m_Event = null;
+		public BehaviourEvent Event{
+			get{ return m_Event = ( m_Event == null ? new BehaviourEvent() : m_Event ); }
+			set{ m_Event = value; }
+		}
 
 		private Transform m_Transform = null;
 
 		public void Start( GameObject _owner )
 		{
-			m_Owner = _owner;	
-			SendMessage( StartEvent );
+			m_Owner = _owner;		
 			Start();
 		}
 
 		public override void Stop()
 		{
 			base.Stop();
-			SendMessage( StopEvent );
 		}
 
 		protected override void Action()
 		{
-			SendMessage( ImpulseEvent );
+			SendMessage( Event );
 		}
 
 		/// <summary>

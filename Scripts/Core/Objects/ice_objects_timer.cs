@@ -51,9 +51,9 @@ namespace ICE.World.Objects
 			ImpulseSequenceLimitMax = _object.ImpulseSequenceLimitMax;
 			ImpulseSequenceLimitMaximum = _object.ImpulseSequenceLimitMaximum;
 
-			ImpulseBreakLengthMin = _object.ImpulseBreakLengthMin;
-			ImpulseBreakLengthMax = _object.ImpulseBreakLengthMax;
-			ImpulseBreakLengthMaximum = _object.ImpulseBreakLengthMaximum;
+			ImpulseSequenceBreakLengthMin = _object.ImpulseSequenceBreakLengthMin;
+			ImpulseSequenceBreakLengthMax = _object.ImpulseSequenceBreakLengthMax;
+			ImpulseSequenceBreakLengthMaximum = _object.ImpulseSequenceBreakLengthMaximum;
 		}
 
 		private bool m_Active = false;
@@ -66,23 +66,62 @@ namespace ICE.World.Objects
 			if( _active && ! m_Active && Enabled )
 			{
 				m_Active = true;
-				m_ImpulseInterval = ( InitialImpulsTime > 0 ? InitialImpulsTime: Random.Range( ImpulseIntervalMin, ImpulseIntervalMax ) );
-				m_ImpulseSequenceLimit = Random.Range( ImpulseSequenceLimitMin, ImpulseSequenceLimitMax );
-				m_ImpulseBreakLength = Random.Range( ImpulseBreakLengthMin, ImpulseBreakLengthMax );
-				m_ImpulseIntervalTimer = m_ImpulseInterval;
+				if( UseInterval )
+				{
+					m_ImpulseInterval = InitialImpulsTime;
+					m_ImpulseLimit = Random.Range( ImpulseLimitMin, ImpulseLimitMax );
+					m_ImpulseSequenceLimit = Random.Range( ImpulseSequenceLimitMin, ImpulseSequenceLimitMax );
+					m_ImpulseSequenceBreakLength = Random.Range( ImpulseSequenceBreakLengthMin, ImpulseSequenceBreakLengthMax );
+				}
+				else if( UseEnd )
+				{
+					m_ImpulseInterval = 0;
+					m_ImpulseLimit = 0;
+					m_ImpulseSequenceLimit = 0;
+					m_ImpulseSequenceBreakLength = 0;
+				}
+				else
+				{
+					m_ImpulseInterval = InitialImpulsTime;
+					m_ImpulseLimit = 1;
+					m_ImpulseSequenceLimit = 0;
+					m_ImpulseSequenceBreakLength = 0;
+				}
+
+				m_ImpulseLimitCounter = 0;
+				m_ImpulseSequenceLimitCounter = 0;	
+				m_ImpulseIntervalTimer = 0;
+				m_ImpulseSequenceBreakLengthTimer = 0;
 			}
 			else if( ! _active )
-			{
+			{				
+				if( UseEnd && m_Active )
+					Action();
+					
 				m_Active = false;
+				m_ImpulseLimit = 0;
 				m_ImpulseSequenceLimit = 0;
 				m_ImpulseInterval = 0;
-				m_ImpulseBreakLength = 0;
+				m_ImpulseSequenceBreakLength = 0;
+
+				m_ImpulseLimitCounter = 0;
+				m_ImpulseSequenceLimitCounter = 0;	
 				m_ImpulseIntervalTimer = 0;
+				m_ImpulseSequenceBreakLengthTimer = 0;
 			}
 		}
 
+		public bool UseInterval = false;
+		public bool UseEnd = false;
+
 		public float InitialImpulsTime = 0;
 		public float InitialImpulsTimeMaximum = 60;
+
+		private float m_ImpulseLimitCounter = 0;
+		private float m_ImpulseLimit = 0;
+		public float ImpulseLimitMin = 0;
+		public float ImpulseLimitMax = 0;
+		public float ImpulseLimitMaximum = 5;
 
 		private float m_ImpulseIntervalTimer = 0;
 		private float m_ImpulseInterval = 0;
@@ -96,11 +135,11 @@ namespace ICE.World.Objects
 		public int ImpulseSequenceLimitMax = 0;
 		public int ImpulseSequenceLimitMaximum = 10;
 
-		private float m_ImpulseBreakLengthTimer = 0;
-		private float m_ImpulseBreakLength = 0;
-		public float ImpulseBreakLengthMin = 0;
-		public float ImpulseBreakLengthMax = 0;
-		public float ImpulseBreakLengthMaximum = 10;
+		private float m_ImpulseSequenceBreakLengthTimer = 0;
+		private float m_ImpulseSequenceBreakLength = 0;
+		public float ImpulseSequenceBreakLengthMin = 0;
+		public float ImpulseSequenceBreakLengthMax = 0;
+		public float ImpulseSequenceBreakLengthMaximum = 10;
 
 		public virtual void Start(){
 			SetActive( Enabled );
@@ -112,44 +151,48 @@ namespace ICE.World.Objects
 
 		public virtual void Update()
 		{
-			if( ! m_Active )
+			if( ! m_Active || UseEnd )
 				return;
 
-			if( Mathf.Max( ImpulseIntervalMin, ImpulseIntervalMax ) == 0 )
-				Action();
-			else
+			if( m_ImpulseLimit > 0 && m_ImpulseLimitCounter > m_ImpulseLimit )
+				return;
+
+			// if there is sequence limit or the counter is within the defined limit 
+			if( m_ImpulseSequenceLimit == 0 || m_ImpulseSequenceLimitCounter < m_ImpulseSequenceLimit )
 			{
-				if( m_ImpulseSequenceLimit == 0 || m_ImpulseSequenceLimitCounter < m_ImpulseSequenceLimit )
+				if( m_ImpulseInterval == 0 || m_ImpulseIntervalTimer >= m_ImpulseInterval )
 				{
+					Action();
+
+					// prepare next interval and reset timer
+					m_ImpulseInterval = Random.Range( ImpulseIntervalMin, ImpulseIntervalMax );
+					m_ImpulseIntervalTimer = 0;
+
+					// increase sequence limit counter after sending a message
+					if( m_ImpulseSequenceLimit > 0 )
+						m_ImpulseSequenceLimitCounter++;
+
+					// increase limit counter after sending a message
+					if( m_ImpulseLimit > 0 )
+						m_ImpulseLimitCounter++;
+				}
+				else
 					m_ImpulseIntervalTimer += Time.deltaTime;
-					if( m_ImpulseIntervalTimer >= m_ImpulseInterval )
-					{
-						Action();
-
-						// prepare next interval and reset timer
-						m_ImpulseInterval = Random.Range( ImpulseIntervalMin, ImpulseIntervalMax );
-						m_ImpulseIntervalTimer = 0;
-
-						// increase counter after sending a message
-						if( m_ImpulseSequenceLimit > 0 )
-							m_ImpulseSequenceLimitCounter++;
-					}
-				}
-				else 
-				{
-					m_ImpulseBreakLengthTimer +=  Time.deltaTime;
-					if( m_ImpulseBreakLengthTimer >= m_ImpulseBreakLength )
-					{
-						// prepare next sequence and reset counter
-						m_ImpulseSequenceLimit = Random.Range( ImpulseSequenceLimitMin, ImpulseSequenceLimitMax );
-						m_ImpulseSequenceLimitCounter = 0;
-
-						// prepare next break and reset timer
-						m_ImpulseBreakLength = Random.Range( ImpulseBreakLengthMin, ImpulseBreakLengthMax );
-						m_ImpulseBreakLengthTimer = 0;
-					}
-				}
 			}
+
+			// if the sequence limit is reached we have to do a break by using the m_ImpulseSequenceBreakLength
+			else if( m_ImpulseSequenceBreakLength == 0 || m_ImpulseSequenceBreakLengthTimer >= m_ImpulseSequenceBreakLength )
+			{
+				// prepare next sequence and reset counter
+				m_ImpulseSequenceLimit = Random.Range( ImpulseSequenceLimitMin, ImpulseSequenceLimitMax );
+				m_ImpulseSequenceLimitCounter = 0;
+
+				// prepare next break and reset timer
+				m_ImpulseSequenceBreakLength = Random.Range( ImpulseSequenceBreakLengthMin, ImpulseSequenceBreakLengthMax );
+				m_ImpulseSequenceBreakLengthTimer = 0;
+			}
+			else
+				m_ImpulseSequenceBreakLengthTimer +=  Time.deltaTime;	
 		}
 
 		protected virtual void Action(){}

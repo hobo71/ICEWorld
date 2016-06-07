@@ -106,7 +106,8 @@ namespace ICE.World.EditorInfos
 		public static readonly string IMPULSE_TIMER_TIME = "TODO";
 		public static readonly string IMPULSE_TIMER_INTERVAL = "TODO";
 		public static readonly string IMPULSE_TIMER_LIMITS = "TODO";
-		public static readonly string IMPULSE_TIMER_BREAK_LENGTH = "TODO";
+		public static readonly string IMPULSE_TIMER_SEQUENCE_LIMITS = "TODO";
+		public static readonly string IMPULSE_TIMER_SEQUENCE_BREAK_LENGTH = "TODO";
 
 		public static readonly string STATUS_INITIAL_DURABILITY = "Initial Durability defines the fundamental capability of resistance of a creature in terms of " +
 			"physical integrity and its vital fitness. The durability will be affected by several influences (e.g. damage, age etc. ) during the runtime and the " +
