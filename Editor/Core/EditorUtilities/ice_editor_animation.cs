@@ -42,8 +42,149 @@ using ICE.World.EditorInfos;
 
 namespace ICE.World.EditorUtilities
 {
-	public static class AnimationEditor
+	public class AnimationEditor : WorldObjectEditor
 	{	
+		public static string AnimationPopup( Animation _animation, string _name, string _title = "", string _help = "" )
+		{
+			ICEEditorLayout.BeginHorizontal();
+				_name = AnimationPopupBase( _animation, _name, _title );
+			ICEEditorLayout.EndHorizontal( _help );
+
+			return _name;
+		}
+
+		public static string AnimationPopupBase( Animation _animation, string _name, string _title = "" )
+		{
+			if( _animation == null )
+				return "";
+			
+			int _count = AnimationTools.GetAnimationClipCount( _animation );
+			string[] _animation_names = new string[ _count ];
+			int[] _animation_index = new int[ _count];
+
+			int _i = 0;
+			int _selected = 0;
+			if( _count > 0 )
+			{
+				foreach (AnimationState _state in _animation )
+				{
+					if( _state == null || _i >= _count )
+						continue;
+
+					_animation_index[_i] = _i;
+					_animation_names[_i] = _state.name;
+
+					if( _name == _animation_names[_i] )
+						_selected = _i;
+
+					_i++;
+				}
+			}
+
+			if( _title == "" )
+				_title = "Animation";
+
+			_selected = (int)EditorGUILayout.IntPopup( _title , _selected, _animation_names,_animation_index);
+			//new GUIContent( _title , "Animation name and length in seconds" )
+
+			_selected = (int)ICEEditorLayout.PlusMinusGroup( _selected, 1, ICEEditorStyle.CMDButtonDouble );
+
+			if( _selected < 0 )
+				_selected = 0;
+			else if( _selected >= _count - 1 )
+				_selected = _count - 1;
+
+			return _animation_names[_selected];
+		}
+
+		private static int AnimatorIntPopup( Animator _animator, int _selected, string _title = "" )
+		{
+			ICEEditorLayout.BeginHorizontal();
+				_selected = AnimatorIntPopupBase( _animator, _selected, _title );
+			ICEEditorLayout.EndHorizontal();
+
+			return _selected;
+		}
+
+		public static int AnimatorIntPopupBase( Animator _animator, int _selected, string _title = "" )
+		{
+			if( _animator == null || _animator.runtimeAnimatorController == null ) 
+				return -1;
+
+
+			AnimationClip[] _clips = AnimationTools.GetAnimationClips( _animator );
+
+			string[] _animation_names = new string[ _clips.Length ];//_animator.runtimeAnimatorController.animationClips.Length ];
+			int[] _animation_index = new int[  _clips.Length ];//_animator.runtimeAnimatorController.animationClips.Length ];
+
+			int i = 0;							
+			foreach( AnimationClip _clip in _clips )// _animator.runtimeAnimatorController.animationClips )
+			{
+				_animation_index[i] = i;
+				_animation_names[i] = _clip.name;
+
+				i++;
+			}
+
+			if( _title == "" )
+				_title = "Animation";
+
+			_selected = (int)EditorGUILayout.IntPopup( _title , _selected, _animation_names,_animation_index);
+
+			_selected = (int)ICEEditorLayout.PlusMinusGroup( _selected, 1, ICEEditorStyle.CMDButtonDouble );
+
+			if( _selected < 0 )
+				_selected = 0;
+			else if( _selected >= _clips.Length - 1 )
+				_selected = _clips.Length - 1;
+
+			return _selected;
+		}
+
+		public static int AnimationIntPopup( Animation _animation, int _selected, string _title = "" )
+		{
+			ICEEditorLayout.BeginHorizontal();
+			_selected = AnimationIntPopupBase( _animation, _selected, _title );
+			ICEEditorLayout.EndHorizontal();
+
+			return _selected;
+		}
+
+		public static int AnimationIntPopupBase( Animation _animation, int _selected, string _title = "" )
+		{
+			if( _animation == null )
+				return 0;
+
+
+
+			string[] _animation_names = new string[ AnimationTools.GetAnimationClipCount( _animation ) ];
+			int[] _animation_index = new int[ AnimationTools.GetAnimationClipCount( _animation ) ];
+
+			int i = 0;	
+			foreach (AnimationState _animation_state in _animation )
+			{
+				_animation_index[i] = i;
+				_animation_names[i] = _animation_state.name;
+
+				i++;
+			}
+			if( _title == "" )
+				_title = "Animation";
+
+			_selected = (int)EditorGUILayout.IntPopup( _title , _selected, _animation_names,_animation_index);
+			//new GUIContent( _title , "Animation name and length in seconds" )
+
+			_selected = (int)ICEEditorLayout.PlusMinusGroup( _selected, 1, ICEEditorStyle.CMDButtonDouble );
+
+			if( _selected < 0 )
+				_selected = 0;
+			else if( _selected >= AnimationTools.GetAnimationClipCount( _animation ) - 1 )
+				_selected = AnimationTools.GetAnimationClipCount( _animation )  - 1;
+
+			return _selected;
+		}
+
+
 		public static void DrawAnimationDataObject( ICEWorldBehaviour _component, AnimationDataObject _anim, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
 		{
 			if( _anim == null )
@@ -124,9 +265,14 @@ namespace ICE.World.EditorUtilities
 				else if( _anim.InterfaceType == AnimationInterfaceType.CLIP )
 					_anim.Clip = DrawBehaviourAnimationAnimationClipData( _component, _anim.Clip );
 				else if( _anim.InterfaceType == AnimationInterfaceType.CUSTOM )
-				{
 					Info.Help ( _help );
-				}
+
+				if( _anim.InterfaceType == AnimationInterfaceType.MECANIM && _anim.Animator.Type == AnimatorControlType.DIRECT )
+					DrawAnimationEventData( _component, _anim.Events, AnimationTools.GetAnimationClipByAnimatorAndName( AnimationTools.TryGetAnimatorComponent( _component.gameObject ), _anim.GetAnimationName() ), EditorHeaderType.FOLDOUT_ENABLED );
+				else if( _anim.InterfaceType == AnimationInterfaceType.LEGACY )
+					DrawAnimationEventData( _component, _anim.Events, AnimationTools.GetAnimationClipByName( AnimationTools.TryGetAnimationComponent( _component.gameObject ), _anim.GetAnimationName() ), EditorHeaderType.FOLDOUT_ENABLED );
+				else if( _anim.InterfaceType == AnimationInterfaceType.CLIP )
+					DrawAnimationEventData( _component, _anim.Events, _anim.Clip.Clip, EditorHeaderType.FOLDOUT_ENABLED );				
 			}
 			else
 				Info.Help ( Info.ANIMATION_NONE );
@@ -136,7 +282,7 @@ namespace ICE.World.EditorUtilities
 		}
 
 
-		private static AnimationClipDataContainer DrawBehaviourAnimationAnimationClipData( ICEWorldBehaviour _control, AnimationClipDataContainer _clip )
+		private static AnimationClipInterface DrawBehaviourAnimationAnimationClipData( ICEWorldBehaviour _control, AnimationClipInterface _clip )
 		{
 			Animation m_animation = _control.GetComponentInChildren<Animation>();
 
@@ -171,22 +317,111 @@ namespace ICE.World.EditorUtilities
 			return _clip;
 		}
 
+		public static void DrawAnimationEventData( ICEWorldBehaviour _component, AnimationEventsObject _container, AnimationClip _clip, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		{
+			if( _container == null || _clip == null )
+				return;
 
-		/*
-			private static int AnimPopup( ICECreatureControl _control, string _title, int _selected )
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Events";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.ANIMATION_EVENTS;
+
+			ICEEditorLayout.BeginHorizontal();
+
+			if( IsEnabledFoldoutType( _type ) )
 			{
-				Animator _animator = _control.GetComponentInChildren<Animator>();
-				Animation _animation = _control.GetComponentInChildren<Animation>();
-				
-				if( _animator != null && _animator.enabled == true && _animator.runtimeAnimatorController != null && _animator.avatar != null )
-					_selected = AnimatorPopup( _animator, _selected, _title);
-				else if( _animation != null && _animation.enabled == true )
-					_selected = ICEEditorLayout.AnimationPopup( _animation, _selected, _title);
+				EditorGUI.BeginDisabledGroup( _container.Enabled == false );
+			}			
 
-				return _selected;
-			}*/
+			DrawObjectHeaderLine( _container, GetSimpleFoldout( _type ), _title, _hint );
 
-		private static AnimationDataContainer DrawBehaviourAnimationAnimationData( ICEWorldBehaviour _control, AnimationDataContainer _animation_data )
+			EditorGUI.BeginDisabledGroup( _container.Enabled == false );
+				if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
+					_container.Events.Add( new AnimationEventObject() );
+
+				EditorGUI.BeginDisabledGroup( _container.Events.Count == 0 );
+
+					if( ICEEditorLayout.Button( "RES", "", ICEEditorStyle.CMDButtonDouble ) )
+					{
+						_container.Events.Clear();
+						AnimationUtility.SetAnimationEvents( _clip, _container.GetAnimationEvents() );
+					}
+			
+				EditorGUI.EndDisabledGroup();
+			EditorGUI.EndDisabledGroup();				
+
+			if( IsEnabledFoldoutType( _type ) )
+			{
+				EditorGUI.EndDisabledGroup();
+				_container.Enabled = ICEEditorLayout.ButtonEnabled( _container.Enabled );
+			}
+			ICEEditorLayout.EndHorizontal( _help );
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _container ) )
+				return;
+
+			AnimationEvent[] _events = AnimationUtility.GetAnimationEvents( _clip );
+
+			_container.UpdateAnimationEvents( _events );
+
+			//foreach( AnimationEventObject _data in _container.Events )
+			for( int i = 0 ; i < _container.Events.Count ; i++ )
+			{
+				AnimationEventObject _data = _container.Events[i];
+				ICEEditorLayout.BeginHorizontal();
+
+					MethodDataContainer _method = new MethodDataContainer();
+					_method.ComponentName = _component.name;
+					_method.MethodName = _data.MethodName;
+					//_method.ParameterType = SystemTools.GetMethodParameterType( _control, _event.functionName );
+
+					_method = WorldPopups.MethodPopupLine( _component, _method, _component.PublicMethods, ref _data.UseCustomFunction, "", "Event #" + i, "" );
+
+					_data.MethodName = _method.MethodName;
+
+					bool _active = ICEEditorLayout.ButtonCheck( "ACTIVE", "", _data.IsActive , ICEEditorStyle.ButtonMiddle );
+
+					if( _active != _data.IsActive )
+					{
+						_data.IsActive = _active;
+						AnimationUtility.SetAnimationEvents( _clip, _container.GetAnimationEvents() );						
+					}
+
+					if( ICEEditorLayout.Button( "X", "", ICEEditorStyle.CMDButton ) )
+					{
+						_container.Events.Remove( _data );
+						AnimationUtility.SetAnimationEvents( _clip, _container.GetAnimationEvents() );
+						return;
+					}
+
+				ICEEditorLayout.EndHorizontal( Info.ANIMATION_EVENTS_METHOD );
+
+				EditorGUI.indentLevel++;
+
+					if( _method.ParameterType == MethodParameterType.Integer )
+						_data.ParameterInteger = ICEEditorLayout.Integer( "Parameter Integer", "", _data.ParameterInteger, Info.METHOD_PARAMETER_INTEGER );
+					else if( _method.ParameterType == MethodParameterType.Float )
+						_data.ParameterFloat = ICEEditorLayout.Float( "Parameter Float", "", _data.ParameterFloat, Info.METHOD_PARAMETER_FLOAT );
+					else if( _method.ParameterType == MethodParameterType.String )
+						_data.ParameterString = ICEEditorLayout.Text( "Parameter String", "", _data.ParameterString, Info.METHOD_PARAMETER_STRING );
+
+					_data.Time = ICEEditorLayout.Slider( "Time", "The time at which the event will be fired off.", _data.Time, 0.0001f, 0, _clip.length, Info.ANIMATION_EVENTS_TIME );
+
+				EditorGUI.indentLevel--;
+			}
+
+			if( _container.UpdateRequired( _events ) )
+				AnimationUtility.SetAnimationEvents( _clip, _container.GetAnimationEvents() );
+
+			EndObjectContent();
+			// CONTENT END
+		}
+
+		private static AnimationInterface DrawBehaviourAnimationAnimationData( ICEWorldBehaviour _control, AnimationInterface _animation_data )
 		{
 			Animation _animation = _control.GetComponentInChildren<Animation>();
 
@@ -200,7 +435,7 @@ namespace ICE.World.EditorUtilities
 				}
 				else
 				{
-					string _animation_name = ICEEditorLayout.AnimationPopup( _animation, _animation_data.Name, "Animation (" + _animation_data.Length.ToString() + " secs.)", Info.ANIMATION_NAME );
+					string _animation_name = AnimationPopup( _animation, _animation_data.Name, "Animation (" + _animation_data.Length.ToString() + " secs.)", Info.ANIMATION_NAME );
 					if( _animation_name != _animation_data.Name )
 					{
 						AnimationState _state = AnimationTools.GetAnimationStateByName( _control.gameObject, _animation_name );					
@@ -221,12 +456,12 @@ namespace ICE.World.EditorUtilities
 				}
 
 				EditorGUI.indentLevel++;
-				_animation_data.wrapMode = (WrapMode)ICEEditorLayout.EnumPopup( "WrapMode (" + _animation_data.DefaultWrapMode + ")", "Determines how time is treated outside of the keyframed range of an AnimationClip or AnimationCurve.", _animation_data.wrapMode, Info.ANIMATION_WRAP_MODE );
-				_animation_data.Speed = ICEEditorLayout.AutoSlider( "Speed (" + _animation_data.DefaultSpeed + ")", "The playback speed of the animation. 1 is normal playback speed. A negative playback speed will play the animation backwards. Adapt this value to your movement settings.", _animation_data.Speed, 0.01f, -10, 10, ref _animation_data.AutoSpeed, 1, Info.ANIMATION_SPEED );
-				_animation_data.TransitionDuration = ICEEditorLayout.AutoSlider( "Transition Duration", "", _animation_data.TransitionDuration, 0.01f, 0, 10, ref _animation_data.AutoTransitionDuration, 0.5f, Info.ANIMATION_TRANSITION );
+					_animation_data.wrapMode = (WrapMode)ICEEditorLayout.EnumPopup( "WrapMode (" + _animation_data.DefaultWrapMode + ")", "Determines how time is treated outside of the keyframed range of an AnimationClip or AnimationCurve.", _animation_data.wrapMode, Info.ANIMATION_WRAP_MODE );
+					_animation_data.Speed = ICEEditorLayout.AutoSlider( "Speed (" + _animation_data.DefaultSpeed + ")", "The playback speed of the animation. 1 is normal playback speed. A negative playback speed will play the animation backwards. Adapt this value to your movement settings.", _animation_data.Speed, 0.01f, -10, 10, ref _animation_data.AutoSpeed, 1, Info.ANIMATION_SPEED );
+					_animation_data.TransitionDuration = ICEEditorLayout.AutoSlider( "Transition Duration", "", _animation_data.TransitionDuration, 0.01f, 0, 10, ref _animation_data.AutoTransitionDuration, 0.5f, Info.ANIMATION_TRANSITION );
 
-				if( _animation_data.AutoTransitionDuration )
-					_animation_data.TransitionDuration = _animation_data.Length / 3;
+					if( _animation_data.AutoTransitionDuration )
+						_animation_data.TransitionDuration = _animation_data.Length / 3;
 
 				EditorGUI.indentLevel--;
 
@@ -239,105 +474,6 @@ namespace ICE.World.EditorUtilities
 			return _animation_data;
 		}
 
-		private static int AnimatorPopup( Animator _animator, int _selected, string _title = "" )
-		{
-			ICEEditorLayout.BeginHorizontal();
-			_selected = AnimatorPopupBase( _animator, _selected, _title );
-			ICEEditorLayout.EndHorizontal();
-
-			return _selected;
-		}
-		/*
-			public static string AnimatorPopupBaseExt( Animator _animator, string _selected_state_name, string _title = "" )
-			{
-				if( _animator == null || _animator.runtimeAnimatorController == null ) 
-					return -1;
-
-				UnityEditor.Animations.ChildAnimatorState[] _states = SystemTools.GetChildAnimatorStates( _animator, 0 );
-
-				string[] _state_names = new string[ _states.Length ];
-				int[] _state_index = new int[  _states.Length ];
-
-				int i = 0;	
-				int _selected_state_index = 0;
-				foreach( UnityEditor.Animations.ChildAnimatorState _state in _states )
-				{
-					_state_index[i] = i;
-					_state_names[i] = _state.state.name;
-
-					if( _state.state.name == _selected_state_name )
-						_selected_state_index = i;
-
-					i++;
-				}
-
-				if( _title == "" )
-					_title = "Animation";
-
-				_selected_state_index = (int)EditorGUILayout.IntPopup( _title , _selected_state_index, _state_names, _state_index);
-
-				if (GUILayout.Button("<", ICEEditorStyle.CMDButtonDouble ))
-				{
-					_selected_state_index--;
-					if( _selected_state_index < 0 ){ 
-						_selected_state_index = _states.Length-1;
-					}
-				}
-				if (GUILayout.Button(">", ICEEditorStyle.CMDButtonDouble))
-				{
-					_selected_state_index++;
-					if( _selected_state_index >= _states.Length ){ 
-						_selected_state_index = 0;
-					}
-				}
-
-				return _state_names[_selected_state_index];
-
-			}
-
-	*/
-
-		public static int AnimatorPopupBase( Animator _animator, int _selected, string _title = "" )
-		{
-			if( _animator == null || _animator.runtimeAnimatorController == null ) 
-				return -1;
-
-			AnimationClip[] _clips = _animator.runtimeAnimatorController.animationClips; //AnimationUtility.GetAnimationClips( _animator.gameObject );
-
-			string[] _animation_names = new string[ _clips.Length ];//_animator.runtimeAnimatorController.animationClips.Length ];
-			int[] _animation_index = new int[  _clips.Length ];//_animator.runtimeAnimatorController.animationClips.Length ];
-
-			int i = 0;							
-			foreach( AnimationClip _clip in _clips )// _animator.runtimeAnimatorController.animationClips )
-			{
-				_animation_index[i] = i;
-				_animation_names[i] = _clip.name;
-
-				i++;
-			}
-
-			if( _title == "" )
-				_title = "Animation";
-
-			_selected = (int)EditorGUILayout.IntPopup( _title , _selected, _animation_names,_animation_index);
-
-			if (GUILayout.Button("<", ICEEditorStyle.CMDButtonDouble ))
-			{
-				_selected--;
-				if( _selected < 0 ){ 
-					_selected = _clips.Length-1;
-				}
-			}
-			if (GUILayout.Button(">", ICEEditorStyle.CMDButtonDouble))
-			{
-				_selected++;
-				if( _selected >= _clips.Length ){ 
-					_selected = 0;
-				}
-			}
-
-			return _selected;
-		}
 
 		private static List<AnimatorParameterObject> DrawBehaviourAnimationAnimatorParameterData( ICEWorldBehaviour _control, List<AnimatorParameterObject> _parameter_list )
 		{
@@ -432,7 +568,7 @@ namespace ICE.World.EditorUtilities
 			return _parameter_list;
 		}
 
-		private static AnimatorDataContainer DrawBehaviourAnimationAnimatorData( ICEWorldBehaviour _control, AnimatorDataContainer _animator_data )
+		private static AnimatorInterface DrawBehaviourAnimationAnimatorData( ICEWorldBehaviour _control, AnimatorInterface _animator_data )
 		{
 			Animator m_animator = _control.GetComponentInChildren<Animator>();
 
@@ -449,15 +585,15 @@ namespace ICE.World.EditorUtilities
 
 					if( _animator_data.Type == AnimatorControlType.DIRECT )
 					{
-						_animator_data.Index = AnimatorPopup( m_animator, _animator_data.Index );
+						_animator_data.Index = AnimatorIntPopup( m_animator, _animator_data.Index );
 
-						if( m_animator.runtimeAnimatorController.animationClips.Length == 0 )
+						if( AnimationTools.GetAnimationClipCount( m_animator ) == 0 )
 						{
 							Info.Warning( Info.ANIMATION_ANIMATOR_ERROR_NO_CLIPS );
 						}
 						else
 						{
-							AnimationClip _animation_clip = m_animator.runtimeAnimatorController.animationClips[_animator_data.Index];
+							AnimationClip _animation_clip = AnimationTools.GetAnimationClipByIndex( m_animator,_animator_data.Index );
 
 							if( _animation_clip != null )
 							{				
@@ -467,7 +603,7 @@ namespace ICE.World.EditorUtilities
 								_animation_clip.wrapMode = (WrapMode)ICEEditorLayout.EnumPopup( "WarpMode", "Determines how time is treated outside of the keyframed range of an AnimationClip or AnimationCurve.", _animation_clip.wrapMode );
 								_animation_clip.legacy = false;
 
-								_animator_data.StateName = AnimationTools.GetAnimationStateName( m_animator, _animation_clip.name );
+								_animator_data.StateName = AnimationTools.GetAnimatorStateName( m_animator, _animation_clip.name );
 								_animator_data.Name = _animation_clip.name;
 								_animator_data.Length = _animation_clip.length;
 								_animator_data.DefaultWrapMode = _animation_clip.wrapMode;
@@ -480,6 +616,7 @@ namespace ICE.World.EditorUtilities
 								if( _toggle )
 									_animator_data.TransitionDuration = _animator_data.Length / 3;						
 								_toggle = false;
+							
 							}
 						}
 
@@ -513,6 +650,9 @@ namespace ICE.World.EditorUtilities
 						if( _toggle )
 							_animator_data.TransitionDuration = _animator_data.Length / 3;						
 						_toggle = false;
+
+				
+						
 					}
 					else if( _animator_data.Type == AnimatorControlType.ADVANCED )
 					{

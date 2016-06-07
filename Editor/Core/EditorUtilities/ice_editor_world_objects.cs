@@ -122,28 +122,28 @@ namespace ICE.World.EditorUtilities
 
 			ICEEditorLayout.BeginHorizontal();
 
-			if( IsEnabledFoldoutType( _type ) )
-			{
+				if( IsEnabledFoldoutType( _type ) )
+				{
+					EditorGUI.BeginDisabledGroup( _methods.Enabled == false );
+				}			
+
+				DrawObjectHeaderLine( _methods, GetSimpleFoldout( _type ), _title, _hint );
+
 				EditorGUI.BeginDisabledGroup( _methods.Enabled == false );
-			}			
+				if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
+					_methods.Methods.Add( new MethodObject() );
 
-			DrawObjectHeaderLine( _methods, GetSimpleFoldout( _type ), _title, _hint );
-
-			EditorGUI.BeginDisabledGroup( _methods.Enabled == false );
-			if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
-				_methods.Methods.Add( new MethodObject() );
-
-			EditorGUI.BeginDisabledGroup( _methods.Methods.Count == 0 );
-			if( ICEEditorLayout.Button( "RES", "", ICEEditorStyle.CMDButtonDouble ) )
-				_methods.Methods.Clear();
-			EditorGUI.EndDisabledGroup();
-			EditorGUI.EndDisabledGroup();				
-
-			if( IsEnabledFoldoutType( _type ) )
-			{
+				EditorGUI.BeginDisabledGroup( _methods.Methods.Count == 0 );
+				if( ICEEditorLayout.Button( "RES", "", ICEEditorStyle.CMDButtonDouble ) )
+					_methods.Methods.Clear();
 				EditorGUI.EndDisabledGroup();
-				_methods.Enabled = ICEEditorLayout.ButtonEnabled( _methods.Enabled );
-			}
+				EditorGUI.EndDisabledGroup();				
+
+				if( IsEnabledFoldoutType( _type ) )
+				{
+					EditorGUI.EndDisabledGroup();
+					_methods.Enabled = ICEEditorLayout.ButtonEnabled( _methods.Enabled );
+				}
 			ICEEditorLayout.EndHorizontal( _help );
 
 			// CONTENT BEGIN
@@ -203,16 +203,16 @@ namespace ICE.World.EditorUtilities
 			if( string.IsNullOrEmpty( _help ) )
 				_help = Info.METHOD;
 
-			_method.MethodData = WorldPopups.MethodPopup( _component, _method.MethodData, _component.AllPublicMethods, ref _method.UseCustomMethod, Info.METHOD_POPUP,  _title, _hint );
+			_method.MethodData = WorldPopups.MethodPopup( _component, _method.MethodData, _component.PublicMethodsInChildren, ref _method.UseCustomFunction, Info.METHOD_POPUP,  _title, _hint );
 
 			EditorGUI.indentLevel++;
-			if( _method.MethodType == MethodParameterType.Boolean )
+			if( _method.ParameterType == MethodParameterType.Boolean )
 				_method.ParameterBoolean = ICEEditorLayout.Toggle( "Parameter Boolean", "", _method.ParameterBoolean, Info.METHOD_PARAMETER_BOOLEAN );
-			else if( _method.MethodType == MethodParameterType.Integer )
+			else if( _method.ParameterType == MethodParameterType.Integer )
 				_method.ParameterInteger = ICEEditorLayout.Integer( "Parameter Integer", "", _method.ParameterInteger, Info.METHOD_PARAMETER_INTEGER );
-			else if( _method.MethodType == MethodParameterType.Float )
+			else if( _method.ParameterType == MethodParameterType.Float )
 				_method.ParameterFloat = ICEEditorLayout.Float( "Parameter Float", "", _method.ParameterFloat, Info.METHOD_PARAMETER_FLOAT );
-			else if( _method.MethodType == MethodParameterType.String )
+			else if( _method.ParameterType == MethodParameterType.String )
 				_method.ParameterString = ICEEditorLayout.Text( "Parameter String", "", _method.ParameterString, Info.METHOD_PARAMETER_STRING );
 			EditorGUI.indentLevel--;
 		}

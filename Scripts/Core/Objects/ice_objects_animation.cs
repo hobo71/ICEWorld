@@ -74,10 +74,192 @@ namespace ICE.World.Objects
 		public bool BooleanValue = false;
 	}
 
+
 	[System.Serializable]
-	public struct AnimatorDataContainer
+	public class AnimationEventObject : ICEObject
 	{
-		public void Copy( AnimatorDataContainer _data )
+		public AnimationEventObject(){}
+		public AnimationEventObject( AnimationEvent _event )
+		{
+			this.m_IsUpdateRequired = false;
+
+			this.IsActive = false;
+			this.UseCustomFunction = false;
+			this.MethodName = _event.functionName;
+			this.Time = _event.time;
+
+			this.ParameterType = MethodParameterType.None;
+			this.ParameterString = _event.stringParameter;
+			this.ParameterFloat = _event.floatParameter;
+			this.ParameterInteger = _event.intParameter;
+			this.ParameterBoolean = false;	
+		}
+
+		public bool IsActive;
+		private bool m_IsUpdateRequired;
+		public bool IsUpdateRequired{
+			get{ return m_IsUpdateRequired; }
+		}
+		public bool UseCustomFunction;
+		public string MethodName;
+
+		public MethodParameterType ParameterType;
+		public string ParameterString; 
+		public int ParameterInteger;
+		public float ParameterFloat; 
+		public bool ParameterBoolean;
+
+		public float Time;
+
+		public void SetAnimationEvent( AnimationEvent _event )
+		{
+			if( _event == null )
+				return;
+
+			IsActive = true;
+			MethodName = _event.functionName;
+			Time = _event.time;
+
+			ParameterString = _event.stringParameter;
+			ParameterFloat = _event.floatParameter;
+			ParameterInteger = _event.intParameter;
+			
+		}
+
+		public AnimationEvent GetAnimationEvent()
+		{
+			return GetAnimationEvent( null );
+		}
+
+		public AnimationEvent GetAnimationEvent( AnimationEvent _event )
+		{
+			if( _event == null )
+				_event = new AnimationEvent();
+
+			_event.functionName = MethodName;
+			_event.time = Time;
+			_event.stringParameter = ParameterString;
+			_event.floatParameter = ParameterFloat;
+			_event.intParameter = ParameterInteger;
+			_event.messageOptions = SendMessageOptions.DontRequireReceiver;
+
+			return _event;
+		}
+
+		public bool UpdateRequired( AnimationEvent _event )
+		{
+			if( _event == null )
+				m_IsUpdateRequired = true;
+			else if( _event.functionName != MethodName )
+				m_IsUpdateRequired = true;
+			else if( _event.time != Time )
+				m_IsUpdateRequired = true;
+			else if( _event.stringParameter != ParameterString )
+				m_IsUpdateRequired = true;
+			else if( _event.floatParameter != ParameterFloat )
+				m_IsUpdateRequired = true;
+			else if( _event.intParameter != ParameterInteger )
+				m_IsUpdateRequired = true;
+			else
+				m_IsUpdateRequired = false;
+
+			return m_IsUpdateRequired;
+		}
+	}
+
+	[System.Serializable]
+	public class AnimationEventsObject : ICEDataObject
+	{
+		public AnimationEventsObject(){}
+		public AnimationEventsObject( AnimationEventsObject _events ) : base( _events ) {
+			Copy( _events );
+		}
+
+		public void Copy( AnimationEventsObject _events )
+		{
+			Events.Clear();
+			foreach( AnimationEventObject _event in _events.Events )
+				Events.Add( _event );
+		}
+
+		[SerializeField]
+		private List<AnimationEventObject> m_Events = null;
+		public List<AnimationEventObject> Events{
+			get{ return m_Events = ( m_Events == null ? new List<AnimationEventObject>() : m_Events ); }
+			set{ m_Events = value; } 
+		}
+
+		public bool UpdateRequired( AnimationEvent[] _events )
+		{
+			bool _result = false;
+			foreach( AnimationEventObject _data in Events )
+			{
+				if( _data.UpdateRequired( GetAnimationEventByName( _events, _data.MethodName ) ) )
+					_result = true;
+			}
+
+			return _result;
+		}
+
+		public void UpdateAnimationEvents( AnimationEvent[] _events )
+		{
+			//foreach( AnimationEventData _event in Events ) 
+			for( int i = 0 ; i < Events.Count ; i++)
+				Events[i].IsActive = false;
+				
+			for( int i = 0 ; i < _events.Length ; i++ )
+			{
+				AnimationEventObject _data = GetAnimationEventData( _events[i].functionName );
+				if( _data == null )
+					AddAnimationDataEvent( _events[i], true );
+				else
+					_data.IsActive = true;				
+			}
+		}
+
+		public AnimationEvent[] GetAnimationEvents()
+		{
+			List<AnimationEvent> _events = new List<AnimationEvent>();
+			for( int i = 0 ; i < Events.Count ; i++ )
+			{
+				if( Events[i].IsActive )
+					_events.Add( Events[i].GetAnimationEvent() );
+			}
+			return _events.ToArray();
+		}
+
+		public void AddAnimationDataEvent( AnimationEvent _event, bool _active )
+		{
+			if( _event == null || string.IsNullOrEmpty( _event.functionName ) || GetAnimationEventData( _event.functionName ) != null )
+				return;
+
+			Events.Add( new AnimationEventObject( _event ) );
+		}
+
+		public AnimationEventObject GetAnimationEventData( string _name )
+		{
+			foreach( AnimationEventObject _event in Events ) 
+				if( _event.MethodName == _name )
+					return _event;
+	
+			return null;
+		}
+
+		public AnimationEvent GetAnimationEventByName( AnimationEvent[] _events, string _name )
+		{
+			foreach( AnimationEvent _event in _events ) 
+				if( _event.functionName == _name )
+					return _event;
+
+			return null;
+		}
+
+	}
+
+	[System.Serializable]
+	public struct AnimatorInterface
+	{
+		public void Copy( AnimatorInterface _data )
 		{
 			StateName = _data.StateName;
 			Name = _data.Name;
@@ -130,9 +312,9 @@ namespace ICE.World.Objects
 	}
 
 	[System.Serializable]
-	public struct AnimationDataContainer
+	public struct AnimationInterface
 	{
-		public void Copy( AnimationDataContainer _data )
+		public void Copy( AnimationInterface _data )
 		{
 			Name = _data.Name;
 			Index = _data.Index;
@@ -157,6 +339,7 @@ namespace ICE.World.Objects
 		public bool AutoTransitionDuration;
 		public float TransitionDuration;
 
+
 		public void Init()
 		{
 			this.AutoSpeed = false;
@@ -167,9 +350,9 @@ namespace ICE.World.Objects
 	}
 
 	[System.Serializable]
-	public struct AnimationClipDataContainer
+	public struct AnimationClipInterface
 	{
-		public void Copy( AnimationClipDataContainer _data )
+		public void Copy( AnimationClipInterface _data )
 		{
 			Clip = _data.Clip;
 			TransitionDuration = _data.TransitionDuration;
@@ -203,14 +386,22 @@ namespace ICE.World.Objects
 			Animator.Copy( _data.Animator );
 			Animation.Copy( _data.Animation );
 			Clip.Copy( _data.Clip );
+			Events.Copy( _data.Events );
 		}
 
 		public bool AllowInterfaceSelector;
 		public AnimationInterfaceType InterfaceType;
+		public AnimatorInterface Animator;
+		public AnimationInterface Animation;
+		public AnimationClipInterface Clip;
 
-		public AnimatorDataContainer Animator;
-		public AnimationDataContainer Animation;
-		public AnimationClipDataContainer Clip;
+		[SerializeField]
+		private AnimationEventsObject m_Events = null;
+		public AnimationEventsObject Events{
+			get{ return m_Events = ( m_Events == null ? new AnimationEventsObject() : m_Events ); }
+			set{ m_Events = value; }
+		}
+
 
 		public float GetAnimationLength()
 		{
@@ -408,7 +599,7 @@ namespace ICE.World.Objects
 
 		}
 
-		public virtual void UpdateAnimatorParameter( AnimatorDataContainer _animator_data )
+		public virtual void UpdateAnimatorParameter( AnimatorInterface _animator_data )
 		{
 			foreach( AnimatorParameterObject _parameter in _animator_data.Parameters )
 			{
