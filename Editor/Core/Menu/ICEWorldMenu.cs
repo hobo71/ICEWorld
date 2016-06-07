@@ -29,22 +29,22 @@ namespace ICE.World.Menus
 {
 	public class ICEWorldMenu : MonoBehaviour {
 
-		[MenuItem ("ICE/ICEWorld/Repository", false, 99999 )]
+		[MenuItem ("ICE/ICEWorld/Repository", false, 9999 )]
 		static void Repository (){
 			Application.OpenURL("https://github.com/icetec/ICEWorld");
 		}
 
-		[MenuItem ("ICE/ICEWorld/Wiki", false, 99999 )]
+		[MenuItem ("ICE/ICEWorld/Wiki", false, 9999 )]
 		static void Wiki (){
 			Application.OpenURL("https://github.com/icetec/ICEWorld/wiki");
 		}
 					
-		[MenuItem ("ICE/ICEWorld/Template Designer (BETA)", false, 99999 )]
+		[MenuItem ("ICE/ICEWorld/Template Designer (BETA)", false, 9999 )]
 		static void ShowTemplateDesigner(){
 			TemplateDesigner.Create();
 		} 
 
-		[MenuItem ("ICE/ICEWorld/About", false, 99999 )]
+		[MenuItem ("ICE/ICEWorld/About", false, 9999 )]
 		static void ShowAbout(){
 			ICEWorldAbout.Create();
 		} 

@@ -36,6 +36,10 @@ using System.Collections;
 
 namespace ICE.World.EditorUtilities
 {
+	public enum ICEWorldTemplateType
+	{
+	}
+
 	public class ICEWorldTemplateData : System.Object
 	{
 		public string ProjectName = "MyProject";
