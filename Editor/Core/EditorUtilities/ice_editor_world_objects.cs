@@ -75,6 +75,8 @@ namespace ICE.World.EditorUtilities
 			if( _timer.ImpulseBreakLengthMaximum == 0 )
 				_timer.ImpulseBreakLengthMaximum = 10;
 
+			_timer.InitialImpulsTime = ICEEditorLayout.MaxDefaultSlider( "", "", _timer.InitialImpulsTime , Init.DECIMAL_PRECISION_TIMER, 0, ref _timer.InitialImpulsTimeMaximum, 0, "" );
+
 			ICEEditorLayout.RandomMinMaxGroupExt( "Impulse Interval (secs.)", "", ref _timer.ImpulseIntervalMin, ref _timer.ImpulseIntervalMax, 0, ref _timer.ImpulseIntervalMaximum,0,0,30, 0.01f, Info.IMPULSE_TIMER_INTERVAL );
 			if( Mathf.Max( _timer.ImpulseIntervalMin, _timer.ImpulseIntervalMax ) > 0 )
 			{
@@ -108,74 +110,75 @@ namespace ICE.World.EditorUtilities
 		/// <param name="_title">Title.</param>
 		/// <param name="_hint">Hint.</param>
 		/// <param name="_help">Help.</param>
-		public static void DrawMethodsObject( ICEWorldBehaviour _component, MethodsObject _methods, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		public static void DrawEventsObject( ICEWorldBehaviour _component, BehaviourEventsObject _events, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
 		{
-			if( _methods == null )
+			if( _events == null )
 				return;
 
 			if( string.IsNullOrEmpty( _title ) )
-				_title = "Methods";
+				_title = "Events";
 			if( string.IsNullOrEmpty( _hint ) )
 				_hint = "";
 			if( string.IsNullOrEmpty( _help ) )
-				_help = Info.METHODS;
+				_help = Info.EVENTS;
 
 			ICEEditorLayout.BeginHorizontal();
 
 				if( IsEnabledFoldoutType( _type ) )
 				{
-					EditorGUI.BeginDisabledGroup( _methods.Enabled == false );
+					EditorGUI.BeginDisabledGroup( _events.Enabled == false );
 				}			
 
-				DrawObjectHeaderLine( _methods, GetSimpleFoldout( _type ), _title, _hint );
+				DrawObjectHeaderLine( _events, GetSimpleFoldout( _type ), _title, _hint );
 
-				EditorGUI.BeginDisabledGroup( _methods.Enabled == false );
+				EditorGUI.BeginDisabledGroup( _events.Enabled == false );
 				if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
-					_methods.Methods.Add( new MethodObject() );
+					_events.Events.Add( new BehaviourEventObject() );
 
-				EditorGUI.BeginDisabledGroup( _methods.Methods.Count == 0 );
+				EditorGUI.BeginDisabledGroup( _events.Events.Count == 0 );
 				if( ICEEditorLayout.Button( "RES", "", ICEEditorStyle.CMDButtonDouble ) )
-					_methods.Methods.Clear();
+					_events.Events.Clear();
 				EditorGUI.EndDisabledGroup();
 				EditorGUI.EndDisabledGroup();				
 
 				if( IsEnabledFoldoutType( _type ) )
 				{
 					EditorGUI.EndDisabledGroup();
-					_methods.Enabled = ICEEditorLayout.ButtonEnabled( _methods.Enabled );
+					_events.Enabled = ICEEditorLayout.ButtonEnabled( _events.Enabled );
 				}
 			ICEEditorLayout.EndHorizontal( _help );
 
 			// CONTENT BEGIN
-			if( BeginObjectContentOrReturn( _type, _methods ) )
+			if( BeginObjectContentOrReturn( _type, _events ) )
 				return;
 
-			for( int i = 0 ; i < _methods.Methods.Count ; i++ )
+			for( int i = 0 ; i < _events.Events.Count ; i++ )
 			{
-				MethodObject _method = _methods.Methods[i];
+				BehaviourEventObject _event = _events.Events[i];
 
 				ICEEditorLayout.BeginHorizontal();
-				ICEEditorLayout.Label( ( string.IsNullOrEmpty( _method.ImpulseMethod.MethodName ) ? "Undefined":_method.ImpulseMethod.MethodName ), true );
+				ICEEditorLayout.Label( ( string.IsNullOrEmpty( _event.ImpulseEvent.FunctionName ) ? "Event #" + i:_event.ImpulseEvent.FunctionName ), true );
 				if( ICEEditorLayout.Button( "COPY", "", ICEEditorStyle.CMDButtonDouble ) )
-					_methods.Methods.Add( new MethodObject( _method ) );
+					_events.Events.Add( new BehaviourEventObject( _event ) );
 
 				if( ICEEditorLayout.Button( "X", "", ICEEditorStyle.CMDButton ) )
 				{
-					_methods.Methods.Remove( _method );
+					_events.Events.Remove( _event );
 					return;
 				}
 				ICEEditorLayout.EndHorizontal();
 
 				EditorGUI.indentLevel++;						
-				DrawMethodDataObject( _component, _method.StartMethod, "", "Start Method" );
-				DrawMethodDataObject( _component, _method.ImpulseMethod, "", "Impulse Method" );
-				if( ! string.IsNullOrEmpty( _method.ImpulseMethod.MethodName ) )
-					DrawImpulsTimerObject( _method );	
+				DrawBehaviourEvent( _component, _event.StartEvent, "", "Start Event" );
+				DrawBehaviourEvent( _component, _event.ImpulseEvent, "", "Impulse Event" );
+				if( ! string.IsNullOrEmpty( _event.ImpulseEvent.FunctionName ) )
+					DrawImpulsTimerObject( _event );	
 				else
 				{
 					//TODO:Deactivate Timer
+			
 				}
-				DrawMethodDataObject( _component, _method.StopMethod, "", "Stop Method" );
+				DrawBehaviourEvent( _component, _event.StopEvent, "", "Stop Event" );
 				EditorGUI.indentLevel--;
 			}
 
@@ -191,29 +194,29 @@ namespace ICE.World.EditorUtilities
 		/// <param name="_help">Help.</param>
 		/// <param name="_title">Title.</param>
 		/// <param name="_hint">Hint.</param>
-		public static void DrawMethodDataObject( ICEWorldBehaviour _component, MethodDataObject _method, string _help = "", string _title = "", string _hint = "" )
+		public static void DrawBehaviourEvent( ICEWorldBehaviour _component, BehaviourEvent _event, string _help = "", string _title = "", string _hint = "" )
 		{
-			if( _method == null )
+			if( _event == null )
 				return;
 
 			if( string.IsNullOrEmpty( _title ) )
-				_title = "Method";
+				_title = "Event";
 			if( string.IsNullOrEmpty( _hint ) )
 				_hint = "";
 			if( string.IsNullOrEmpty( _help ) )
-				_help = Info.METHOD;
+				_help = Info.EVENT;
 
-			_method.MethodData = WorldPopups.MethodPopup( _component, _method.MethodData, _component.PublicMethodsInChildren, ref _method.UseCustomFunction, Info.METHOD_POPUP,  _title, _hint );
+			_event.Info = WorldPopups.EventPopup( _component, _event.Info, _component.BehaviourEventsInChildren, ref _event.UseCustomFunction, Info.EVENT_POPUP,  _title, _hint );
 
 			EditorGUI.indentLevel++;
-			if( _method.ParameterType == MethodParameterType.Boolean )
-				_method.ParameterBoolean = ICEEditorLayout.Toggle( "Parameter Boolean", "", _method.ParameterBoolean, Info.METHOD_PARAMETER_BOOLEAN );
-			else if( _method.ParameterType == MethodParameterType.Integer )
-				_method.ParameterInteger = ICEEditorLayout.Integer( "Parameter Integer", "", _method.ParameterInteger, Info.METHOD_PARAMETER_INTEGER );
-			else if( _method.ParameterType == MethodParameterType.Float )
-				_method.ParameterFloat = ICEEditorLayout.Float( "Parameter Float", "", _method.ParameterFloat, Info.METHOD_PARAMETER_FLOAT );
-			else if( _method.ParameterType == MethodParameterType.String )
-				_method.ParameterString = ICEEditorLayout.Text( "Parameter String", "", _method.ParameterString, Info.METHOD_PARAMETER_STRING );
+			if( _event.ParameterType == BehaviourEventParameterType.Boolean )
+				_event.ParameterBoolean = ICEEditorLayout.Toggle( "Parameter Boolean", "", _event.ParameterBoolean, Info.EVENT_PARAMETER_BOOLEAN );
+			else if( _event.ParameterType == BehaviourEventParameterType.Integer )
+				_event.ParameterInteger = ICEEditorLayout.Integer( "Parameter Integer", "", _event.ParameterInteger, Info.EVENT_PARAMETER_INTEGER );
+			else if( _event.ParameterType == BehaviourEventParameterType.Float )
+				_event.ParameterFloat = ICEEditorLayout.Float( "Parameter Float", "", _event.ParameterFloat, Info.EVENT_PARAMETER_FLOAT );
+			else if( _event.ParameterType == BehaviourEventParameterType.String )
+				_event.ParameterString = ICEEditorLayout.Text( "Parameter String", "", _event.ParameterString, Info.EVENT_PARAMETER_STRING );
 			EditorGUI.indentLevel--;
 		}
 	}
