@@ -130,7 +130,7 @@ namespace ICE.World
 	/// <summary>
 	/// Method parameter type.
 	/// </summary>
-	public enum MethodParameterType
+	public enum BehaviourEventParameterType
 	{
 		None=0,
 		Float,

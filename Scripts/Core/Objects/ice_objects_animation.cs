@@ -88,7 +88,7 @@ namespace ICE.World.Objects
 			this.MethodName = _event.functionName;
 			this.Time = _event.time;
 
-			this.ParameterType = MethodParameterType.None;
+			this.ParameterType = BehaviourEventParameterType.None;
 			this.ParameterString = _event.stringParameter;
 			this.ParameterFloat = _event.floatParameter;
 			this.ParameterInteger = _event.intParameter;
@@ -103,7 +103,7 @@ namespace ICE.World.Objects
 		public bool UseCustomFunction;
 		public string MethodName;
 
-		public MethodParameterType ParameterType;
+		public BehaviourEventParameterType ParameterType;
 		public string ParameterString; 
 		public int ParameterInteger;
 		public float ParameterFloat; 

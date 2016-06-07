@@ -81,23 +81,35 @@ namespace ICE.World.EditorUtilities
 
 			return (LogicalOperatorType)EditorGUILayout.Popup( (int)_selected, _values, _options ); 
 		}
-		public static MethodDataContainer MethodPopup( ICEWorldBehaviour _component, MethodDataContainer _method, MethodDataContainer[] _methods, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
+
+		/// <summary>
+		/// Draws the embeded event popup.
+		/// </summary>
+		/// <returns>The popup.</returns>
+		/// <param name="_component">Component.</param>
+		/// <param name="_event">Event.</param>
+		/// <param name="_methods">Methods.</param>
+		/// <param name="_custom">Custom.</param>
+		/// <param name="_help">Help.</param>
+		/// <param name="_title">Title.</param>
+		/// <param name="_hint">Hint.</param>
+		public static BehaviourEventInfo EventPopup( ICEWorldBehaviour _component, BehaviourEventInfo _event, BehaviourEventInfo[] _methods, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
 		{
 			if( string.IsNullOrEmpty( _title ) )
-				_title = "Method";
+				_title = "Event";
 			if( string.IsNullOrEmpty( _hint ) )
 				_hint = "";
 			if( string.IsNullOrEmpty( _help ) )
-				_help = Info.METHOD;
+				_help = Info.EVENT;
 
 			ICEEditorLayout.BeginHorizontal();
-				_method = MethodPopupLine( _component, _method, _component.PublicMethods, ref _custom, _help, _title, _hint );
+				_event = EventPopupLine( _component, _event, _component.BehaviourEvents, ref _custom, _help, _title, _hint );
 			ICEEditorLayout.EndHorizontal( _help );
-			return _method;
+			return _event;
 		}
 
 		/// <summary>
-		/// Draws the message popup.
+		/// Draws the basic event popup line.
 		/// </summary>
 		/// <returns>The message popup.</returns>
 		/// <param name="_title">Title.</param>
@@ -107,38 +119,38 @@ namespace ICE.World.EditorUtilities
 		/// <param name="_messages">Messages.</param>
 		/// <param name="_custom">Custom.</param>
 		/// <param name="_help">Help.</param>
-		public static MethodDataContainer MethodPopupLine( ICEWorldBehaviour _component, MethodDataContainer _method, MethodDataContainer[] _methods, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
+		public static BehaviourEventInfo EventPopupLine( ICEWorldBehaviour _component, BehaviourEventInfo _event, BehaviourEventInfo[] _events, ref bool _custom, string _help = "", string _title = "", string _hint = ""  )
 		{
-			if( _custom || _methods.Length == 0 )
+			if( _custom || _events.Length == 0 )
 			{
-				_method.ComponentName = "";
-				_method.MethodName = ICEEditorLayout.Text( _title, _hint, _method.MethodName, "" );
+				_event.ComponentName = "";
+				_event.FunctionName = ICEEditorLayout.Text( _title, _hint, _event.FunctionName, "" );
 				int indent = EditorGUI.indentLevel;
 				EditorGUI.indentLevel = 0;
-				_method.ParameterType = (MethodParameterType)EditorGUILayout.EnumPopup( _method.ParameterType, GUILayout.Width( 60 ) );
+					_event.ParameterType = (BehaviourEventParameterType)EditorGUILayout.EnumPopup( _event.ParameterType, GUILayout.Width( 60 ) );
 				EditorGUI.indentLevel = indent;
 			}
 			else
 			{
-				string[] _array = new string[_methods.Length+1];
+				string[] _array = new string[_events.Length+1];
 				_array[0] = " ";
 
-				for( int i = 0 ; i < _methods.Length ; i++ )
-					_array[i+1] = _methods[i].MethodKey;
+				for( int i = 0 ; i < _events.Length ; i++ )
+					_array[i+1] = _events[i].Key;
 
-				int _selected = ICEEditorLayout.Popup( _title, _hint, EditorTools.StringToIndex( _method.MethodKey, _array ), _array, "" );
+				int _selected = ICEEditorLayout.Popup( _title, _hint, EditorTools.StringToIndex( _event.Key, _array ), _array, "" );
 
 				if( _selected == 0 )
 				{
-					_method.Reset();
+					_event.Reset();
 				}
 				else
 				{
-					for( int i = 0 ; i < _methods.Length ; i++ )
+					for( int i = 0 ; i < _events.Length ; i++ )
 					{
-						if( _methods[i].MethodKey == _array[_selected] )
+						if( _events[i].Key == _array[_selected] )
 						{
-							_method.Copy( _methods[i] );
+							_event.Copy( _events[i] );
 						}
 					}
 				}
@@ -146,7 +158,7 @@ namespace ICE.World.EditorUtilities
 
 			_custom = ICEEditorLayout.ButtonCheck( "CUSTOM", "", _custom, ICEEditorStyle.ButtonMiddle );
 
-			return _method;
+			return _event;
 		}
 
 	}

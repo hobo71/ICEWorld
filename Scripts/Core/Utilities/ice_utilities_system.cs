@@ -36,24 +36,24 @@ namespace ICE.World.Utilities
 {
 	public static class SystemTools 
 	{
-		public static MethodParameterType GetMethodParameterType( ICEWorldBehaviour _control, string _method )
+		public static BehaviourEventParameterType GetMethodParameterType( ICEWorldBehaviour _control, string _method )
 		{
 			System.Type _type = _control.GetType();
 
 			if( _type == null )
-				return MethodParameterType.None;
+				return BehaviourEventParameterType.None;
 
 			if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(bool) }, null) != null )
-				return MethodParameterType.Boolean;
+				return BehaviourEventParameterType.Boolean;
 			else if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(string) }, null) != null )
-				return MethodParameterType.String;
+				return BehaviourEventParameterType.String;
 			else if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(float) }, null) != null )
-				return MethodParameterType.Float;
+				return BehaviourEventParameterType.Float;
 			else if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(int) }, null) != null )
-				return MethodParameterType.Integer;
+				return BehaviourEventParameterType.Integer;
 
 			else
-				return MethodParameterType.None;
+				return BehaviourEventParameterType.None;
 		}
 
 		/// <summary>

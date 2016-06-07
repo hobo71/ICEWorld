@@ -52,10 +52,10 @@ namespace ICE.World
 		/// RegisterPublicMethod(); while doing so you can use base.OnRegisterPublicMethods(); 
 		/// to call the event in the base classes too.
 		/// </summary>
-		protected override void OnRegisterPublicMethods()
+		protected override void OnRegisterBehaviourEvents()
 		{
 			//base.OnRegisterPublicMethods(); 
-			RegisterPublicMethod( "ApplyDamage", MethodParameterType.Float );
+			RegisterBehaviourEvent( "ApplyDamage", BehaviourEventParameterType.Float );
 		}
 			
 		private ICEWorldSingleton m_World = null;

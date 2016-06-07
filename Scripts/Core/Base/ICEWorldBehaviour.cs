@@ -30,53 +30,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+using ICE;
+using ICE.World.Objects;
+
 namespace ICE.World
 {
-	[System.Serializable]
-	public struct MethodDataContainer
-	{
-		public string ComponentName;
-		public string MethodName;
-		public MethodParameterType ParameterType;
 
-		/*
-		public PublicMethodData()
-		{
-			this.MethodName = "";
-			this.MethodType = MethodParameterType.None;
-		}*/
-		public MethodDataContainer( string _component, string _name, MethodParameterType _type )
-		{
-			this.ComponentName = _component;
-			this.MethodName = _name;
-			this.ParameterType = _type;
-		}
-
-		public MethodDataContainer( MethodDataContainer _method )
-		{
-			this.ComponentName = _method.ComponentName;
-			this.MethodName = _method.MethodName;
-			this.ParameterType = _method.ParameterType;
-		}
-
-		public void Copy( MethodDataContainer _method )
-		{
-			this.ComponentName = _method.ComponentName;
-			this.MethodName = _method.MethodName;
-			this.ParameterType = _method.ParameterType;
-		}
-
-		public string MethodKey{
-			get{ return ComponentName + "." + MethodName; }
-		}
-
-		public void Reset()
-		{
-			this.ComponentName = "";
-			this.MethodName = "";
-			this.ParameterType = MethodParameterType.None;
-		}
-	}
 
 	/// <summary>
 	/// ICEComponent is the abstract base class of all ICEWorld based components.
@@ -147,68 +106,80 @@ namespace ICE.World
 		/// <summary>
 		/// m_PublicMethods. PublicMethods represents a list of method names.
 		/// </summary>
-		protected List<MethodDataContainer> m_PublicMethods = new List<MethodDataContainer>();
+		protected List<BehaviourEventInfo> m_BehaviourEvents = new List<BehaviourEventInfo>();
 		/// <summary>
 		/// Gets the public methods.
 		/// </summary>
 		/// <value>The public methods.</value>
-		public MethodDataContainer[] PublicMethods{
-			get{ return GetPublicMethods(); }
+		public BehaviourEventInfo[] BehaviourEvents{
+			get{ return GetBehaviourEvents(); }
 		}
 
-		protected MethodDataContainer[] GetPublicMethods()
+		protected BehaviourEventInfo[] GetBehaviourEvents()
 		{
-			m_PublicMethods.Clear();
-			OnRegisterPublicMethods();
+			m_BehaviourEvents.Clear();
+			OnRegisterBehaviourEvents();
 
-			List<MethodDataContainer> _methods = new List<MethodDataContainer>();
-			foreach( MethodDataContainer _method in m_PublicMethods )						
-				_methods.Add( new MethodDataContainer( _method ) );
+			List<BehaviourEventInfo> _events = new List<BehaviourEventInfo>();
+			foreach( BehaviourEventInfo _event in m_BehaviourEvents )						
+				_events.Add( new BehaviourEventInfo( _event ) );
 
-			return _methods.ToArray();
+			return _events.ToArray();
 		}
 
 
 		/// <summary>
-		/// Gets all public methods.
+		/// Gets all available behaviour events.
 		/// </summary>
-		/// <value>All public methods.</value>
-		public MethodDataContainer[] PublicMethodsInChildren{
+		/// <value>All available behaviour events.</value>
+		public BehaviourEventInfo[] BehaviourEventsInChildren{
 			get{
-				List<MethodDataContainer> _methods = new List<MethodDataContainer>();
+				List<BehaviourEventInfo> _events = new List<BehaviourEventInfo>();
 				ICEWorldBehaviour[] _components = GetComponentsInChildren<ICEWorldBehaviour>();
 				if( _components != null )
 				{
 					foreach( ICEWorldBehaviour _component in _components )
-						foreach( MethodDataContainer _method in _component.PublicMethods )						
-							_methods.Add( new MethodDataContainer( _method ) );
+						foreach( BehaviourEventInfo _event in _component.BehaviourEvents )						
+							_events.Add( new BehaviourEventInfo( _event ) );
 				}
 
-				return _methods.ToArray();
+				return _events.ToArray();
 			}
 		}
 
 		/// <summary>
-		/// OnRegisterPublicMethods is called whithin the GetPublicMethods() method to update the 
-		/// m_PublicMethods list. Override this event to register your own methods by using the 
-		/// RegisterPublicMethod(); while doing so you can use base.OnRegisterPublicMethods(); 
+		/// OnRegisterBehaviourEvents is called whithin the GetBehaviourEvents() method to update the 
+		/// m_BehaviourEvents list. Override this event to register your own events by using the 
+		/// RegisterBehaviourEvent method, while doing so you can use base.OnRegisterBehaviourEvents(); 
 		/// to call the event in the base classes too.
 		/// </summary>
-		protected virtual void OnRegisterPublicMethods(){}
+		protected virtual void OnRegisterBehaviourEvents(){}
 
-		public void RegisterPublicMethod( string _method ){
-			RegisterPublicMethod( _method, MethodParameterType.None );
+		/// <summary>
+		/// Registers the behaviour event with zero parameter.
+		/// </summary>
+		/// <param name="_event">Event.</param>
+		public void RegisterBehaviourEvent( string _event ){
+			RegisterBehaviourEvent( _event, BehaviourEventParameterType.None );
 		}
 
-		public void RegisterPublicMethod( string _method, MethodParameterType _type ){
-			if( string.IsNullOrEmpty( _method ) )
+		/// <summary>
+		/// Registers the behaviour event with the defind parameter type.
+		/// </summary>
+		/// <param name="_event">Event.</param>
+		/// <param name="_type">Type.</param>
+		public void RegisterBehaviourEvent( string _event, BehaviourEventParameterType _type ){
+			if( string.IsNullOrEmpty( _event ) )
 				return;
 
-			m_PublicMethods.Add( new MethodDataContainer( this.name, _method, _type ) );
+			m_BehaviourEvents.Add( new BehaviourEventInfo( this.name, _event, _type ) );
 		}
 
-		public void ClearPublicMethods(){
-			m_PublicMethods.Clear();
+		/// <summary>
+		/// Clears the behaviour events.
+		/// </summary>
+		public void ClearBehaviourEvents(){
+			m_BehaviourEvents.Clear();
 		}
 
 		public virtual bool GetDynamicBooleanValue( DynamicBooleanValueType _type )
