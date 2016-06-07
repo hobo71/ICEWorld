@@ -323,7 +323,7 @@ namespace ICE.World.EditorUtilities
 				return;
 
 			if( string.IsNullOrEmpty( _title ) )
-				_title = "Events";
+				_title = "Animation Events";
 			if( string.IsNullOrEmpty( _hint ) )
 				_hint = "";
 			if( string.IsNullOrEmpty( _help ) )
@@ -356,7 +356,14 @@ namespace ICE.World.EditorUtilities
 			if( IsEnabledFoldoutType( _type ) )
 			{
 				EditorGUI.EndDisabledGroup();
-				_container.Enabled = ICEEditorLayout.ButtonEnabled( _container.Enabled );
+				bool _enabled = ICEEditorLayout.ButtonEnabled( _container.Enabled );
+
+				if( _enabled != _container.Enabled )
+				{
+					_container.Enabled = _enabled;
+					if( _container.Enabled == false )
+						AnimationUtility.SetAnimationEvents( _clip, new AnimationEvent[0] );						
+				}
 			}
 			ICEEditorLayout.EndHorizontal( _help );
 
@@ -374,14 +381,14 @@ namespace ICE.World.EditorUtilities
 				AnimationEventObject _data = _container.Events[i];
 				ICEEditorLayout.BeginHorizontal();
 
-					MethodDataContainer _method = new MethodDataContainer();
-					_method.ComponentName = _component.name;
-					_method.MethodName = _data.MethodName;
+				BehaviourEventInfo _event = new BehaviourEventInfo();
+					_event.ComponentName = _component.name;
+					_event.FunctionName = _data.MethodName;
 					//_method.ParameterType = SystemTools.GetMethodParameterType( _control, _event.functionName );
 
-					_method = WorldPopups.MethodPopupLine( _component, _method, _component.PublicMethods, ref _data.UseCustomFunction, "", "Event #" + i, "" );
+					_event = WorldPopups.EventPopupLine( _component, _event, _component.BehaviourEvents, ref _data.UseCustomFunction, "", "Event #" + i, "" );
 
-					_data.MethodName = _method.MethodName;
+					_data.MethodName = _event.FunctionName;
 
 					bool _active = ICEEditorLayout.ButtonCheck( "ACTIVE", "", _data.IsActive , ICEEditorStyle.ButtonMiddle );
 
@@ -398,18 +405,18 @@ namespace ICE.World.EditorUtilities
 						return;
 					}
 
-				ICEEditorLayout.EndHorizontal( Info.ANIMATION_EVENTS_METHOD );
+				ICEEditorLayout.EndHorizontal( Info.ANIMATION_EVENTS_METHOD_POPUP );
 
 				EditorGUI.indentLevel++;
 
-					if( _method.ParameterType == MethodParameterType.Integer )
-						_data.ParameterInteger = ICEEditorLayout.Integer( "Parameter Integer", "", _data.ParameterInteger, Info.METHOD_PARAMETER_INTEGER );
-					else if( _method.ParameterType == MethodParameterType.Float )
-						_data.ParameterFloat = ICEEditorLayout.Float( "Parameter Float", "", _data.ParameterFloat, Info.METHOD_PARAMETER_FLOAT );
-					else if( _method.ParameterType == MethodParameterType.String )
-						_data.ParameterString = ICEEditorLayout.Text( "Parameter String", "", _data.ParameterString, Info.METHOD_PARAMETER_STRING );
+					if( _event.ParameterType == BehaviourEventParameterType.Integer )
+						_data.ParameterInteger = ICEEditorLayout.Integer( "Parameter Integer", "", _data.ParameterInteger, Info.EVENT_PARAMETER_INTEGER );
+					else if( _event.ParameterType == BehaviourEventParameterType.Float )
+						_data.ParameterFloat = ICEEditorLayout.Float( "Parameter Float", "", _data.ParameterFloat, Info.EVENT_PARAMETER_FLOAT );
+					else if( _event.ParameterType == BehaviourEventParameterType.String )
+						_data.ParameterString = ICEEditorLayout.Text( "Parameter String", "", _data.ParameterString, Info.EVENT_PARAMETER_STRING );
 
-					_data.Time = ICEEditorLayout.Slider( "Time", "The time at which the event will be fired off.", _data.Time, 0.0001f, 0, _clip.length, Info.ANIMATION_EVENTS_TIME );
+					_data.Time = ICEEditorLayout.Slider( "Time", "The time at which the event will be fired off.", _data.Time, 0.0001f, 0, _clip.length, Info.ANIMATION_EVENTS_METHOD_TIME );
 
 				EditorGUI.indentLevel--;
 			}
