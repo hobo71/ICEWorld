@@ -36,6 +36,26 @@ namespace ICE.World.Utilities
 {
 	public static class SystemTools 
 	{
+		public static MethodParameterType GetMethodParameterType( ICEWorldBehaviour _control, string _method )
+		{
+			System.Type _type = _control.GetType();
+
+			if( _type == null )
+				return MethodParameterType.None;
+
+			if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(bool) }, null) != null )
+				return MethodParameterType.Boolean;
+			else if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(string) }, null) != null )
+				return MethodParameterType.String;
+			else if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(float) }, null) != null )
+				return MethodParameterType.Float;
+			else if( _type.GetMethod( _method, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { typeof(int) }, null) != null )
+				return MethodParameterType.Integer;
+
+			else
+				return MethodParameterType.None;
+		}
+
 		/// <summary>
 		/// Determines if is in layer mask the specified _object _layerMask.
 		/// </summary>

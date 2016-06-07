@@ -37,7 +37,7 @@ namespace ICE.World
 	{
 		public string ComponentName;
 		public string MethodName;
-		public MethodParameterType MethodType;
+		public MethodParameterType ParameterType;
 
 		/*
 		public PublicMethodData()
@@ -49,21 +49,21 @@ namespace ICE.World
 		{
 			this.ComponentName = _component;
 			this.MethodName = _name;
-			this.MethodType = _type;
+			this.ParameterType = _type;
 		}
 
 		public MethodDataContainer( MethodDataContainer _method )
 		{
 			this.ComponentName = _method.ComponentName;
 			this.MethodName = _method.MethodName;
-			this.MethodType = _method.MethodType;
+			this.ParameterType = _method.ParameterType;
 		}
 
 		public void Copy( MethodDataContainer _method )
 		{
 			this.ComponentName = _method.ComponentName;
 			this.MethodName = _method.MethodName;
-			this.MethodType = _method.MethodType;
+			this.ParameterType = _method.ParameterType;
 		}
 
 		public string MethodKey{
@@ -74,7 +74,7 @@ namespace ICE.World
 		{
 			this.ComponentName = "";
 			this.MethodName = "";
-			this.MethodType = MethodParameterType.None;
+			this.ParameterType = MethodParameterType.None;
 		}
 	}
 
@@ -173,10 +173,9 @@ namespace ICE.World
 		/// Gets all public methods.
 		/// </summary>
 		/// <value>All public methods.</value>
-		public MethodDataContainer[] AllPublicMethods{
-			get{ 
+		public MethodDataContainer[] PublicMethodsInChildren{
+			get{
 				List<MethodDataContainer> _methods = new List<MethodDataContainer>();
-
 				ICEWorldBehaviour[] _components = GetComponentsInChildren<ICEWorldBehaviour>();
 				if( _components != null )
 				{
