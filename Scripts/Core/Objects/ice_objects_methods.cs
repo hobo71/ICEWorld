@@ -117,7 +117,7 @@ namespace ICE.World.Objects
 		/// Sends the message.
 		/// </summary>
 		/// <param name="_method">Method.</param>
-		private void SendMessage( MethodDataObject _method )
+		protected virtual void SendMessage( MethodDataObject _method )
 		{
 			if( m_Owner == null || _method == null || string.IsNullOrEmpty( _method.MethodName ) )
 				return;
@@ -127,7 +127,7 @@ namespace ICE.World.Objects
 
 			if( m_Transform != null )
 			{
-				switch( _method.MethodType ) 
+				switch( _method.ParameterType ) 
 				{
 					case MethodParameterType.Boolean:
 						m_Transform.SendMessage( _method.MethodName, _method.ParameterBoolean, SendMessageOptions.DontRequireReceiver );
@@ -148,7 +148,7 @@ namespace ICE.World.Objects
 			}
 			else
 			{
-				switch( _method.MethodType ) 
+				switch( _method.ParameterType ) 
 				{
 					case MethodParameterType.Boolean:
 						m_Owner.BroadcastMessage( _method.MethodName, _method.ParameterBoolean, SendMessageOptions.DontRequireReceiver );
@@ -173,11 +173,11 @@ namespace ICE.World.Objects
 	[System.Serializable]
 	public class MethodDataObject : ICEObject
 	{
-		public bool UseCustomMethod = false;
+		public bool UseCustomFunction = false;
 		public string ComponentName = "";
 		public string MethodName = "";
-		public MethodParameterType MethodType = MethodParameterType.None;
 
+		public MethodParameterType ParameterType = MethodParameterType.None;
 		public string ParameterString; 
 		public int ParameterInteger;
 		public float ParameterFloat; 
@@ -188,8 +188,8 @@ namespace ICE.World.Objects
 		{
 			this.ComponentName = _method.ComponentName;
 			this.MethodName = _method.MethodName;
-			this.MethodType = _method.MethodType;
 
+			this.ParameterType = _method.ParameterType;
 			this.ParameterString = _method.ParameterString;
 			this.ParameterInteger = _method.ParameterInteger;
 			this.ParameterFloat = _method.ParameterFloat;
@@ -197,11 +197,11 @@ namespace ICE.World.Objects
 		}
 
 		public MethodDataContainer MethodData{
-			get{ return new MethodDataContainer( ComponentName, MethodName, MethodType ); }
+			get{ return new MethodDataContainer( ComponentName, MethodName, ParameterType ); }
 			set{ 
 				ComponentName = value.ComponentName;
 				MethodName = value.MethodName; 
-				MethodType = value.MethodType; 
+				ParameterType = value.ParameterType; 
 			}
 		}
 
