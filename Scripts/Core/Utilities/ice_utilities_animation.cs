@@ -32,6 +32,141 @@ namespace ICE.World.Utilities
 {
 	public static class AnimationTools 
 	{
+		public static Animator TryGetAnimatorComponent( GameObject _object )
+		{
+			if( _object == null )
+				return null;
+			
+			return _object.GetComponentInChildren<Animator>();
+		}
+
+		public static Animation TryGetAnimationComponent( GameObject _object )
+		{
+			if( _object == null )
+				return null;
+			
+			return _object.GetComponentInChildren<Animation>();
+		}
+
+		/// <summary>
+		/// Get AnimationState by GameObject and AnimationName
+		/// </summary>
+		/// <returns>The state by index.</returns>
+		/// <param name="_control">_control.</param>
+		/// <param name="index">Index.</param>
+		public static AnimationState GetAnimationStateByName( GameObject _object, string _name )
+		{
+			return GetAnimationStateByName( _object.GetComponentInChildren<Animation>(), _name );
+		}
+
+		/// <summary>
+		/// Gets AnimationState by AnimationName
+		/// </summary>
+		/// <returns>The AnimationState.</returns>
+		/// <param name="_animation">Animation.</param>
+		/// <param name="_name">Name.</param>
+		public static AnimationState GetAnimationStateByName( Animation _animation, string _name )
+		{
+			if( _animation == null )
+				return null;
+
+			foreach( AnimationState _state in _animation )
+				if( _state.name == _name )
+					return _state;
+
+			return null;
+		}
+
+		public static AnimationState[] GetAnimationStates( Animation _animation )
+		{
+			if( _animation == null )
+				return null;
+
+			int i = 0;
+			AnimationState[] _states = new AnimationState[ GetAnimationClipCount( _animation ) ];
+			foreach( AnimationState _state in _animation )
+				_states[i++] = _state;
+
+			return _states;
+		}
+
+		public static AnimationClip GetAnimationClipByName( Animation _animation, string _name )
+		{
+			if( _animation == null )
+				return null;
+			
+			foreach( AnimationState _state in _animation )
+				if( _state.clip.name == _name )
+					return _state.clip;
+
+			return null;
+		}
+
+		public static AnimationClip[] GetAnimationClips( Animation _animation )
+		{
+			if( _animation == null )
+				return null;
+			int i = 0;
+			int _count = GetAnimationClipCount( _animation );
+			AnimationClip[] _clips = new AnimationClip[ _count ];
+			foreach( AnimationState _state in _animation )
+				_clips[i++] = _state.clip;
+
+			return _clips;
+		}
+
+		public static int GetAnimationClipCount( Animation _animation )
+		{
+			if( _animation == null )
+				return 0;
+
+			return _animation.GetClipCount();
+		}
+
+		public static AnimationClip GetAnimationClipByAnimatorAndName( Animator _animator, string _name )
+		{
+			if( _animator == null || _animator.runtimeAnimatorController == null )
+				return null;
+
+			return GetAnimationClipByName( GetAnimationClips( _animator ), _name );
+		}
+
+		public static int GetAnimationClipCount( Animator _animator )
+		{
+			if( _animator == null || _animator.runtimeAnimatorController == null )
+				return 0;
+
+			return _animator.runtimeAnimatorController.animationClips.Length;
+		}
+
+		public static AnimationClip GetAnimationClipByIndex( Animator _animator, int _index )
+		{
+			if( _animator == null || _animator.runtimeAnimatorController == null || _index < 0 || _index >= _animator.runtimeAnimatorController.animationClips.Length )
+				return null;
+
+			return _animator.runtimeAnimatorController.animationClips[ _index ];
+		}
+
+		public static AnimationClip[] GetAnimationClips( Animator _animator )
+		{
+			if( _animator == null || _animator.runtimeAnimatorController == null )
+				return null;
+
+			return _animator.runtimeAnimatorController.animationClips;
+		}
+
+		public static AnimationClip GetAnimationClipByName( AnimationClip[] _clips, string _name )
+		{
+			if( _clips == null || _clips.Length == 0 )
+				return null;
+			
+			foreach( AnimationClip _clip in _clips )
+				if( _clip.name == _name )
+					return _clip;
+
+			return null;
+		}
+
 		/// <summary>
 		/// Compares two animation curves.
 		/// </summary>
@@ -57,14 +192,14 @@ namespace ICE.World.Utilities
 
 			return true;
 		}
-
+			
 		/// <summary>
 		/// Gets the name of the animation state.
 		/// </summary>
 		/// <returns>The animation state name.</returns>
 		/// <param name="_animator">Animator.</param>
 		/// <param name="_name">Name.</param>
-		public static string GetAnimationStateName( Animator _animator, string _name )
+		public static string GetAnimatorStateName( Animator _animator, string _name )
 		{
 			if( string.IsNullOrEmpty( _name ) || _animator == null || _animator.runtimeAnimatorController == null )
 				return "";
@@ -93,33 +228,14 @@ namespace ICE.World.Utilities
 		public static bool HasAnimations( GameObject _object )
 		{
 			if( _object != null && (
-				( _object.GetComponentInChildren<Animation>() != null && _object.GetComponentInChildren<Animation>().GetClipCount() > 0 ) ||
-				( _object.GetComponentInChildren<Animator>() != null && _object.GetComponentInChildren<Animator>().runtimeAnimatorController != null ) ) )
+				GetAnimationClipCount( _object.GetComponentInChildren<Animation>() ) > 0 ||
+				GetAnimationClipCount( _object.GetComponentInChildren<Animator>() ) > 0 ) )
 				return true;
 			else
 				return false;
 		}
 
-		/// <summary>
-		/// Get AnimationState by Index
-		/// </summary>
-		/// <returns>The state by index.</returns>
-		/// <param name="_control">_control.</param>
-		/// <param name="index">Index.</param>
-		public static AnimationState GetAnimationStateByName( GameObject _object, string _name )
-		{
-			Animation _anim = _object.GetComponentInChildren<Animation>();
 
-			if( _anim == null )
-				return null;
-
-			foreach (AnimationState state in _anim )
-			{
-				if ( state.name == _name)
-					return state;
-			}
-			return null;
-		}
 
 		/// <summary>
 		/// Get AnimationName by Index 
