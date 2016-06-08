@@ -27,11 +27,46 @@
 // ##############################################################################
 
 using UnityEngine;
+using UnityEditor;
 
-namespace ICE.World.Utilities
+using ICE;
+using ICE.World;
+using ICE.World.Objects;
+using ICE.World.Utilities;
+
+namespace ICE.World.EditorUtilities
 {
 	public static class EditorTools 
 	{
+		public static AxisInputData[] ReadAxes()
+		{
+			var _input_manager = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0];
+			SerializedObject _input_object = new SerializedObject(_input_manager);
+			SerializedProperty _axes_array = _input_object.FindProperty("m_Axes");
+
+			if( _axes_array.arraySize == 0 )
+				return new AxisInputData[0];
+
+			AxisInputData[] _axes = new AxisInputData[_axes_array.arraySize];
+
+			for( int i = 0; i < _axes_array.arraySize; ++i )
+			{
+				_axes[i] = new AxisInputData();
+
+				SerializedProperty axis = _axes_array.GetArrayElementAtIndex(i);
+
+				_axes[i].Name = axis.FindPropertyRelative("m_Name").stringValue;
+				_axes[i].Value = axis.FindPropertyRelative("axis").intValue;
+				_axes[i].Type = (AxisInputType)axis.FindPropertyRelative("type").intValue;
+
+				//Debug.Log(_axes[i].Name);
+				//Debug.Log(_axes[i].Value);
+				//Debug.Log(_axes[i].Type);
+			}
+
+			return _axes;
+		}
+
 		public static int StringToIndex( string _text, string[] _data )
 		{
 			int _i = 0;

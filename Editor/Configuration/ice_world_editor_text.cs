@@ -93,9 +93,11 @@ namespace ICE.World.EditorInfos
 			"the X button, this will removes both the listed event template and the assigned AnimationEvent.";
 		public static readonly string ANIMATION_EVENTS_METHOD_TIME = "The time at which the event will be fired off.";
 
+		public static readonly string INPUT_POPUP = "TODO";
+
 		public static readonly string EVENTS = "TODO";
 		public static readonly string EVENT = "TODO";
-		public static readonly string EVENT_POPUP = "The Method Popup displays all available PublicMethods ";
+		public static readonly string EVENT_POPUP = "The Event Popup displays all available Behaviour Events ";
 		public static readonly string EVENT_PARAMETER_BOOLEAN = "Boolean parameter that is stored in the event and will be sent to the function.";
 		public static readonly string EVENT_PARAMETER_INTEGER = "Int parameter that is stored in the event and will be sent to the function.";
 		public static readonly string EVENT_PARAMETER_FLOAT = "Float parameter that is stored in the event and will be sent to the function.";

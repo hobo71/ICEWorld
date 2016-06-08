@@ -54,6 +54,16 @@ namespace ICE.World
 		CUSTOM
 	}
 
+	/// <summary>
+	/// Axis input type.
+	/// </summary>
+	public enum AxisInputType
+	{
+		KeyOrMouseButton,
+		MouseMovement,
+		JoystickAxis
+	}
+
 	// *** B *** 
 	// *** C *** 
 	// *** D *** 

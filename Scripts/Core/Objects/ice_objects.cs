@@ -36,6 +36,21 @@ using System.Text.RegularExpressions;
 namespace ICE.World.Objects
 {
 	[System.Serializable]
+	public struct AxisInputData
+	{
+		public AxisInputType Type;
+		public string Name;
+		public int Value;
+
+		public void Copy( AxisInputData _data )
+		{
+			Type = _data.Type;
+			Name = _data.Name;
+			Value = _data.Value;
+		}
+	}
+
+	[System.Serializable]
 	public abstract class ICEObject : System.Object 
 	{
 

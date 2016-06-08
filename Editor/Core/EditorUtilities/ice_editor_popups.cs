@@ -82,6 +82,58 @@ namespace ICE.World.EditorUtilities
 			return (LogicalOperatorType)EditorGUILayout.Popup( (int)_selected, _values, _options ); 
 		}
 
+		public static AxisInputData InputPopup( ICEWorldBehaviour _component, AxisInputData _input, string _help = "", string _title = "", string _hint = ""  )
+		{
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Input";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.INPUT_POPUP;
+
+			ICEEditorLayout.BeginHorizontal();
+				_input = InputPopupLine( _component, _input, "", _title, _hint );
+			ICEEditorLayout.EndHorizontal( _help );
+			return _input;
+		}
+
+		public static AxisInputData InputPopupLine( ICEWorldBehaviour _component, AxisInputData _input, string _help = "", string _title = "", string _hint = ""  )
+		{
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Input";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			
+			AxisInputData[] _axes = EditorTools.ReadAxes();
+
+			if( _axes.Length == 0 )
+			{
+				_input.Name = ICEEditorLayout.Text( _title, _hint, _input.Name, _help );
+			}
+			else
+			{
+				string[] _names = new string[_axes.Length];
+
+				for( int i = 0 ; i < _axes.Length ; i++ )
+					_names[i] = _axes[i].Name;
+
+				int _selected = ICEEditorLayout.Popup( _title, _hint, EditorTools.StringToIndex( _input.Name, _names ), _names, _help );
+
+				_input.Copy( _axes[_selected] );
+
+				/*
+				for( int i = 0 ; i < _axes.Length ; i++ )
+				{
+					if( _axes[i].Name == _names[_selected] )
+					{
+						_input.Copy( _axes[i] );
+					}
+				}*/
+			}
+
+			return _input;
+		}
+
 		/// <summary>
 		/// Draws the embeded event popup.
 		/// </summary>
@@ -100,13 +152,15 @@ namespace ICE.World.EditorUtilities
 			if( string.IsNullOrEmpty( _hint ) )
 				_hint = "";
 			if( string.IsNullOrEmpty( _help ) )
-				_help = Info.EVENT;
+				_help = Info.EVENT_POPUP;
 
 			ICEEditorLayout.BeginHorizontal();
 				_event = EventPopupLine( _component, _event, _component.BehaviourEvents, ref _custom, _help, _title, _hint );
 			ICEEditorLayout.EndHorizontal( _help );
 			return _event;
 		}
+
+
 
 		/// <summary>
 		/// Draws the basic event popup line.
@@ -129,6 +183,8 @@ namespace ICE.World.EditorUtilities
 				EditorGUI.indentLevel = 0;
 					_event.ParameterType = (BehaviourEventParameterType)EditorGUILayout.EnumPopup( _event.ParameterType, GUILayout.Width( 60 ) );
 				EditorGUI.indentLevel = indent;
+
+				_custom = true;
 			}
 			else
 			{
@@ -156,7 +212,10 @@ namespace ICE.World.EditorUtilities
 				}
 			}
 
+
+			EditorGUI.BeginDisabledGroup( _events.Length == 0 );
 			_custom = ICEEditorLayout.ButtonCheck( "CUSTOM", "", _custom, ICEEditorStyle.ButtonMiddle );
+			EditorGUI.EndDisabledGroup();
 
 			return _event;
 		}
