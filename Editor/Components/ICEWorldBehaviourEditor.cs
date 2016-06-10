@@ -36,6 +36,7 @@ using UnityEditor.AnimatedValues;
 using ICE;
 using ICE.World;
 using ICE.World.EditorUtilities;
+using ICE.World.EditorInfos;
 using ICE.World.Utilities;
 
 namespace ICE.World
@@ -67,7 +68,7 @@ namespace ICE.World
 			T _target = (T)target;
 
 			GUI.changed = false;
-			//Info.HelpButtonIndex = 0;
+			Info.HelpButtonIndex = 0;
 
 			EditorGUILayout.Separator();
 			return _target;
