@@ -109,6 +109,49 @@ namespace ICE.World.EditorUtilities
 		public static readonly char EXCLAMATION_MARK = '\uFE15';
 		public static readonly char CROSS_MARK = '\u2764';
 
+		public static void MiniLabel( string _text )
+		{
+			if( string.IsNullOrEmpty( _text ) )
+				return;
+			
+			ICEEditorLayout.BeginHorizontal();
+				GUILayout.FlexibleSpace();
+					EditorGUILayout.LabelField( _text , EditorStyles.wordWrappedMiniLabel );
+				GUILayout.FlexibleSpace();
+			ICEEditorLayout.EndHorizontal();
+		}
+
+		public static void MiniLabelLeft( string _text )
+		{
+			if( string.IsNullOrEmpty( _text ) )
+				return;
+
+			EditorGUILayout.LabelField( _text , EditorStyles.wordWrappedMiniLabel );
+		}
+
+		private static ColliderType _collider;
+		public static void DrawAddCollider( GameObject _object ){
+
+			if( _object == null || _object.GetComponent<Collider>() != null )
+				return;
+
+			ICEEditorLayout.BeginHorizontal();
+			_collider = (ColliderType)ICEEditorLayout.EnumPopup( "Add Collider", "", _collider ); 
+			if( ICEEditorLayout.Button( "ADD", "Adds the selected collider", ICEEditorStyle.CMDButtonDouble ) )
+			{
+				if( _collider == ColliderType.Sphere )
+					_object.AddComponent<SphereCollider>();
+				else if( _collider == ColliderType.Box )
+					_object.AddComponent<BoxCollider>();
+				else if( _collider == ColliderType.Capsule )
+					_object.AddComponent<CapsuleCollider>();
+			}
+			ICEEditorLayout.EndHorizontal();
+
+			EditorGUILayout.HelpBox( Info.COLLIDER_INFO, MessageType.Info );
+		}
+
+
 		public static void DrawPriorityInfo( int _priority, string _hint = "" )
 		{
 			if( _hint == "" )
@@ -397,7 +440,7 @@ namespace ICE.World.EditorUtilities
 			if (GUILayout.Button( new GUIContent( "DEFAULT", "Sets default color." ), ICEEditorStyle.ButtonMiddle ))
 				_color = _default;
 
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _color;
 		}
 
@@ -715,7 +758,7 @@ namespace ICE.World.EditorUtilities
 					_offset = Vector3.zero;
 				}
 			}
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 
 
 			return _offset;
@@ -727,7 +770,7 @@ namespace ICE.World.EditorUtilities
 				_offset = EditorGUILayout.Vector3Field( _title, _offset );				
 				if (GUILayout.Button( new GUIContent( "RESET", "Reset offset values" ), ICEEditorStyle.CMDButtonDouble ))
 					_offset = Vector3.zero;
-			EndHorizontalInfo( _help );			
+			EndHorizontalHelp( _help );			
 			
 			return _offset;
 		}
@@ -736,7 +779,7 @@ namespace ICE.World.EditorUtilities
 		{
 			BeginHorizontal();
 			int _value = Popup( _title, _hint, _selected, _options ); 
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -762,7 +805,7 @@ namespace ICE.World.EditorUtilities
 		{
 			BeginHorizontal();
 			int _value = EditorGUILayout.Popup( new GUIContent( _title, _hint), _selected, _options ); 
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -776,7 +819,7 @@ namespace ICE.World.EditorUtilities
 		{
 			BeginHorizontal();
 				Enum _value = EnumPopup( _title, _hint, _selected );
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 			
@@ -795,7 +838,7 @@ namespace ICE.World.EditorUtilities
 			BeginHorizontal();
 				bool _value = ToggleLeft( _title, _hint, _toggle , _bold );
 				GUILayout.FlexibleSpace();			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -808,7 +851,7 @@ namespace ICE.World.EditorUtilities
 				BeginHorizontal();
 					bool _value = Toggle( _title, _hint, _toggle );
 					GUILayout.FlexibleSpace();			
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}			
 		}
@@ -818,7 +861,7 @@ namespace ICE.World.EditorUtilities
 			BeginHorizontal();
 				bool _value = Toggle( _title, _hint, _toggle );
 				GUILayout.FlexibleSpace();			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -830,7 +873,7 @@ namespace ICE.World.EditorUtilities
 			{
 				BeginHorizontal();
 				_value = EditorGUILayout.TagField( new GUIContent( _title, _hint ), _value );
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}			
 		}
@@ -913,7 +956,7 @@ namespace ICE.World.EditorUtilities
 			{
 				BeginHorizontal();
 				_value = EditorGUILayout.LayerField( new GUIContent( _title, _hint ), _value );		
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}			
 		}
@@ -928,7 +971,7 @@ namespace ICE.World.EditorUtilities
 				BeginHorizontal();
 				_value = EditorGUILayout.FloatField( new GUIContent( _title, _hint ) ,_value );
 				GUILayout.FlexibleSpace();			
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}			
 		}
@@ -942,7 +985,7 @@ namespace ICE.World.EditorUtilities
 				BeginHorizontal();
 				_value = EditorGUILayout.IntField( new GUIContent( _title, _hint ) ,_value );
 				GUILayout.FlexibleSpace();			
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}			
 		}
@@ -955,7 +998,7 @@ namespace ICE.World.EditorUtilities
 			{
 				BeginHorizontal();
 				_value = EditorGUILayout.TextField( new GUIContent( _title, _hint ) ,_value );
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}			
 		}
@@ -982,7 +1025,7 @@ namespace ICE.World.EditorUtilities
 				BeginHorizontal();
 					Label( _text, _bold );
 					GUILayout.FlexibleSpace();
-				EndHorizontalInfo( _help );		
+				EndHorizontalHelp( _help );		
 			}
 		}
 
@@ -998,7 +1041,7 @@ namespace ICE.World.EditorUtilities
 				DrawPriorityInfo( _priority );
 				_show_info = ButtonCheck( "i", "Show info text", _show_info, ICEEditorStyle.CMDButton ); 
 
-			EndHorizontalInfo( _help );	
+			EndHorizontalHelp( _help );	
 
 			if( _show_info )
 			{
@@ -1023,7 +1066,7 @@ namespace ICE.World.EditorUtilities
 
 				_show_info = ButtonCheck( "i", "Show info text", _show_info, ICEEditorStyle.CMDButton ); 
 
-				EndHorizontalInfo( _help );		
+				EndHorizontalHelp( _help );		
 			}
 
 			if( _show_info )
@@ -1058,7 +1101,7 @@ namespace ICE.World.EditorUtilities
 			if( _help == "" )
 				EditorGUILayout.EndHorizontal();
 			else
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 
 			if( _show_info )
 			{
@@ -1072,10 +1115,10 @@ namespace ICE.World.EditorUtilities
 			if( _help == "" )
 				EditorGUILayout.EndHorizontal();
 			else
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 		}
 
-		public static void EndHorizontalInfo( string _help )
+		public static void EndHorizontalHelp( string _help )
 		{
 			if( _help != "" )
 				ICEEditorInfo.HelpButton();
@@ -1104,7 +1147,7 @@ namespace ICE.World.EditorUtilities
 			{
 				BeginHorizontal();
 				_value = EditorGUILayout.IntField( new GUIContent( _title, _hint ), _value );
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}	
 
@@ -1122,7 +1165,7 @@ namespace ICE.World.EditorUtilities
 
 			_show_info = ButtonCheck( "i", "Show info text", _show_info, ICEEditorStyle.CMDButton ); 
 
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 
 			if( _show_info )
 			{
@@ -1142,7 +1185,7 @@ namespace ICE.World.EditorUtilities
 				BeginHorizontal();
 					bool _value = EditorGUILayout.Foldout( _foldout , title, (_bold?ICEEditorStyle.Foldout:ICEEditorStyle.FoldoutNormal) );
 					GUILayout.FlexibleSpace();			
-				EndHorizontalInfo( _help );
+				EndHorizontalHelp( _help );
 				return _value;
 			}
 		}
@@ -1209,7 +1252,7 @@ namespace ICE.World.EditorUtilities
 				
 				GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
 			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			
 			return _value;
 			
@@ -1221,7 +1264,7 @@ namespace ICE.World.EditorUtilities
 			BeginHorizontal();
 			_value = MaxBasicSlider( _title, _tooltip, _value, _precision, _min, ref _max );
 			_value = ButtonDefault( _value, _default );
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 
 		}
@@ -1249,7 +1292,7 @@ namespace ICE.World.EditorUtilities
 
 			GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
 
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _curve;
 		}
 
@@ -1261,7 +1304,7 @@ namespace ICE.World.EditorUtilities
 			BeginHorizontal();
 				_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
 				_value = ButtonDefault( _value, _default );
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 			
 			
@@ -1281,7 +1324,7 @@ namespace ICE.World.EditorUtilities
 		{
 			BeginHorizontal();
 				_value = BasicSlider( _title, _tooltip, _value, _precision, _min, _max );
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -1458,7 +1501,7 @@ namespace ICE.World.EditorUtilities
 			
 			GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
 			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -1481,7 +1524,7 @@ namespace ICE.World.EditorUtilities
 			
 			GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
 			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -1497,7 +1540,7 @@ namespace ICE.World.EditorUtilities
 			GUI.backgroundColor = Color.green;
 			_toggle = ButtonCheck( "Auto", "Automatic", _toggle , ICEEditorStyle.CMDButtonDouble );
 
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 			return _value;
 		}
 
@@ -1607,7 +1650,7 @@ namespace ICE.World.EditorUtilities
 			BeginHorizontal();					
 			Rect _rect = GUILayoutUtility.GetRect(0,15);
 			EditorGUI.ProgressBar( _rect, _value/100, _title + " (" +_value + "%)" );			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 		}
 
 		public static void DrawProgressBar( string _title, float _value, string _help = "" )
@@ -1616,7 +1659,7 @@ namespace ICE.World.EditorUtilities
 				EditorGUILayout.PrefixLabel( _title );			
 				Rect _rect = GUILayoutUtility.GetRect(0,15);
 				EditorGUI.ProgressBar( _rect, _value/100, _value + "%" );			
-			EndHorizontalInfo( _help );
+			EndHorizontalHelp( _help );
 		}
 
 		public static float DrawValueButtons( float value, float step, float min = 0, float max = 0 )

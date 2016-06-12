@@ -120,6 +120,9 @@ namespace ICE.World.EditorInfos
 			"initial durability value. \n\nThe Initial Durability based on a minimum and maximum value, which allows you to define a random range. If you prefer to " +
 			"define a fixed value, simply set minimum and maximum to the same value, also you can adapt the third field to modify the range of the slider. ";
 
+
+		public static readonly string COLLIDER = "TODO";
+		public static readonly string COLLIDER_INFO = "TODO";
 	}
 }
 

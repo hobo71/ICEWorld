@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICEWorldBehaviourEditor.cs | ICEWorldBehaviourEditor : Editor
+// ICEWorldTemplateMenu.cs | ICEWorldTemplateMenu
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -26,67 +26,47 @@
 //
 // ##############################################################################
 
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEditor;
-using UnityEditor.AnimatedValues;
+using UnityEngine;
 
 using ICE;
-using ICE.World;
 using ICE.World.EditorUtilities;
-using ICE.World.EditorInfos;
-using ICE.World.Utilities;
 
-namespace ICE.World
-{
-	[CustomEditor(typeof(ICEWorldBehaviour))]
-	public class ICEWorldBehaviourEditor : Editor 
-	{
-		protected EditorHeaderType m_HeaderType = EditorHeaderType.FOLDOUT_ENABLED_BOLD;
+public class ICEWorldTemplateMenu : MonoBehaviour {
 
-		/// <summary>
-		/// Raises the inspector GUI event.
-		/// </summary>
-		public override void OnInspectorGUI()
-		{
-			ICEWorldBehaviour _target = DrawDefaultHeader<ICEWorldBehaviour>();
+	[MenuItem ( "Assets/Create/ICE/C# ICEWorldEntity Template", false, 1000 )]
+	static void AddICEWorldEntityTemplate() {
 
-			DrawDefaultFooter( _target );
+		ICEWorldTemplateData _data = new ICEWorldTemplateData();
 
-		}
+		_data.ClassName = "NewWorldEntity";
+		_data.Namespace = "";
+		_data.ProjectName = "";
 
-		/// <summary>
-		/// Draws the default header.
-		/// </summary>
-		/// <returns>The default header.</returns>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public virtual T DrawDefaultHeader<T>() where T : ICEWorldBehaviour
-		{
-			ICEEditorLayout.SetDefaults();
-			T _target = (T)target;
+		var selected = Selection.activeObject;
 
-			GUI.changed = false;
-			Info.HelpButtonIndex = 0;
+		string _path = AssetDatabase.GetAssetPath(selected);
 
-			EditorGUILayout.Separator();
-			return _target;
-		}
+		ICEWorldTemplateDesigner.CreateWorldEntity( _data, _path );
 
-		/// <summary>
-		/// Draws the default footer.
-		/// </summary>
-		/// <param name="_target">Target.</param>
-		public virtual void DrawDefaultFooter( ICEWorldBehaviour _target )
-		{
-			if( _target == null )
-				return;
+		AssetDatabase.Refresh();
+	}
+		
+	[MenuItem ( "Assets/Create/ICE/C# ICEWorldBehaviour Template", false, 1001 )]
+	static void AddICEWorldBehaviourTemplate() {
 
-			EditorGUILayout.Separator();
-			if( GUI.changed )
-				EditorUtility.SetDirty( _target );
-		}
+		ICEWorldTemplateData _data = new ICEWorldTemplateData();
+
+		_data.ClassName = "NewWorldBehaviour";
+		_data.Namespace = "";
+		_data.ProjectName = "";
+
+		var selected = Selection.activeObject;
+
+		string _path = AssetDatabase.GetAssetPath(selected);
+
+		ICEWorldTemplateDesigner.CreateWorldBehaviour( _data, _path );
+
+		AssetDatabase.Refresh();
 	}
 }
-
