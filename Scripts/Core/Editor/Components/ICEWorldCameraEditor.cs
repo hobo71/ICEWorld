@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEWorldCamera.cs
+// ICEWorldBehaviourEditor.cs | ICEWorldBehaviourEditor : Editor
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -28,56 +28,40 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEditor;
+using UnityEditor.AnimatedValues;
 
+using ICE;
+using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
 
+using ICE.World.EditorUtilities;
+using ICE.World.EditorInfos;
+
+
 namespace ICE.World
 {
-	using UnityEngine;
-	using System.Collections;
+	[CustomEditor(typeof( ICEWorldCamera))]
+	public class ICEWorldCameraEditor : ICEWorldBehaviourEditor 
+	{
+		/// <summary>
+		/// Raises the inspector GUI event.
+		/// </summary>
+		public override void OnInspectorGUI()
+		{
+			ICEWorldCamera _target = DrawDefaultHeader< ICEWorldCamera>();
+			DrawCameraContent( _target );
+			DrawDefaultFooter( _target );
 
-	/// <summary>
-	/// ICE world camera.
-	/// </summary>
-	public class ICEWorldCamera : ICEWorldBehaviour {
-
-		[SerializeField]
-		private UnderwaterCameraEffect m_UnderwaterEffect = null;
-		public UnderwaterCameraEffect Underwater{
-			get{ return m_UnderwaterEffect = ( m_UnderwaterEffect == null ? new UnderwaterCameraEffect( this ) : m_UnderwaterEffect ); }
-			set{ m_UnderwaterEffect = value; }
 		}
 
-		/// <summary>
-		/// Start this instance.
-		/// </summary>
-		public override void Start () {
-			Underwater.Init( this );
-		}
-			
-		/// <summary>
-		/// Raises the trigger enter event.
-		/// </summary>
-		/// <param name="_other">Other.</param>
-		public virtual void OnTriggerEnter( Collider _other ){
-			Underwater.CheckColliderEnterOrStay( _other );
-		}
-
-		/// <summary>
-		/// Raises the trigger stay event.
-		/// </summary>
-		/// <param name="_other">Other.</param>
-		public virtual void OnTriggerStay( Collider _other ){
-			Underwater.CheckColliderEnterOrStay( _other );
-		}
-
-		/// <summary>
-		/// Raises the trigger exit event.
-		/// </summary>
-		/// <param name="_other">Other.</param>
-		public virtual void OnTriggerExit( Collider _other ){
-			Underwater.CheckColliderExit( _other );
+		public virtual void DrawCameraContent( ICEWorldCamera _target )
+		{
+			WorldObjectEditor.DrawUnderwaterCameraEffect( _target, _target.Underwater, m_HeaderType );
 		}
 	}
 }
+

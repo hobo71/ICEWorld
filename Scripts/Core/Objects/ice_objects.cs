@@ -77,12 +77,12 @@ namespace ICE.World.Objects
 		/// <summary>
 		/// Enables or disables the use of the object.
 		/// </summary>
-		public bool Enabled = false;
+		public bool Enabled = true;
 
 		/// <summary>
 		/// The foldout parameter is a display option and should be used in the editor only 
 		/// </summary>
-		public bool Foldout = false;
+		public bool Foldout = true;
 
 
 	}

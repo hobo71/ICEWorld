@@ -29,6 +29,8 @@
 using UnityEngine;
 using System.Collections;
 
+using ICE;
+using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
 
@@ -40,12 +42,19 @@ namespace ICE.World
 	public abstract class ICEWorldEntity : ICEWorldBehaviour {
 
 		[SerializeField]
+		protected LifespanObject m_Lifespan = null;
+		public LifespanObject Lifespan{
+			get{ return m_Lifespan = ( m_Lifespan == null ? new LifespanObject():m_Lifespan ); }
+			set{ m_Lifespan = value; }
+		}
+
+		[SerializeField]
 		protected ICEStatusObject m_Status = null;
 		public virtual ICEStatusObject Status{
 			set{ m_Status = value; }
 			get{ return m_Status = ( m_Status == null ? new ICEStatusObject(this):m_Status ); }
 		}
-
+			
 		/// <summary>
 		/// OnRegisterPublicMethods is called within the GetPublicMethods() method to update the 
 		/// m_PublicMethods list. Override this event to register your own methods by using the 
@@ -54,8 +63,9 @@ namespace ICE.World
 		/// </summary>
 		protected override void OnRegisterBehaviourEvents()
 		{
-			//base.OnRegisterPublicMethods(); 
+			//base.OnRegisterBehaviourEvents(); 
 			RegisterBehaviourEvent( "ApplyDamage", BehaviourEventParameterType.Float );
+			RegisterBehaviourEvent( "Reset" );
 		}
 			
 		private ICEWorldSingleton m_World = null;
@@ -104,6 +114,7 @@ namespace ICE.World
 
 		public override void OnEnable () {
 			base.OnEnable();
+			Lifespan.Init( this );
 		}
 
 		public override void OnDisable () {
@@ -114,11 +125,12 @@ namespace ICE.World
 			base.OnDestroy();
 		}
 
-		public override void Update()
-		{
-			DoUpdateBegin();
+		public override void Update(){
 			DoUpdate();
-			DoUpdateComplete();
+		}
+
+		public override void LateUpdate () {
+			DoLateUpdate();
 		}
 
 		protected virtual void Register(){
@@ -138,7 +150,10 @@ namespace ICE.World
 			WorldRegister.Remove( transform.gameObject );
 		}
 
-		public virtual void Reset(){}
+		public virtual void Reset()
+		{
+			Status.Reset();
+		}
 
 		public virtual void ApplyDamage( float _damage ){
 			ApplyDamage( _damage, Vector3.zero, Vector3.zero, null, 0 );
@@ -149,40 +164,13 @@ namespace ICE.World
 			Status.ApplyDamage( _damage );
 		}
 
-		public virtual void OnCollisionEnter(Collision _collision) 
-		{
-
-		}
-
-		public virtual void OnCollisionStay(Collision _collision) 
-		{
-
-		}
-
-		public virtual void OnCollisionExit( Collision _collision ) 
-		{
-
-		}
-
-		public virtual void OnTriggerEnter( Collider _collider ) 
-		{
-
-		}
-
-		public virtual void OnTriggerStay( Collider _collider ) 
-		{
-
-		}
-
-		public virtual void OnTriggerExit( Collider _collider ) 
-		{
-
-		}
-
-		public virtual void OnControllerColliderHit( ControllerColliderHit hit ) 
-		{
-
-		}
+		public virtual void OnCollisionEnter(Collision _collision) {}
+		public virtual void OnCollisionStay(Collision _collision) {}
+		public virtual void OnCollisionExit( Collision _collision )  {}
+		public virtual void OnTriggerEnter( Collider _collider ) {}
+		public virtual void OnTriggerStay( Collider _collider ) {}
+		public virtual void OnTriggerExit( Collider _collider ) {}
+		public virtual void OnControllerColliderHit( ControllerColliderHit hit ) {}
 
 
 	}

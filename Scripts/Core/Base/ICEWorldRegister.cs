@@ -40,6 +40,8 @@ namespace ICE.World
 
 		public Vector3 GridSize = Vector3.one;
 
+		public RandomSeedType RandomSeed = RandomSeedType.DEFAULT;
+		public int CustomRandomSeed = 23;
 
 		[SerializeField]
 		private List<string> m_GroundLayers = new List<string>();
@@ -50,10 +52,19 @@ namespace ICE.World
 		public GroundCheckType GroundCheck = GroundCheckType.NONE;
 		private LayerMask m_GroundLayerMask = -1;
 		public LayerMask GroundLayerMask{
-			get{
-				m_GroundLayerMask = SystemTools.GetLayerMask( GroundLayers, m_GroundLayerMask );
-				return m_GroundLayerMask;
-			}
+			get{ return m_GroundLayerMask = ( m_GroundLayerMask == -1 ? SystemTools.GetLayerMask( GroundLayers, m_GroundLayerMask ) : m_GroundLayerMask ); }
+		}
+
+		[SerializeField]
+		private List<string> m_ObstacleLayers = new List<string>();
+		public List<string> ObstacleLayers{
+			get{ return m_ObstacleLayers; }
+		}
+
+		public ObstacleCheckType ObstacleCheck = ObstacleCheckType.NONE;
+		private LayerMask m_ObstacleLayerMask = -1;
+		public LayerMask ObstacleLayerMask{
+			get{ return m_ObstacleLayerMask = ( m_ObstacleLayerMask == -1 ? SystemTools.GetLayerMask( ObstacleLayers, m_ObstacleLayerMask ) : m_ObstacleLayerMask ); }
 		}
 
 		protected static new ICEWorldRegister m_Instance = null;

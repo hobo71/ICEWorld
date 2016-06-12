@@ -151,6 +151,14 @@ namespace ICE.World.EditorUtilities
 			EditorGUILayout.HelpBox( Info.COLLIDER_INFO, MessageType.Info );
 		}
 
+		public static Color ColorField( string _title, string _hint, Color _color, string _help = ""  )
+		{
+			ICEEditorLayout.BeginHorizontal();
+				_color = EditorGUILayout.ColorField( new GUIContent( _title, _hint ), _color );
+			ICEEditorLayout.EndHorizontal( _help );
+
+			return _color;
+		}
 
 		public static void DrawPriorityInfo( int _priority, string _hint = "" )
 		{

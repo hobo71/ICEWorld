@@ -123,6 +123,40 @@ namespace ICE.World.EditorUtilities
 			}
 		}
 
+		public static void DrawUnderwaterCameraEffect( ICEWorldBehaviour _component, UnderwaterCameraEffect _underwater, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		{
+			if( _underwater == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Underwater Effect";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.EVENTS;
+
+			DrawObjectHeader( _underwater, _type, _title, _hint );
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _underwater ) )
+				return;
+
+			_underwater.UseWaterZone = ICEEditorLayout.Toggle( "Use Water Zone", "", _underwater.UseWaterZone ); 
+
+			_underwater.WaterLevel = ICEEditorLayout.MaxDefaultSlider( "Water Level", "", _underwater.WaterLevel, 0.25f, - _underwater.WaterLevelMaximum, ref _underwater.WaterLevelMaximum, 0, "" );
+
+			_underwater.FogEnabled = ICEEditorLayout.Toggle( "Fog Enabled", "", _underwater.FogEnabled ); 
+
+			_underwater.FogColor = ICEEditorLayout.ColorField( "Fog Color", "", _underwater.FogColor, "" ); 
+
+			_underwater.FogDensity = ICEEditorLayout.DefaultSlider( "Fog Density", "", _underwater.FogDensity, 0.001f, 0, 1, 0.04f, "" );
+
+			_underwater.UnderwaterBackgroundColor = ICEEditorLayout.ColorField( "Background Color", "", _underwater.UnderwaterBackgroundColor, "" ); 
+
+			EndObjectContent();
+			// CONTENT END
+		}
+
 		public static void DrawBehaviourEventObject( ICEWorldBehaviour _component, BehaviourEventsObject _events, BehaviourEventObject _event, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
 		{
 			if( _event == null || _events == null )

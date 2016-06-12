@@ -66,6 +66,17 @@ namespace ICE.World
 
 	// *** B *** 
 	// *** C *** 
+
+	/// <summary>
+	/// Supported Collider types.
+	/// </summary>
+	public enum ColliderType
+	{
+		Sphere,
+		Box,
+		Capsule
+	}
+
 	// *** D *** 
 
 	/// <summary>
@@ -150,6 +161,16 @@ namespace ICE.World
 	}
 	// *** N *** 
 	// *** O *** 
+
+	/// <summary>
+	/// Obstacle check type.
+	/// </summary>
+	public enum ObstacleCheckType
+	{
+		NONE,
+		BASIC
+	}
+
 	// *** P *** 
 	// *** Q *** 
 	// *** R *** 
@@ -164,6 +185,17 @@ namespace ICE.World
 		HEMISPHERE,
 		SPHERE
 	}
+
+	/// <summary>
+	/// Random seed type.
+	/// </summary>
+	public enum RandomSeedType
+	{
+		DEFAULT = 0,
+		TIME,
+		CUSTOM
+	}
+
 	// *** S *** 
 	// *** T *** 
 	// *** U *** 

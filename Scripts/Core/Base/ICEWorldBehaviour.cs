@@ -80,27 +80,36 @@ namespace ICE.World
 		public int ObjectInstanceID{
 			get{  return m_ObjectInstanceID = ( m_ObjectInstanceID == 0 ? transform.gameObject.GetInstanceID():m_ObjectInstanceID ); }
 		}
-
-		public delegate void OnLateUpdateEvent();
-		public event OnLateUpdateEvent OnLateUpdate;
-
-		public delegate void OnUpdateBeginEvent();
-		public event OnUpdateBeginEvent OnUpdateBegin;
-
+			
+		/// <summary>
+		/// OnUpdateEvent. This delegate can be used in ICEOwnerObject classes to handle updates
+		/// </summary>
 		public delegate void OnUpdateEvent();
+
+		/// <summary>
+		/// OnUpdate. This event can be used in ICEOwnerObject classes to handle updates
+		/// </summary>
 		public event OnUpdateEvent OnUpdate;
 
-		public delegate void OnUpdateCompleteEvent();
-		public event OnUpdateCompleteEvent OnUpdateComplete;
+		/// <summary>
+		/// OnLateUpdateEvent. This delegate can be used in ICEOwnerObject classes to handle late updates
+		/// </summary>
+		public delegate void OnLateUpdateEvent();
 
-		public delegate void OnFixedUpdateBeginEvent();
-		public event OnFixedUpdateBeginEvent OnFixedUpdateBegin;
+		/// <summary>
+		/// OnLateUpdate. This event can be used in ICEOwnerObject classes to handle late updates
+		/// </summary>
+		public event OnLateUpdateEvent OnLateUpdate;
 
+		/// <summary>
+		/// OnFixedUpdateEvent. This delegate can be used in ICEOwnerObject classes to handle fixed updates
+		/// </summary>
 		public delegate void OnFixedUpdateEvent();
-		public event OnFixedUpdateEvent OnFixedUpdate;
 
-		public delegate void OnFixedUpdateCompleteEvent();
-		public event OnFixedUpdateCompleteEvent OnFixedUpdateComplete;
+		/// <summary>
+		/// OnFixedUpdate. This event can be used in ICEOwnerObject classes to handle fixed updates
+		/// </summary>
+		public event OnFixedUpdateEvent OnFixedUpdate;
 
 		// PUBLIC METHODS
 		/// <summary>
@@ -276,19 +285,20 @@ namespace ICE.World
 		/// Update this instance.
 		/// </summary>
 		public virtual void Update () {
-			DoUpdateBegin();
 			DoUpdate();
-			DoUpdateComplete();
 		}
-			
+
+		public virtual void LateUpdate () {
+			DoLateUpdate();
+		}
+
 		/// <summary>
-		/// Dos the update begin.
+		/// Fixeds the update.
 		/// </summary>
-		protected virtual void DoUpdateBegin () {
-			if( OnUpdateBegin != null )
-				OnUpdateBegin();
+		public virtual void FixedUpdate () {
+			DoFixedUpdate();
 		}
-			
+
 		/// <summary>
 		/// Dos the update.
 		/// </summary>
@@ -297,38 +307,9 @@ namespace ICE.World
 				OnUpdate();
 		}
 
-		/// <summary>
-		/// Dos the update complete.
-		/// </summary>
-		protected virtual void DoUpdateComplete () {
-			if( OnUpdateComplete != null )
-				OnUpdateComplete();
-		}
-
-		public virtual void LateUpdate () {
-			DoLateUpdate();
-		}
-
 		protected virtual void DoLateUpdate () {
 			if( OnLateUpdate != null )
 				OnLateUpdate();
-		}
-
-		/// <summary>
-		/// Fixeds the update.
-		/// </summary>
-		public virtual void FixedUpdate () {
-			DoFixedUpdateBegin();
-			DoFixedUpdate();
-			DoFixedUpdateComplete();
-		}
-
-		/// <summary>
-		/// Dos the fixed update begin.
-		/// </summary>
-		protected virtual void DoFixedUpdateBegin () {
-			if( OnFixedUpdateBegin != null )
-				OnFixedUpdateBegin();
 		}
 
 		/// <summary>
@@ -337,14 +318,6 @@ namespace ICE.World
 		protected virtual void DoFixedUpdate () {
 			if( OnFixedUpdate != null )
 				OnFixedUpdate();
-		}
-
-		/// <summary>
-		/// Dos the fixed update complete.
-		/// </summary>
-		protected virtual void DoFixedUpdateComplete () {
-			if( OnFixedUpdateComplete != null )
-				OnFixedUpdateComplete();
 		}
 	}
 }
