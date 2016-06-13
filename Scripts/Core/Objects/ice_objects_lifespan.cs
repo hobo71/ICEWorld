@@ -20,13 +20,46 @@ using ICE.World.Objects;
 
 namespace ICE.World.Objects
 {
+	public enum LifespanType
+	{
+		NONE,
+		LIFESPAN,
+		AGING
+	}
+
 	[System.Serializable]
 	public class LifespanObject : ICEOwnerObject
 	{
+		public LifespanObject(){}
+		public LifespanObject( ICEWorldBehaviour _component ) : base( _component )
+		{
+			Init( _component );
+		}
+
 		/// <summary>
-		/// The start time.
+		/// Gets the total lifetime since the start
 		/// </summary>
-		private float m_StartTime = 0;
+		/// <value>The total lifetime.</value>
+		public float TotalLifetime{ 
+			get{ return Time.time - m_InitTime; } 
+		}
+
+		/// <summary>
+		/// Gets the lifetime since the last reset.
+		/// </summary>
+		/// <value>The lifetime.</value>
+		public float Lifetime{ 			
+			get{ return Time.time - m_ResetTime; } 
+		}
+		/// <summary>
+		/// The init time.
+		/// </summary>
+		private float m_InitTime = 0;
+
+		/// <summary>
+		/// The reset time.
+		/// </summary>
+		private float m_ResetTime = 0;
 	
 		/// <summary>
 		/// The current lifespan.
@@ -51,6 +84,11 @@ namespace ICE.World.Objects
 		/// </summary>
 		public float LifespanDefaultMax = 360;
 
+
+		public float LifespanInPercent{		
+			get{ return FixedPercent( 100 - ( 100/MaxAge*m_Age) ); }
+		}
+
 		/// <summary>
 		/// The age in seconds.
 		/// </summary>
@@ -74,18 +112,36 @@ namespace ICE.World.Objects
 			get{ return m_AgeInSeconds/3600; }
 		}
 
+		public bool UseAging = false;
+		public float MaxAge = 60f;	
+		public float MaxAgeMaximum = 60f;
+
+		protected float m_Age = 0.0f;
+		public float Age{ 
+			get{ return m_Age; }
+		}
+
+		public void SetAge( float _age )
+		{ 
+			if( _age >= 0 && _age <= MaxAge )
+				m_Age = _age;
+		}
+
 		/// <summary>
 		/// Overrides the parent Init method to initiate the lifespan procedure
 		/// </summary>
 		/// <param name="_parent">Parent.</param>
-		public override void Init( ICEWorldBehaviour _parent )
+		public override void Init( ICEWorldBehaviour _owner )
 		{
-			m_OwnerComponent = _parent;
+			base.Init( _owner );
+
 			if( m_OwnerComponent == null )
 				return;
 
-			m_StartTime = Time.time;
-			m_CurrentLifespan = RandomLifespan;
+			m_InitTime = Time.time;
+			m_ResetTime = Time.time;
+
+			m_CurrentLifespan = UpdateRandomLifespan();
 				
 			m_OwnerComponent.OnUpdate += DoUpdate;
 
@@ -93,30 +149,74 @@ namespace ICE.World.Objects
 				m_OwnerComponent.Invoke( "Remove", m_CurrentLifespan );
 		}
 
+		public virtual void Reset()
+		{
+			m_ResetTime = Time.time;
+
+			m_InitTime = Time.time;
+			m_CurrentLifespan = UpdateRandomLifespan();
+		}
+
+
 		/// <summary>
 		/// Gets a random lifespan.
 		/// </summary>
 		/// <value>The random lifespan.</value>
-		public float RandomLifespan{
-			get{ return Random.Range( LifespanMin, LifespanMax ); }
+		public float UpdateRandomLifespan(){
+			return Random.Range( LifespanMin, LifespanMax ); 
 		}
 
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="ICE.Creatures.Objects.LifespanObject"/> use lifespan.
 		/// </summary>
 		/// <value><c>true</c> if use lifespan; otherwise, <c>false</c>.</value>
-		public bool UseLifespan{
-			get{ return ( ( m_CurrentLifespan > 0 && Enabled )?true:false); }
-		}
+		public bool UseLifespan = false;
 
 		/// <summary>
 		/// Dos the update begin.
 		/// </summary>
 		private void DoUpdate()
 		{
-			m_AgeInSeconds = Time.time - m_StartTime;
 
-			PrintDebugLog( this, "Lifespan : " + m_CurrentLifespan + " - Age :" + m_AgeInSeconds );
+		}
+
+		public virtual void Update()
+		{
+			if( UseAging )
+			{
+				m_Age +=  Time.deltaTime;
+			}
+
+			m_AgeInSeconds = Time.time - m_InitTime;
+
+			if( UseLifespan || UseAging )
+				PrintDebugLog( this, "Lifespan : " + ( ( UseLifespan && m_CurrentLifespan > 0 ) ? m_CurrentLifespan.ToString() : "disabled" ) + " - Age :" + ( UseAging ? AgeInMinutes.ToString() + " min." : "disabled" ) );
+		}
+
+		/// <summary>
+		/// Returns valid rounded percent value
+		/// </summary>
+		/// <returns>The percent.</returns>
+		/// <param name="_value">Value.</param>
+		protected float FixedPercent( float _value )
+		{
+			if( _value < 0 ) _value = 0;
+			if( _value > 100 ) _value = 100;
+
+			return (float)System.Math.Round( _value, 2 );
+		}
+
+		/// <summary>
+		/// Returns valid multiplier between 0 and 1
+		/// </summary>
+		/// <returns>The multiplier.</returns>
+		/// <param name="_value">Value.</param>
+		protected float FixedMultiplier( float _value )
+		{
+			if( _value < 0 ) _value = 0;
+			if( _value > 1 ) _value = 1;
+
+			return _value;
 		}
 	}
 

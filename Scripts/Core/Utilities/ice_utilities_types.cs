@@ -29,7 +29,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace ICE.World
+namespace ICE.World.EnumTypes
 {
 	// *** A ***
 
@@ -65,7 +65,26 @@ namespace ICE.World
 	}
 
 	// *** B *** 
+
+	/// <summary>
+	/// Boolean value type.
+	/// </summary>
+	public enum BooleanValueType
+	{
+		TRUE=0,
+		FALSE
+	}
+
 	// *** C *** 
+
+	/// <summary>
+	/// Conditional operator type.
+	/// </summary>
+	public enum ConditionalOperatorType
+	{
+		AND = 0,
+		OR = 1
+	}
 
 	/// <summary>
 	/// Supported Collider types.
@@ -130,6 +149,16 @@ namespace ICE.World
 
 	// *** H *** 
 	// *** I *** 
+
+	/// <summary>
+	/// Influence type. TODO: BETA dynamic influences coming soon
+	/// </summary>
+	public enum InfluenceType
+	{
+		Unknown
+
+	}
+
 	// *** J *** 
 	// *** K *** 
 	// *** L *** 
@@ -197,6 +226,26 @@ namespace ICE.World
 	}
 
 	// *** S *** 
+
+	/// <summary>
+	/// String operator type.
+	/// </summary>
+	public enum StringOperatorType
+	{
+		EQUAL,
+		NOT
+	}
+
+	/// <summary>
+	/// Sequence order type.
+	/// </summary>
+	public enum SequenceOrderType
+	{
+		CYCLE,
+		RANDOM,
+		PINGPONG
+	}
+
 	// *** T *** 
 	// *** U *** 
 	// *** V *** 

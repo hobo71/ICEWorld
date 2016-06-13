@@ -38,6 +38,8 @@ using ICE;
 using ICE.World;
 using ICE.World.Utilities;
 using ICE.World.Objects;
+using ICE.World.EnumTypes;
+
 using ICE.World.EditorUtilities;
 using ICE.World.EditorInfos;
 
@@ -68,6 +70,11 @@ namespace ICE.World.EditorUtilities
 		FOLDOUT_ENABLED,
 		FOLDOUT_ENABLED_BOLD,
 		FOLDOUT_CUSTOM,
+		LABEL,
+		LABEL_BOLD,
+		LABEL_ENABLED,
+		LABEL_ENABLED_BOLD,
+		LABEL_CUSTOM,
 		NONE
 	}
 
@@ -168,6 +175,47 @@ namespace ICE.World.EditorUtilities
 			GUI.backgroundColor = new HSBColor( _priority * 0.0025f ,0.5f,1f ).ToColor();
 			ICEEditorLayout.Button( _priority.ToString(), _hint, ICEEditorStyle.CMDButtonDouble );
 			GUI.backgroundColor = ICEEditorLayout.DefaultBackgroundColor;
+		}
+
+		public static bool ListDeleteButton<T>( List<T> _list, T _item )
+		{
+			if( ICEEditorLayout.Button( "DEL", "", ICEEditorStyle.CMDButtonDouble ) )
+			{
+				_list.Remove( _item );
+				return true;
+			}
+
+			return false;
+		}
+
+		public static bool ListUpDownButtons<T>( List<T> _list, int _i )
+		{
+			if( ICEEditorLayout.ButtonUp() )
+			{
+				T _tmp_obj = _list[_i]; 
+				_list.RemoveAt( _i );
+
+				if( _i - 1 < 0 )
+					_list.Add( _tmp_obj );
+				else
+					_list.Insert( _i - 1, _tmp_obj );
+
+				return true;
+			}	
+			if( ICEEditorLayout.ButtonDown() )
+			{
+				T _tmp_obj = _list[_i]; 
+				_list.RemoveAt( _i );
+
+				if( _i + 1 > _list.Count )
+					_list.Insert( 0, _tmp_obj );
+				else
+					_list.Insert( _i +1, _tmp_obj );
+
+				return true;
+			}	
+
+			return false;
 		}
 
 		public static float Round( float _value, float _precision )
@@ -781,6 +829,30 @@ namespace ICE.World.EditorUtilities
 			EndHorizontalHelp( _help );			
 			
 			return _offset;
+		}
+
+		public static Quaternion RotationGroup( string _title, Quaternion _rotation, string _help = ""  )
+		{
+			Vector4 _vector = Converter.QuaternionToVector4( _rotation );
+
+			BeginHorizontal();
+				_vector = EditorGUILayout.Vector4Field( _title, _vector );				
+				if (GUILayout.Button( new GUIContent( "RESET", "Reset rotation values" ), ICEEditorStyle.CMDButtonDouble ))
+					_vector = Vector4.zero;
+			EndHorizontalHelp( _help );			
+
+			return Converter.Vector4ToQuaternion( _vector );
+		}
+
+		public static Vector3 EulerGroup( string _title, Vector3 _rotation, string _help = ""  )
+		{
+			BeginHorizontal();
+			_rotation = EditorGUILayout.Vector3Field( _title, _rotation );				
+			if (GUILayout.Button( new GUIContent( "RESET", "Reset rotation values" ), ICEEditorStyle.CMDButtonDouble ))
+				_rotation = Vector3.zero;
+			EndHorizontalHelp( _help );			
+
+			return _rotation;
 		}
 
 		public static int Popup( string _title, string _hint, int _selected, string[] _options, string _help )
@@ -1665,7 +1737,7 @@ namespace ICE.World.EditorUtilities
 		{
 			BeginHorizontal();			
 				EditorGUILayout.PrefixLabel( _title );			
-				Rect _rect = GUILayoutUtility.GetRect(0,15);
+				Rect _rect = GUILayoutUtility.GetRect(0,16);
 				EditorGUI.ProgressBar( _rect, _value/100, _value + "%" );			
 			EndHorizontalHelp( _help );
 		}

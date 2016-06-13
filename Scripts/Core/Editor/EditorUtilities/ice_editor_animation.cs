@@ -37,6 +37,8 @@ using ICE;
 using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
+using ICE.World.EnumTypes;
+
 using ICE.World.EditorUtilities;
 using ICE.World.EditorInfos;
 

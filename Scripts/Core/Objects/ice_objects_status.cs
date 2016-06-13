@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ice_objects_status.cs | ICE.World.Objects.ICEStatusObject
+// ice_objects_status.cs | EntityStatusObject
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -34,10 +34,11 @@ using ICE.World;
 
 namespace ICE.World.Objects
 {
-	public class ICEStatusObject : ICEOwnerObject {
+	[System.Serializable]
+	public class EntityStatusObject : LifespanObject {
 
-		public ICEStatusObject(){}
-		public ICEStatusObject( ICEWorldBehaviour _component ) : base( _component )
+		public EntityStatusObject(){}
+		public EntityStatusObject( ICEWorldBehaviour _component ) : base( _component )
 		{
 			Init( _component );
 		}
@@ -63,13 +64,24 @@ namespace ICE.World.Objects
 		public float DefaultDurabilityMax = 100;
 		public float DefaultDurabilityMaximum = 100;
 
-		public bool UseAging = false;
-		public float MaxAge = 60f;	
-		public float MaxAgeMaximum = 60f;
+		public virtual void SetDefaultDurability( float _value ){
 
-		protected float m_Age = 0.0f;
-		public float Age{ 
-			get{ return m_Age; }
+			if( _value < DefaultDurabilityMin ) 
+				m_DefaultDurability = DefaultDurabilityMin;
+			else if( _value > DefaultDurabilityMax ) 
+				m_DefaultDurability = DefaultDurabilityMax;
+			else
+				m_DefaultDurability = _value;				
+		}
+
+		public virtual void SetDurability( float _value ){
+
+			if( _value < 0 ) 
+				m_Durability = 0;
+			else if( _value > DefaultDurabilityMax ) 
+				m_Durability = DefaultDurabilityMax;
+			else
+				m_Durability = _value;				
 		}
 
 		/// <summary>
@@ -79,34 +91,35 @@ namespace ICE.World.Objects
 		public virtual bool IsDestroyed{
 			get{ return ( IsDestructible && m_Durability <= 0 ? true:false ); }
 		}
-
-		public void SetAge( float _age )
-		{ 
-			if( _age >= 0 && _age <= MaxAge )
-				m_Age = _age;
-		}
-
+			
 		public override void Init( ICEWorldBehaviour _component )
 		{
 			base.Init( _component );
 
-			Reset();
+			m_DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
+			m_Durability = m_DefaultDurability;
+
+			PrintDebugLog( this, "Init" );
 		}
 
 		public virtual void Reset()
 		{
+			base.Reset();
+
 			m_DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
 			m_Durability = m_DefaultDurability;
+
+			PrintDebugLog( this, "Reset" );
 		}
 
-		public virtual void Update()
-		{
-			if( UseAging )
-			{
-				m_Age +=  Time.deltaTime;
-			}
+		public override void Update(){
+			base.Update();
 		}
 
+		/// <summary>
+		/// Applies the damage.
+		/// </summary>
+		/// <param name="_damage">Damage.</param>
 		public virtual void ApplyDamage( float _damage ){
 			ProcessDamage( _damage );
 		}
@@ -123,6 +136,8 @@ namespace ICE.World.Objects
 
 			if( m_Durability < 0 )
 				m_Durability = 0;
+
+			PrintDebugLog( this, "ProcessDamage - " + ( IsDestructible && m_DefaultDurability > 0 ? "DefaultDurability :" + m_DefaultDurability +" - Durability :" + m_Durability  + " - Damage :" + _damage : "disabled" ) );
 
 			return m_Durability;
 		}

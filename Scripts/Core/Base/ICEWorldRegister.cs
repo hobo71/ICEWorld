@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using ICE;
 using ICE.World;
 using ICE.World.Utilities;
+using ICE.World.EnumTypes;
 
 namespace ICE.World
 {

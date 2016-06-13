@@ -32,6 +32,10 @@ using System.Globalization;
 using System.Collections;
 using System.Collections.Generic;
 
+using ICE;
+using ICE.World;
+using ICE.World.EnumTypes;
+
 namespace ICE.World.Utilities
 {
 	public static class SystemTools 

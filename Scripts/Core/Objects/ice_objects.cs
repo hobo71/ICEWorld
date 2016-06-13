@@ -33,6 +33,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 
+using ICE.World.EnumTypes;
+
 namespace ICE.World.Objects
 {
 	[System.Serializable]
@@ -77,12 +79,12 @@ namespace ICE.World.Objects
 		/// <summary>
 		/// Enables or disables the use of the object.
 		/// </summary>
-		public bool Enabled = true;
+		public bool Enabled = false;
 
 		/// <summary>
 		/// The foldout parameter is a display option and should be used in the editor only 
 		/// </summary>
-		public bool Foldout = true;
+		public bool Foldout = false;
 
 
 	}
@@ -96,7 +98,7 @@ namespace ICE.World.Objects
 			Copy( _object );
 		}
 
-		public void Copy( ICEInfoDataObject _object )
+		public virtual void Copy( ICEInfoDataObject _object )
 		{
 			if( _object == null )
 				return;
@@ -128,7 +130,7 @@ namespace ICE.World.Objects
 			Copy( _object );
 		}
 
-		public void Copy( ICEInfoDataObject _object )
+		public override void Copy( ICEInfoDataObject _object )
 		{
 			if( _object == null )
 				return;
@@ -192,8 +194,10 @@ namespace ICE.World.Objects
 		/// <param name="_log">Log.</param>
 		public void PrintDebugLog( ICEOwnerObject _object, string _log )
 		{
+#if UNITY_EDITOR
 			if( EnableDebugLog || OwnerEnabledDebugLog )
 				Debug.Log( OwnerName + " (" + OwnerInstanceID + ") - " + ( _object != null?_object.GetType().ToString() + " ":"" ) + _log );
+#endif
 		}
 
 		/// <summary>

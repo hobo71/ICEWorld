@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ice_utilities_converter.cs | ICE.World.Utilities.Converter
+// ICE.World.ICEEntity.cs
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -27,38 +27,20 @@
 // ##############################################################################
 
 using UnityEngine;
+using System.Collections;
 
-namespace ICE.World.Utilities
+using ICE;
+using ICE.World;
+using ICE.World.Objects;
+using ICE.World.Utilities;
+using ICE.World.EnumTypes;
+
+namespace ICE.World
 {
 	/// <summary>
-	/// Converter contains several converter tools 
+	/// ICE World Entity represents the abstract base class for all ICE related world objects.
 	/// </summary>
-	public static class Converter 
-	{
-		/// <summary>
-		/// Fahrenheits to celsius.
-		/// </summary>
-		/// <returns>The to celsius.</returns>
-		/// <param name="_fahrenheit">Fahrenheit.</param>
-		public static float FahrenheitToCelsius( float _fahrenheit ){
-			return (5f / 9f) * (_fahrenheit - 32f);
-		}
-
-		/// <summary>
-		/// Celsiuses to fahrenheit.
-		/// </summary>
-		/// <returns>The to fahrenheit.</returns>
-		/// <param name="_celsius">Celsius.</param>
-		public static float CelsiusToFahrenheit( float _celsius ){
-			return _celsius * (9f / 5f) + 32f;
-		}
-
-		public static Vector4 QuaternionToVector4( Quaternion _rot ) {
-			return new Vector4( _rot.x, _rot.y, _rot.z, _rot.w);
-		}
-
-		public static Quaternion Vector4ToQuaternion( Vector4 _vector ) {
-			return new Quaternion( _vector.x, _vector.y, _vector.z, _vector.w );
-		}
+	public abstract class ICEWorldEntityPart : ICEWorldBehaviour {
 	}
 }
+

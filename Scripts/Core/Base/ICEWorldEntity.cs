@@ -33,26 +33,30 @@ using ICE;
 using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
+using ICE.World.EnumTypes;
 
 namespace ICE.World
 {
 	/// <summary>
-	/// ICE World Entity represents the abstract base class for all ICE related world objects.
+	/// Within the ICE World an entity is something that exists as itself, as a subject or as an object, actually 
+	/// or potentially, concretely or abstractly, physically or not. On this note an ICE World Entity represents 
+	/// an interactive GameObject within your scenes which could affect the gameplay in someways. ICEWorldEntity 
+	/// is the lowermost base class for all interactive components within the ICE World (e.g. ICECreatureControl 
+	/// or ICEPlayer, but also items, vehicles, construction elements etc.). 
+	/// 
+	/// ICEWorldEntity is derived from ICEWorldBehaviour and declared as abstract.
+	/// 
+	/// Use ICEWorldEntity or one of its child classes as base class for your own interaction components, such as your 
+	/// own FPSController or your custom AI script, so your code will be automatically downwards compatible with the 
+	/// rest of the ICE world.			
 	/// </summary>
 	public abstract class ICEWorldEntity : ICEWorldBehaviour {
 
 		[SerializeField]
-		protected LifespanObject m_Lifespan = null;
-		public LifespanObject Lifespan{
-			get{ return m_Lifespan = ( m_Lifespan == null ? new LifespanObject():m_Lifespan ); }
-			set{ m_Lifespan = value; }
-		}
-
-		[SerializeField]
-		protected ICEStatusObject m_Status = null;
-		public virtual ICEStatusObject Status{
+		protected EntityStatusObject m_Status = null;
+		public virtual EntityStatusObject Status{
 			set{ m_Status = value; }
-			get{ return m_Status = ( m_Status == null ? new ICEStatusObject(this):m_Status ); }
+			get{ return m_Status = ( m_Status == null ? new EntityStatusObject(this):m_Status ); }
 		}
 			
 		/// <summary>
@@ -104,6 +108,52 @@ namespace ICE.World
 			get{ return m_Transform  = ( m_Transform == null?GetComponent<Transform>():m_Transform ); }
 		}
 
+		/// <summary>
+		/// m root entity contains the stored root entity or null in cases that this entity is the root entity
+		/// you should use RootEntity or GetRootEntity() instead of the stored value because the parent could 
+		/// be changed during the runtime, so this value would be obsolete.
+		/// </summary>
+		protected ICEWorldEntity m_RootEntity = null;
+
+		/// <summary>
+		/// Gets the parent entity.
+		/// </summary>
+		/// <value>The parent entity.</value>
+		public ICEWorldEntity RootEntity { 
+			get{ return m_RootEntity = ( m_RootEntity == null ? GetRootEntity() : m_RootEntity ); }
+		}
+
+		/// <summary>
+		/// Gets the root entity or null in cases that this entity is the root entity
+		/// </summary>
+		/// <returns>The parent entity.</returns>
+		public ICEWorldEntity GetRootEntity()
+		{
+			// if root is identic with the own transform we will return null, m_ParentEntity stays null 
+			// and the check will be repeated all the time because the parent could be changed during the 
+			// runtime 
+			if( transform.root == transform )
+				return null;
+
+			// as long as the given parent entity is root we don't need to check it again
+			else if( m_RootEntity != null && m_RootEntity.transform.root == m_RootEntity.transform )
+				return m_RootEntity;
+
+			// in all other cases we have to check all parents because the root could be changed during the 
+			// runtime.
+			else
+			{
+				ICEWorldEntity[] _entities = ObjectTransform.GetComponentsInParent<ICEWorldEntity>();
+				foreach( ICEWorldEntity _entity in _entities )
+					if( _entity.transform.root == _entity.transform )
+						return _entity;
+			}
+
+			// if there are no higher entities within the hierarchy we assume that this entity is the root entity
+			// so we return null to repeat the check if required.
+			return null;
+		}
+
 		public override void Awake () {
 			base.Awake();
 		}
@@ -114,7 +164,7 @@ namespace ICE.World
 
 		public override void OnEnable () {
 			base.OnEnable();
-			Lifespan.Init( this );
+			Status.Init( this );
 		}
 
 		public override void OnDisable () {
@@ -155,13 +205,37 @@ namespace ICE.World
 			Status.Reset();
 		}
 
+		/// <summary>
+		/// Damage the specified _damage.
+		/// </summary>
+		/// <param name="_damage">Damage.</param>
+		public virtual void Damage( float _damage ){
+			ApplyDamage( _damage, Vector3.zero, Vector3.zero, null, 0 );
+		}
+
+		/// <summary>
+		/// Applies the damage.
+		/// </summary>
+		/// <param name="_damage">Damage.</param>
 		public virtual void ApplyDamage( float _damage ){
 			ApplyDamage( _damage, Vector3.zero, Vector3.zero, null, 0 );
 		}
 
-		public virtual void ApplyDamage( float _damage, Vector3 _damage_direction, Vector3 _attacker_position, Transform _attacker, float _force = 0  )
+		/// <summary>
+		/// Applies the damage.
+		/// </summary>
+		/// <param name="_damage">Damage.</param>
+		/// <param name="_damage_direction">Damage direction.</param>
+		/// <param name="_attacker_position">Attacker position.</param>
+		/// <param name="_attacker">Attacker.</param>
+		/// <param name="_force">Force.</param>
+		protected virtual void ApplyDamage( float _damage, Vector3 _damage_direction, Vector3 _attacker_position, Transform _attacker, float _force = 0  )
 		{
-			Status.ApplyDamage( _damage );
+			// use RootEntity instead of m_RootEntity to make sure that the values will be up-to-date
+			if( RootEntity != null ) 
+				m_RootEntity.Status.ApplyDamage( _damage );
+			else
+				Status.ApplyDamage( _damage );				
 		}
 
 		public virtual void OnCollisionEnter(Collision _collision) {}

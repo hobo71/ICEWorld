@@ -43,6 +43,12 @@ namespace ICE.World.EditorUtilities
 {
 	public class ObjectEditor {
 
+		/// <summary>
+		/// Begins the object content or return.
+		/// </summary>
+		/// <returns><c>true</c>, if object content or return was begun, <c>false</c> otherwise.</returns>
+		/// <param name="_type">Type.</param>
+		/// <param name="_object">Object.</param>
 		public static bool BeginObjectContentOrReturn( EditorHeaderType _type, ICEDataObject _object )
 		{
 			if( _object == null )
@@ -56,6 +62,9 @@ namespace ICE.World.EditorUtilities
 			return false;
 		}
 
+		/// <summary>
+		/// Ends the content of the object.
+		/// </summary>
 		public static void EndObjectContent()
 		{
 			EditorGUI.indentLevel--;
@@ -63,6 +72,11 @@ namespace ICE.World.EditorUtilities
 			EditorGUILayout.Separator();
 		}
 
+		/// <summary>
+		/// Determines if is header required the specified _type.
+		/// </summary>
+		/// <returns><c>true</c> if is header required the specified _type; otherwise, <c>false</c>.</returns>
+		/// <param name="_type">Type.</param>
 		public static bool IsHeaderRequired( EditorHeaderType _type )
 		{
 			switch( _type )
@@ -70,6 +84,7 @@ namespace ICE.World.EditorUtilities
 			case EditorHeaderType.NONE:
 			case EditorHeaderType.FOLDOUT_CUSTOM:
 			case EditorHeaderType.TOGGLE_CUSTOM:
+			case EditorHeaderType.LABEL_CUSTOM:
 				return false;
 			default:
 				return true;
@@ -96,6 +111,11 @@ namespace ICE.World.EditorUtilities
 			}
 		}
 
+		/// <summary>
+		/// Determines if is enabled foldout type the specified _type.
+		/// </summary>
+		/// <returns><c>true</c> if is enabled foldout type the specified _type; otherwise, <c>false</c>.</returns>
+		/// <param name="_type">Type.</param>
 		public static bool IsEnabledFoldoutType( EditorHeaderType _type )
 		{
 			switch( _type )
@@ -108,6 +128,11 @@ namespace ICE.World.EditorUtilities
 			}
 		}
 
+		/// <summary>
+		/// Gets the simple foldout.
+		/// </summary>
+		/// <returns>The simple foldout.</returns>
+		/// <param name="_type">Type.</param>
 		public static EditorHeaderType GetSimpleFoldout( EditorHeaderType _type )
 		{
 			switch( _type )
@@ -155,6 +180,7 @@ namespace ICE.World.EditorUtilities
 			if( _object == null || IsHeaderRequired( _type ) == false )
 				return;
 
+			// TOOGLE
 			if( _type == EditorHeaderType.TOGGLE )
 			{
 				_object.Enabled = ICEEditorLayout.Toggle( _title, _hint, _object.Enabled, _help );
@@ -170,6 +196,32 @@ namespace ICE.World.EditorUtilities
 				_object.Enabled = ICEEditorLayout.ToggleLeft( _title, _hint, _object.Enabled, true, _help );
 				_object.Foldout = _object.Enabled;
 			}
+
+			// LABEL
+			else if( _type == EditorHeaderType.LABEL )
+			{
+				ICEEditorLayout.Label( _title, false, _help );
+				_object.Foldout = true;
+			}
+			else if( _type == EditorHeaderType.LABEL_BOLD )
+			{
+				ICEEditorLayout.Label( _title, true, _help );
+				_object.Foldout = true;
+			}
+			else if( _type == EditorHeaderType.LABEL_ENABLED || _type == EditorHeaderType.LABEL_ENABLED_BOLD )
+			{
+				EditorGUI.BeginDisabledGroup( _object.Enabled == false );
+					if( _type == EditorHeaderType.LABEL_ENABLED_BOLD )
+						ICEEditorLayout.Label( _title, true, _help );
+					else
+						ICEEditorLayout.Label( _title, false, _help );
+					_object.Foldout = true;
+				EditorGUI.EndDisabledGroup();
+
+				_object.Enabled = ICEEditorLayout.ButtonCheck( "ENABLED", "Enables/disables this feature", _object.Enabled, ICEEditorStyle.ButtonMiddle );
+			}
+
+			// FOLDOUT
 			else if( _type == EditorHeaderType.FOLDOUT )
 			{
 				//EditorGUI.BeginDisabledGroup( _object.Enabled == false );

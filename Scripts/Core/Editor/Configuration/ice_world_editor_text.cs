@@ -104,6 +104,13 @@ namespace ICE.World.EditorInfos
 		public static readonly string EVENT_PARAMETER_STRING = "String parameter that is stored in the event and will be sent to the function.";
 		public static readonly string EVENT_NAME = "TODO";
 
+		public static readonly string EFFECT = "TODO";
+		public static readonly string EFFECT_REFERENCE = "TODO";
+		public static readonly string EFFECT_MOUNTPOINT = "TODO";
+		public static readonly string EFFECT_OFFSET_TYPE = "TODO";
+		public static readonly string EFFECT_OFFSET_POSITION = "TODO";
+		public static readonly string EFFECT_OFFSET_RADIUS = "TODO";
+
 		public static readonly string IMPULSE_TIMER = "TODO";
 		public static readonly string IMPULSE_TIMER_TIME = "TODO";
 		public static readonly string IMPULSE_TIMER_INTERVAL = "TODO";
@@ -111,7 +118,7 @@ namespace ICE.World.EditorInfos
 		public static readonly string IMPULSE_TIMER_SEQUENCE_LIMITS = "TODO";
 		public static readonly string IMPULSE_TIMER_SEQUENCE_BREAK_LENGTH = "TODO";
 
-		public static readonly string STATUS_INITIAL_DURABILITY = "Initial Durability defines the fundamental capability of resistance of a creature in terms of " +
+		public static readonly string DURABILITY_INITIAL = "Initial Durability defines the fundamental capability of resistance of a creature in terms of " +
 			"physical integrity and its vital fitness. The durability will be affected by several influences (e.g. damage, age etc. ) during the runtime and the " +
 			"creature will die as soon as its durability is exhausted. By default the Initial Durability is adjusted to 100 but you are free to define a suitable " +
 			"value according to your needs and requirements; the lower the value, the greater the impact of several influences and vice versa (e.g. increase this " +
@@ -120,9 +127,16 @@ namespace ICE.World.EditorInfos
 			"initial durability value. \n\nThe Initial Durability based on a minimum and maximum value, which allows you to define a random range. If you prefer to " +
 			"define a fixed value, simply set minimum and maximum to the same value, also you can adapt the third field to modify the range of the slider. ";
 
+		public static readonly string DURABILITY_PERCENT = "TODO";
 
 		public static readonly string COLLIDER = "TODO";
 		public static readonly string COLLIDER_INFO = "TODO";
+
+
+
+		public static readonly string LIFESPAN = "Lifespan defines a default runtime limit (in seconds). If this limit is reached the object will remove itself.";
+		public static readonly string LIFESPAN_INTERVAL = "TODO";
+		public static readonly string LIFESPAN_DETACH = "TODO";
 	}
 }
 

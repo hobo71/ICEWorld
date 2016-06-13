@@ -37,6 +37,8 @@ using ICE;
 using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
+using ICE.World.EnumTypes;
+
 using ICE.World.EditorUtilities;
 using ICE.World.EditorInfos;
 
@@ -45,22 +47,180 @@ namespace ICE.World.EditorUtilities
 	public class WorldObjectEditor : ObjectEditor
 	{	
 
+		public static void DrawEntityStatusObject( ICEWorldBehaviour _component, EntityStatusObject _status, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		{
+			if( _status == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Status";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.LIFESPAN;
+
+			//LIFESPAN BEGIN
+			DrawObjectHeader( _status, _type,_title, _hint, _help );			
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _status ) )
+				return;
+
+				DrawStatusLifespan( _status );
+				DrawInitialDurability( _status );
+
+				_status.SetDurability( ICEEditorLayout.DefaultSlider( "Durability", "", _status.Durability, 0.0001f, 0, _status.DefaultDurability, _status.DefaultDurability, "" ) );
+
+
+			EndObjectContent();
+			// CONTENT END
+		}
+
+		public static void DrawStatusLifespan( EntityStatusObject _status )
+		{
+			ICEEditorLayout.BeginHorizontal();
+				ICEEditorLayout.MinMaxGroupSimple( "Lifespan", "", ref _status.LifespanMin, ref _status.LifespanMax, 0, ref _status.LifespanDefaultMax, 0.25f, 40, "" );
+
+				if( ICEEditorLayout.Button( "RND", "", ICEEditorStyle.CMDButtonDouble ) )
+				{
+					_status.LifespanMax = Random.Range( _status.LifespanMin, _status.LifespanDefaultMax );
+					_status.LifespanMin = Random.Range( 0, _status.LifespanMax );
+				}
+
+				ICEEditorLayout.ButtonMinMaxDefault( ref _status.LifespanMin, ref _status.LifespanMax, 0, 0 );
+
+				_status.UseLifespan = ICEEditorLayout.ButtonEnabled( _status.UseLifespan );
+			ICEEditorLayout.EndHorizontal( Info.LIFESPAN );
+		}
+
 		/// <summary>
 		/// Draws the initial durability.
 		/// </summary>
 		/// <param name="_status">Status.</param>
-		public static void DrawInitialDurability( ICE.World.Objects.ICEStatusObject _status )
+		public static void DrawInitialDurability( EntityStatusObject _status )
 		{
 			ICEEditorLayout.BeginHorizontal();
-			ICEEditorLayout.MinMaxGroupSimple( "Initial Durability (" + ( Mathf.Round( _status.DefaultDurability / 0.01f ) * 0.01f ) + ")", "Defines the default physical integrity of the creature.", 
-				ref _status.DefaultDurabilityMin, 
-				ref _status.DefaultDurabilityMax,
-				1, ref _status.DefaultDurabilityMaximum, 1, 40, "" );
 
-			ICEEditorLayout.ButtonMinMaxDefault( ref _status.DefaultDurabilityMin, ref _status.DefaultDurabilityMax, 100, 100 );
-			ICEEditorLayout.EndHorizontal( Info.STATUS_INITIAL_DURABILITY  );
-			EditorGUILayout.Separator();
+				if( ! Application.isPlaying )
+					_status.SetDefaultDurability( _status.DefaultDurabilityMax );
+
+				EditorGUI.BeginDisabledGroup( _status.IsDestructible == false );
+					ICEEditorLayout.MinMaxGroupSimple( "Initial Durability (" + ( Mathf.Round( _status.DefaultDurability / 0.01f ) * 0.01f ) + ")", "Defines the default physical integrity of the creature.", 
+						ref _status.DefaultDurabilityMin, 
+						ref _status.DefaultDurabilityMax,
+						1, ref _status.DefaultDurabilityMaximum, 1, 40, "" );
+
+					ICEEditorLayout.ButtonMinMaxDefault( ref _status.DefaultDurabilityMin, ref _status.DefaultDurabilityMax, 100, 100 );
+				EditorGUI.EndDisabledGroup();
+
+				_status.IsDestructible = ICEEditorLayout.ButtonEnabled( _status.IsDestructible );
+			ICEEditorLayout.EndHorizontal( Info.DURABILITY_INITIAL );
+			//EditorGUILayout.Separator();
+
+			EditorGUI.BeginDisabledGroup( _status.IsDestructible == false );
+
+ 
+				//ICEEditorLayout.DrawProgressBar( "Durability (%)", _status.DurabilityInPercent, Info.DURABILITY_PERCENT );
+			EditorGUI.EndDisabledGroup();
 		}
+
+		/// <summary>
+		/// Draws the lifespan object.
+		/// </summary>
+		/// <param name="_title">Title.</param>
+		/// <param name="_hint">Hint.</param>
+		/// <param name="_lifespan">Lifespan.</param>
+		/// <param name="_help">Help.</param>
+		public static void DrawEntityLifespanObject( LifespanObject _lifespan, EditorHeaderType _type, string _help = "", string _title = "", string _hint = ""  )
+		{
+			if( _lifespan == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Lifespan";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.LIFESPAN;
+
+			//LIFESPAN BEGIN
+			DrawObjectHeader( _lifespan, _type,_title, _hint, _help );			
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _lifespan ) )
+				return;
+
+			ICEEditorLayout.BeginHorizontal();
+			ICEEditorLayout.MinMaxGroupSimple( "Lifespan", "", ref _lifespan.LifespanMin, ref _lifespan.LifespanMax, 0, ref _lifespan.LifespanDefaultMax, 0.25f, 40, "" );
+
+			if( ICEEditorLayout.Button( "RND", "", ICEEditorStyle.CMDButtonDouble ) )
+			{
+				_lifespan.LifespanMax = Random.Range( _lifespan.LifespanMin, _lifespan.LifespanDefaultMax );
+				_lifespan.LifespanMin = Random.Range( 0, _lifespan.LifespanMax );
+			}
+
+			ICEEditorLayout.ButtonMinMaxDefault( ref _lifespan.LifespanMin, ref _lifespan.LifespanMax, 0, 0 );
+
+			ICEEditorLayout.EndHorizontal();
+			EndObjectContent();
+			// CONTENT END
+		}
+
+		/// <summary>
+		/// Draws the effect object.
+		/// </summary>
+		/// <returns>The effect object.</returns>
+		/// <param name="_control">Control.</param>
+		/// <param name="_effect">Effect.</param>
+		/// <param name="_help">Help.</param>
+		public static void DrawEffectObject( ICEWorldBehaviour _control, EffectObject _effect, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		{
+			if( _effect == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Effect";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.EFFECT;
+
+			DrawObjectHeader( _effect, _type, _title, _hint, _help );
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _effect ) )
+				return;
+
+			ICEEditorLayout.BeginHorizontal();
+				_effect.ReferenceObject = (GameObject)EditorGUILayout.ObjectField( "Reference", _effect.ReferenceObject, typeof(GameObject), false);
+				EditorGUI.BeginDisabledGroup( _effect.ReferenceObject == null );
+					_effect.Detach = ICEEditorLayout.ButtonCheck( "DETACH", "Detaches the effect instance and will create further ones acording to the given interval" , _effect.Detach, ICEEditorStyle.ButtonMiddle ); 
+				EditorGUI.EndDisabledGroup();
+			ICEEditorLayout.EndHorizontal( Info.EFFECT_REFERENCE );
+
+			EditorGUI.BeginDisabledGroup( _effect.ReferenceObject == null );
+
+				DrawImpulsTimerObject( _effect );
+
+				_effect.MountPointName = ICEEditorLayout.TransformPopup( "Mount Point", "", _effect.MountPointName, _control.transform, true, Info.EFFECT_MOUNTPOINT );
+				_effect.OffsetType = (RandomOffsetType)ICEEditorLayout.EnumPopup( "Offset Type","", _effect.OffsetType, Info.EFFECT_OFFSET_TYPE );
+				EditorGUI.indentLevel++;
+					if( _effect.OffsetType == RandomOffsetType.EXACT )
+						_effect.Offset = ICEEditorLayout.OffsetGroup( "Offset", _effect.Offset, Info.EFFECT_OFFSET_POSITION );
+					else 
+						_effect.OffsetRadius = ICEEditorLayout.MaxDefaultSlider( "Offset Radius", "", _effect.OffsetRadius, 0.25f, 0, ref _effect.OffsetRadiusMaximum, 0, Info.EFFECT_OFFSET_RADIUS );
+				
+					_effect.Rotation.eulerAngles = ICEEditorLayout.EulerGroup( "Rotation", _effect.Rotation.eulerAngles, Info.EFFECT_OFFSET_RADIUS );
+				EditorGUI.indentLevel--;
+
+			EditorGUI.EndDisabledGroup();
+
+			EndObjectContent();
+			// CONTENT END
+		}
+
+
+
 
 		/// <summary>
 		/// Draws the impuls timer object.

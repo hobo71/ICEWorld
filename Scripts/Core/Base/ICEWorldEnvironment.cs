@@ -29,7 +29,9 @@
 using UnityEngine;
 using System.Collections;
 
-namespace ICE.World
+using ICE.World.EnumTypes;
+
+namespace ICE.World.EnumTypes
 {
 	/// <summary>
 	/// Temperature scale type.
@@ -56,6 +58,10 @@ namespace ICE.World
 		MOSTLY_CLOUDY,
 		CLOUDY
 	}
+}
+
+namespace ICE.World
+{
 
 	/// <summary>
 	/// ICE world environment.

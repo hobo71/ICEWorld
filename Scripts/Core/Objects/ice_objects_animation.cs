@@ -34,6 +34,7 @@ using System.Xml.Serialization;
 
 using ICE;
 using ICE.World;
+using ICE.World.EnumTypes;
 
 namespace ICE.World.Objects
 {
