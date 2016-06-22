@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ice_objects_io.cs | ICE.World.ICEWorldIO.cs
+// ice_objects_world_io.cs | ICE.World.ICEWorldIO.cs
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -45,35 +45,38 @@ using ICE.World.Utilities;
 namespace ICE.World.Objects
 {
 	#if UNITY_EDITOR
-	public class ICEIO : System.Object
+	public class ICEWorldIO : ICEIO
 	{
-		protected static string m_Path = "";
 
-		protected static string Save( string _name, string _suffix ){
-			return UnityEditor.EditorUtility.SaveFilePanelInProject( "Save File As", _name.ToLower() + "." + _suffix , _suffix, "" );
-		}
-
-		protected static string Load( string _suffix ){
-			return UnityEditor.EditorUtility.OpenFilePanel( "Open File", Application.dataPath, _suffix );
-		}
-
-		protected static void SaveObjectToFile<T>( T _object ) where T : ICEObject
+		/// <summary>
+		/// Saves the durability composition to file.
+		/// </summary>
+		/// <param name="_object">Object.</param>
+		/// <param name="owner">Owner.</param>
+		public static void SaveDurabilityCompositionToFile( DurabilityCompositionObject _object, string owner  )
 		{
-			XmlSerializer serializer = new XmlSerializer( typeof( T ) );
-			FileStream _stream = new FileStream( m_Path, FileMode.Create);
-			serializer.Serialize( _stream, _object );
-			_stream.Close();
+			m_Path = Save( owner, "durability" );
+			if( m_Path.Length == 0 )
+				return;
+
+			SaveObjectToFile<DurabilityCompositionObject>( _object );
 		}
 
-		protected static T LoadObjectFromFile<T>( T _object ) where T : ICEObject
+
+		/// <summary>
+		/// Loads the durability composition from file.
+		/// </summary>
+		/// <returns>The durability composition from file.</returns>
+		/// <param name="_object">Object.</param>
+		public static DurabilityCompositionObject LoadDurabilityCompositionFromFile( DurabilityCompositionObject _object )
 		{
-			XmlSerializer serializer = new XmlSerializer(typeof( T ));
-			FileStream _stream = new FileStream( m_Path, FileMode.Open);
-			_object = serializer.Deserialize(_stream) as T;
-			_stream.Close();
+			m_Path = Load( "durability" );
+			if( m_Path.Length == 0 )
+				return _object;
 
-			return _object;
+			return LoadObjectFromFile<DurabilityCompositionObject>( _object );
 		}
+
 	}
 	#endif
 }

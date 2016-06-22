@@ -28,12 +28,44 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
 
 using ICE;
 using ICE.World;
+using ICE.World.Objects;
+using ICE.World.Utilities;
 
 namespace ICE.World.Objects
 {
+	[System.Serializable]
+	public class EntityBodyPartObject : ICEOwnerObject {
+
+		public EntityBodyPartObject(){}
+		public EntityBodyPartObject( ICEWorldBehaviour _component ) : base( _component )
+		{
+			Init( _component );
+		}
+
+		public override void Init( ICEWorldBehaviour _component )
+		{
+			base.Init( _component );
+		}
+
+		public float DamageMultiplier = 1;
+		public float DamageMultiplierMaximum = 100;
+		public bool UseDamageTransfer = true;
+		public bool DamageTransferRequired{
+			get{
+				if( m_OwnerComponent != null && m_OwnerComponent.transform.root != m_OwnerComponent.transform && UseDamageTransfer )
+					return true;
+				else
+					return false;
+			}
+		}
+	}
+
 	[System.Serializable]
 	public class EntityStatusObject : LifespanObject {
 
@@ -43,45 +75,81 @@ namespace ICE.World.Objects
 			Init( _component );
 		}
 
+		/* TODO: UNDER CONSTRUCTION 
+		[SerializeField]
+		private DurabilityCompositionObject m_DurabilityComposition = null;
+		public DurabilityCompositionObject DurabilityComposition{
+			get{ return m_DurabilityComposition = ( m_DurabilityComposition == null ? new DurabilityCompositionObject() : m_DurabilityComposition ); }
+			set{ m_DurabilityComposition = value; }
+		}*/
+
+		[SerializeField]
+		private CorpseObject m_Corpse = null;
+		public CorpseObject Corpse{
+			get{ return m_Corpse = ( m_Corpse == null ? new CorpseObject( m_OwnerComponent ) : m_Corpse ); }
+			set{ m_Corpse = value; }
+		}
+
+
+
 		public bool IsDestructible = true;
 
 		protected float m_Durability = 0;
 		public virtual float Durability{
-			get{ return m_Durability; }
+			get{ 
+
+				//m_Durability = DurabilityComposition.UpdateDurability( m_DefaultDurability );
+
+				if( m_Durability < 0 ) 
+					m_Durability = 0;
+				else if( m_Durability > m_InitialDurability ) 
+					m_Durability = m_InitialDurability;	
+
+				return m_Durability; 
+			}
 		}
+
 		public virtual float DurabilityInPercent{
-			get{ return ( m_DefaultDurability > 0 ? 100 / m_DefaultDurability * Durability:100 ); }
-		}
-		public virtual float DurabilityMultiplier{
-			get{ return (m_Durability > 0?100/m_Durability:1); }
+			get{ return FixedPercent( m_InitialDurability > 0 ? 100 / m_InitialDurability * Durability:100 ); }
 		}
 
-		protected float m_DefaultDurability = 100;
-		public virtual float DefaultDurability{
-			get{ return m_DefaultDurability; }
+		public virtual float InitialDurabilityMultiplier{
+			get{ return ( m_InitialDurability > 0?100/m_InitialDurability:1 ); }
 		}
-		public float DefaultDurabilityMin = 100;
-		public float DefaultDurabilityMax = 100;
-		public float DefaultDurabilityMaximum = 100;
 
-		public virtual void SetDefaultDurability( float _value ){
+		protected float m_InitialDurability = 100;
+		public virtual float InitialDurability{
+			get{ return m_InitialDurability; }
+		}
+		public float InitialDurabilityMin = 100;
+		public float InitialDurabilityMax = 100;
+		public float InitialDurabilityMaximum = 100;
 
-			if( _value < DefaultDurabilityMin ) 
-				m_DefaultDurability = DefaultDurabilityMin;
-			else if( _value > DefaultDurabilityMax ) 
-				m_DefaultDurability = DefaultDurabilityMax;
+		public virtual void SetInitialDurability( float _value ){
+
+			if( _value < InitialDurabilityMin ) 
+				m_InitialDurability = InitialDurabilityMin;
+			else if( _value > InitialDurabilityMax ) 
+				m_InitialDurability = InitialDurabilityMax;
 			else
-				m_DefaultDurability = _value;				
+				m_InitialDurability = _value;				
 		}
 
 		public virtual void SetDurability( float _value ){
 
 			if( _value < 0 ) 
 				m_Durability = 0;
-			else if( _value > DefaultDurabilityMax ) 
-				m_Durability = DefaultDurabilityMax;
+			else if( _value > InitialDurabilityMax ) 
+				m_Durability = InitialDurabilityMax;
 			else
 				m_Durability = _value;				
+		}
+
+		public virtual void UpdateDurabilityByPercent( float _percent ){
+
+			_percent = FixedPercent( _percent );
+
+			m_Durability = m_InitialDurability / 100 * _percent;			
 		}
 
 		/// <summary>
@@ -89,25 +157,27 @@ namespace ICE.World.Objects
 		/// </summary>
 		/// <value><c>true</c> if this instance is destroyed; otherwise, <c>false</c>.</value>
 		public virtual bool IsDestroyed{
-			get{ return ( IsDestructible && m_Durability <= 0 ? true:false ); }
+			get{ return ( IsDestructible && Durability <= 0 ? true:false ); }
 		}
 			
 		public override void Init( ICEWorldBehaviour _component )
 		{
 			base.Init( _component );
 
-			m_DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
-			m_Durability = m_DefaultDurability;
+			Corpse.Init( m_OwnerComponent );
+
+			m_InitialDurability = Random.Range( InitialDurabilityMin, InitialDurabilityMax );
+			m_Durability = m_InitialDurability;
 
 			PrintDebugLog( this, "Init" );
 		}
 
-		public virtual void Reset()
+		public override void Reset()
 		{
 			base.Reset();
 
-			m_DefaultDurability = Random.Range( DefaultDurabilityMin, DefaultDurabilityMax );
-			m_Durability = m_DefaultDurability;
+			m_InitialDurability = Random.Range( InitialDurabilityMin, InitialDurabilityMax );
+			m_Durability = m_InitialDurability;
 
 			PrintDebugLog( this, "Reset" );
 		}
@@ -116,30 +186,27 @@ namespace ICE.World.Objects
 			base.Update();
 		}
 
-		/// <summary>
-		/// Applies the damage.
-		/// </summary>
-		/// <param name="_damage">Damage.</param>
-		public virtual void ApplyDamage( float _damage ){
-			ProcessDamage( _damage );
-		}
+		public virtual void Remove()
+		{
+			PrintDebugLog( this, "Remove - Durability :" + m_Durability );
 
+			// Removes the entity from the world
+			WorldManager.Remove( m_Owner );
+		}
 
 		/// <summary>
 		/// Processes the received damage.
 		/// </summary>
 		/// <returns>The damage.</returns>
 		/// <param name="_damage">Damage.</param>
-		protected virtual float ProcessDamage( float _damage )
+		public virtual void AddDamage( float _damage )
 		{
 			m_Durability -= _damage;
 
 			if( m_Durability < 0 )
 				m_Durability = 0;
 
-			PrintDebugLog( this, "ProcessDamage - " + ( IsDestructible && m_DefaultDurability > 0 ? "DefaultDurability :" + m_DefaultDurability +" - Durability :" + m_Durability  + " - Damage :" + _damage : "disabled" ) );
-
-			return m_Durability;
+			PrintDebugLog( this, "AddDamage - " + ( IsDestructible && m_InitialDurability > 0 ? "InitialDurability :" + m_InitialDurability +" - Durability :" + m_Durability  + " - Damage :" + _damage : "disabled" ) );
 		}
 	}
 }

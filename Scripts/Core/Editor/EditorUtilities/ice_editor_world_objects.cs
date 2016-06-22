@@ -46,6 +46,208 @@ namespace ICE.World.EditorUtilities
 {
 	public class WorldObjectEditor : ObjectEditor
 	{	
+		public static DurabilityInfluenceObject InfluencePopup( string _title, string _hint, DurabilityInfluenceObject _influence, List<DurabilityInfluenceObject> _list, string _help = "", params GUILayoutOption[] _gui )
+		{
+			ICEEditorLayout.BeginHorizontal();
+	
+				GUIContent[] _options = new GUIContent[_list.Count];
+				int _selected = 0;
+				for( int _i = 0 ; _i < _list.Count ; _i++ )
+				{
+					_options[ _i ] = new GUIContent( _list[_i].Key );
+
+					if( _list[_i].Key == _influence.Key )
+						_selected = _i;
+				}
+
+				_selected = EditorGUILayout.Popup( new GUIContent( _title, _hint ) , _selected, _options, _gui );
+
+				_influence = _list[_selected];
+
+			ICEEditorLayout.EndHorizontal( _help );
+			return _influence;
+		}
+
+		public static bool DrawDurabilityInfluenceObject( ICEWorldBehaviour _component, DurabilityCompositionObject _composition, int _index )
+		{
+			if( _composition == null || _index < 0 || _index >= _composition.Influences.Count )
+				return false;
+
+			DurabilityInfluenceObject _influence = _composition.Influences[_index];
+
+
+			ICEEditorLayout.BeginHorizontal();
+
+			_influence.Key = ICEEditorLayout.Text( "Key", "", _influence.Key , "" );
+
+
+			if( ICEEditorLayout.ListUpDownButtons<DurabilityInfluenceObject>( _composition.Influences, _index ) )
+				return true;
+
+			if( ICEEditorLayout.ListDeleteButton<DurabilityInfluenceObject>( _composition.Influences, _influence ) )
+				return true;
+
+			ICEEditorLayout.EndHorizontal( "TODO" );
+
+			return false;
+		}
+
+		public static bool DrawDurabilityAttributeObject( ICEWorldBehaviour _component, DurabilityCompositionObject _composition, int _index )
+		{
+			if( _composition == null || _index < 0 || _index >= _composition.Attributes.Count )
+				return false;
+
+			DurabilityAttributeObject _attribute = _composition.Attributes[_index];
+
+
+			ICEEditorLayout.BeginHorizontal();
+
+					_attribute.Key = ICEEditorLayout.Text( "Key", "", _attribute.Key , "" );
+
+				if( ICEEditorLayout.ListUpDownButtons<DurabilityAttributeObject>( _composition.Attributes, _index ) )
+					return true;
+
+				if( ICEEditorLayout.ListDeleteButton<DurabilityAttributeObject>( _composition.Attributes, _attribute ) )
+					return true;
+
+				if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
+					_attribute.Multiplier.Add( new DurabilityInfluenceMultiplierObject() );
+
+			ICEEditorLayout.EndHorizontal( "TODO" );
+
+			for( int i = 0 ; i < _attribute.Multiplier.Count ; i++ )
+			{
+				DurabilityInfluenceMultiplierObject _multiplier = _attribute.Multiplier[i];
+
+				if( _multiplier == null )
+					continue;
+				
+				ICEEditorLayout.BeginHorizontal();
+
+				//_multiplier.Influence = InfluencePopup( "", "", _multiplier.Influence, _composition.Influences, "", GUILayout.MinWidth( 120 ), GUILayout.MaxWidth( 250 ) );
+				_multiplier.Multiplier = ICEEditorLayout.DefaultSlider( _multiplier.Influence.Key + " Multiplier", "", _multiplier.Multiplier, 0.001f, -1, 1, 0 );
+
+				if( ICEEditorLayout.ListDeleteButton<DurabilityInfluenceMultiplierObject>( _attribute.Multiplier, _multiplier ) )
+					return true;
+
+				ICEEditorLayout.EndHorizontal( "TODO" );
+			}
+
+			return false;
+		}
+
+
+		public static void DrawDurabilityCompositionObject( ICEWorldBehaviour _component, DurabilityCompositionObject _composition, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		{
+			if( _composition == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Durability Composition";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = "TODO";
+
+			ICEEditorLayout.BeginHorizontal();
+
+			if( IsEnabledFoldoutType( _type ) )
+				EditorGUI.BeginDisabledGroup( _composition.Enabled == false );
+
+				DrawObjectHeaderLine( _composition, GetSimpleFoldout( _type ), _title, _hint );	
+
+				if( ICEEditorLayout.Button( "SAVE", "", ICEEditorStyle.CMDButtonDouble ) )
+					ICEWorldIO.SaveDurabilityCompositionToFile( _composition, _component.name );
+				if( ICEEditorLayout.Button( "LOAD", "", ICEEditorStyle.CMDButtonDouble ) )
+					_composition.Copy( ICEWorldIO.LoadDurabilityCompositionFromFile( new DurabilityCompositionObject() ) );
+				if( ICEEditorLayout.Button( "RESET", "", ICEEditorStyle.CMDButtonDouble ) )
+					_composition.Reset();
+
+				if( IsEnabledFoldoutType( _type ) )
+				{
+					EditorGUI.EndDisabledGroup();
+					_composition.Enabled = ICEEditorLayout.ButtonEnabled( _composition.Enabled );
+				}
+
+			ICEEditorLayout.EndHorizontal( _help );
+
+	
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _composition ) )
+				return;
+
+
+			ICEEditorLayout.BeginHorizontal();
+			ICEEditorLayout.Label( "Entity Influences", true );
+
+			if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
+			{
+				_composition.AddInfluenceByKey( "NEW" );
+			}
+
+
+			ICEEditorLayout.EndHorizontal();
+
+			for( int i = 0 ; i < _composition.Influences.Count ; i++ )
+				if( DrawDurabilityInfluenceObject( _component, _composition, i ) )
+					return;
+
+
+			EditorGUILayout.Separator();
+
+			ICEEditorLayout.BeginHorizontal();
+			ICEEditorLayout.Label( "Entity Attributes", true );
+
+			if( ICEEditorLayout.Button( "ADD", "", ICEEditorStyle.CMDButtonDouble ) )
+			{
+				_composition.AddAttributeByKey( "NEW" );
+			}
+
+			ICEEditorLayout.EndHorizontal();
+
+			for( int i = 0 ; i < _composition.Attributes.Count ; i++ )
+				if( DrawDurabilityAttributeObject( _component, _composition, i ) )
+					return;
+
+
+
+
+
+			
+			EndObjectContent();
+			// CONTENT END
+		}
+
+		public static void DrawCorpseObject( ICEWorldBehaviour _component, CorpseObject _corpse, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
+		{
+			if( _corpse == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Corpse";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.CORPSE;
+
+			DrawObjectHeader( _corpse, _type,_title, _hint, _help );			
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _corpse ) )
+				return;
+
+			EditorGUI.indentLevel++;
+				_corpse.CorpseReferencePrefab = (GameObject)EditorGUILayout.ObjectField( "Corpse Prefab", _corpse.CorpseReferencePrefab, typeof(GameObject), false );
+				_corpse.CorpseRemovingDelay = ICEEditorLayout.MaxDefaultSlider("Corpse Removing Delay (secs.)","Defines how long the corpse will be visible after dying.", _corpse.CorpseRemovingDelay, 0.5f, 0, ref _corpse.CorpseRemovingDelayMaximum, 0, Info.CORPSE_REMOVING_DELAY );
+				EditorGUI.indentLevel++;
+					_corpse.CorpseRemovingDelayVariance = ICEEditorLayout.DefaultSlider("Variance Multiplier","", _corpse.CorpseRemovingDelayVariance,0.025f, 0,1, 0.25f, Info.CORPSE_REMOVING_DELAY_VARIANCE );
+				EditorGUI.indentLevel--;
+			EditorGUI.indentLevel--;
+
+
+			EndObjectContent();
+			// CONTENT END
+		}
 
 		public static void DrawEntityStatusObject( ICEWorldBehaviour _component, EntityStatusObject _status, EditorHeaderType _type, string _help = "", string _title = "", string _hint = "" )
 		{
@@ -67,10 +269,14 @@ namespace ICE.World.EditorUtilities
 				return;
 
 				DrawStatusLifespan( _status );
+				//DrawDamageTransfer( _status );
 				DrawInitialDurability( _status );
 
-				_status.SetDurability( ICEEditorLayout.DefaultSlider( "Durability", "", _status.Durability, 0.0001f, 0, _status.DefaultDurability, _status.DefaultDurability, "" ) );
+				EditorGUI.indentLevel++;
+					_status.SetDurability( ICEEditorLayout.DefaultSlider( "Durability", "", _status.Durability, 0.0001f, 0, _status.InitialDurability, _status.InitialDurability, "" ) );
+				EditorGUI.indentLevel--;
 
+				
 
 			EndObjectContent();
 			// CONTENT END
@@ -102,15 +308,15 @@ namespace ICE.World.EditorUtilities
 			ICEEditorLayout.BeginHorizontal();
 
 				if( ! Application.isPlaying )
-					_status.SetDefaultDurability( _status.DefaultDurabilityMax );
+					_status.SetInitialDurability( _status.InitialDurabilityMax );
 
 				EditorGUI.BeginDisabledGroup( _status.IsDestructible == false );
-					ICEEditorLayout.MinMaxGroupSimple( "Initial Durability (" + ( Mathf.Round( _status.DefaultDurability / 0.01f ) * 0.01f ) + ")", "Defines the default physical integrity of the creature.", 
-						ref _status.DefaultDurabilityMin, 
-						ref _status.DefaultDurabilityMax,
-						1, ref _status.DefaultDurabilityMaximum, 1, 40, "" );
+					ICEEditorLayout.MinMaxGroupSimple( "Initial Durability (" + ( Mathf.Round( _status.InitialDurability / 0.01f ) * 0.01f ) + ")", "Defines the default physical integrity of the creature.", 
+						ref _status.InitialDurabilityMin, 
+						ref _status.InitialDurabilityMax,
+						1, ref _status.InitialDurabilityMaximum, 1, 40, "" );
 
-					ICEEditorLayout.ButtonMinMaxDefault( ref _status.DefaultDurabilityMin, ref _status.DefaultDurabilityMax, 100, 100 );
+					ICEEditorLayout.ButtonMinMaxDefault( ref _status.InitialDurabilityMin, ref _status.InitialDurabilityMax, 100, 100 );
 				EditorGUI.EndDisabledGroup();
 
 				_status.IsDestructible = ICEEditorLayout.ButtonEnabled( _status.IsDestructible );
@@ -122,6 +328,35 @@ namespace ICE.World.EditorUtilities
  
 				//ICEEditorLayout.DrawProgressBar( "Durability (%)", _status.DurabilityInPercent, Info.DURABILITY_PERCENT );
 			EditorGUI.EndDisabledGroup();
+		}
+
+		public static void DrawBodyPartObject( EntityBodyPartObject _part, EditorHeaderType _type, string _help = "", string _title = "", string _hint = ""  )
+		{
+			if( _part == null )
+				return;
+
+			if( string.IsNullOrEmpty( _title ) )
+				_title = "Body Part";
+			if( string.IsNullOrEmpty( _hint ) )
+				_hint = "";
+			if( string.IsNullOrEmpty( _help ) )
+				_help = Info.BODYPART;
+
+			DrawObjectHeader( _part, _type,_title, _hint, _help );			
+
+			// CONTENT BEGIN
+			if( BeginObjectContentOrReturn( _type, _part ) )
+				return;
+			
+			ICEEditorLayout.BeginHorizontal();
+
+				_part.DamageMultiplier = ICEEditorLayout.MaxDefaultSlider( "Damage Transfer Multiplier", "", _part.DamageMultiplier, Init.DECIMAL_PRECISION, - _part.DamageMultiplierMaximum, ref _part.DamageMultiplierMaximum, 1 );
+
+				_part.UseDamageTransfer = ICEEditorLayout.ButtonCheck( "TRANSFER", "Allows damage transfer for body parts", _part.UseDamageTransfer, ICEEditorStyle.ButtonMiddle );
+			ICEEditorLayout.EndHorizontal( Info.BODYPART_DAMAGE_TRANSFER );
+
+			EndObjectContent();
+			// CONTENT END
 		}
 
 		/// <summary>

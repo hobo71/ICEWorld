@@ -288,17 +288,17 @@ namespace ICE.World.EditorUtilities
 
 				_outfile.WriteLine("");
 				_outfile.WriteLine("\t\t//protected override void Register(){ // TODO: override Register if required ");
-				_outfile.WriteLine("\t\t\t//WorldRegister.Register( transform.gameObject );");
+				_outfile.WriteLine("\t\t\t//WorldManager.Register( transform.gameObject );");
 				_outfile.WriteLine("\t\t//}");
 
 				_outfile.WriteLine("");
 				_outfile.WriteLine("\t\t//protected override void Deregister(){ // TODO: override Deregister if required ");
-				_outfile.WriteLine("\t\t\t//WorldRegister.Deregister( transform.gameObject );");
+				_outfile.WriteLine("\t\t\t//WorldManager.Deregister( transform.gameObject );");
 				_outfile.WriteLine("\t\t\t//}");
 
 				_outfile.WriteLine("");
 				_outfile.WriteLine("\t\t//protected override void Remove(){ // TODO: override Remove if required ");
-				_outfile.WriteLine("\t\t\t//WorldRegister.Remove( transform.gameObject );");
+				_outfile.WriteLine("\t\t\t//WorldManager.Remove( transform.gameObject );");
 				_outfile.WriteLine("\t\t//}");
 
 				_outfile.WriteLine("");

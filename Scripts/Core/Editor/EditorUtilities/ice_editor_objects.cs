@@ -177,9 +177,11 @@ namespace ICE.World.EditorUtilities
 		/// <param name="_help">Help.</param>
 		public static void DrawObjectHeaderLine( ICEDataObject _object, EditorHeaderType _type, string _title, string _hint, string _help = "" )
 		{
-			if( _object == null || IsHeaderRequired( _type ) == false )
+			if( _object == null )
 				return;
 
+			DrawObjectHeaderLine( ref _object.Enabled, ref _object.Foldout, _type, _title, _hint, _help );
+			/*
 			// TOOGLE
 			if( _type == EditorHeaderType.TOGGLE )
 			{
@@ -251,6 +253,85 @@ namespace ICE.World.EditorUtilities
 				// Auto foldout if the feature was enabled by the user
 				if( _enabled != _object.Enabled && _object.Enabled == true )
 					_object.Foldout = true;
+			}*/
+		}
+
+		public static void DrawObjectHeaderLine( ref bool _enabled, ref bool _foldout, EditorHeaderType _type, string _title, string _hint, string _help = "" )
+		{
+			if( IsHeaderRequired( _type ) == false )
+				return;
+
+			// TOOGLE
+			if( _type == EditorHeaderType.TOGGLE )
+			{
+				_enabled = ICEEditorLayout.Toggle( _title, _hint, _enabled, _help );
+				_foldout = _enabled;
+			}
+			else if( _type == EditorHeaderType.TOGGLE_LEFT )
+			{
+				_enabled = ICEEditorLayout.ToggleLeft( _title, _hint, _enabled, false, _help );	
+				_foldout = _enabled;
+			}
+			else if( _type == EditorHeaderType.TOGGLE_LEFT_BOLD )
+			{
+				_enabled = ICEEditorLayout.ToggleLeft( _title, _hint, _enabled, true, _help );
+				_foldout = _enabled;
+			}
+
+			// LABEL
+			else if( _type == EditorHeaderType.LABEL )
+			{
+				ICEEditorLayout.Label( _title, false, _help );
+				_foldout = true;
+			}
+			else if( _type == EditorHeaderType.LABEL_BOLD )
+			{
+				ICEEditorLayout.Label( _title, true, _help );
+				_foldout = true;
+			}
+			else if( _type == EditorHeaderType.LABEL_ENABLED || _type == EditorHeaderType.LABEL_ENABLED_BOLD )
+			{
+				EditorGUI.BeginDisabledGroup( _enabled == false );
+				if( _type == EditorHeaderType.LABEL_ENABLED_BOLD )
+					ICEEditorLayout.Label( _title, true, _help );
+				else
+					ICEEditorLayout.Label( _title, false, _help );
+				_foldout = true;
+				EditorGUI.EndDisabledGroup();
+
+				_enabled = ICEEditorLayout.ButtonCheck( "ENABLED", "Enables/disables this feature", _enabled, ICEEditorStyle.ButtonMiddle );
+			}
+
+			// FOLDOUT
+			else if( _type == EditorHeaderType.FOLDOUT )
+			{
+				//EditorGUI.BeginDisabledGroup( _object.Enabled == false );
+				_foldout = ICEEditorLayout.Foldout( _foldout, _title, _help, false );
+				//EditorGUI.EndDisabledGroup();
+
+			}
+			else if( _type == EditorHeaderType.FOLDOUT_BOLD )
+			{
+				//EditorGUI.BeginDisabledGroup( _object.Enabled == false );
+				_foldout = ICEEditorLayout.Foldout( _foldout, _title, _help, true );
+				//EditorGUI.EndDisabledGroup();
+			}
+			else 
+			{
+				bool _enabled_in = _enabled;
+
+				EditorGUI.BeginDisabledGroup( _enabled == false );
+				if( _type == EditorHeaderType.FOLDOUT_ENABLED_BOLD )
+					_foldout = ICEEditorLayout.Foldout( _foldout, _title, _help, true );
+				else
+					_foldout = ICEEditorLayout.Foldout( _foldout, _title, _help, false );
+				EditorGUI.EndDisabledGroup();
+
+				_enabled = ICEEditorLayout.ButtonCheck( "ENABLED", "Enables/disables this feature", _enabled, ICEEditorStyle.ButtonMiddle );
+
+				// Auto foldout if the feature was enabled by the user
+				if( _enabled_in != _enabled && _enabled == true )
+					_foldout = true;
 			}
 		}
 	}

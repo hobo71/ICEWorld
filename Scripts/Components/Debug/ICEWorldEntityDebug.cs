@@ -52,7 +52,7 @@ namespace ICE.World
 
 			#if UNITY_EDITOR
 			if( GroundedInEditorMode == true && ! Application.isPlaying && UnityEditor.Selection.activeGameObject == transform.gameObject )
-				WorldRegister.SetGroundLevel( transform, BaseOffset );	
+				WorldManager.SetGroundLevel( transform, BaseOffset );	
 			#endif
 		}
 
@@ -71,7 +71,7 @@ namespace ICE.World
 
 			//if( CreatureRegister.UseDebug )
 
-			Color _color = WorldRegister.GetDebugDefaultColor( this.gameObject );
+			Color _color = WorldManager.GetDebugDefaultColor( this.gameObject );
 			if( UseCustomGizmoColor )
 				_color = CustomGizmoColor;
 

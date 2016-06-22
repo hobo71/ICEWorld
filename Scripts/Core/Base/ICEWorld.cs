@@ -73,6 +73,13 @@ namespace ICE.World
 			get{ return m_Instance = ( m_Instance == null?GameObject.FindObjectOfType<ICEWorldRegister>():m_Instance ); }
 		}
 
+		public delegate void OnSpawnObjectEvent( out GameObject _object, GameObject _reference, Vector3 _position, Quaternion _rotation );
+		public event OnSpawnObjectEvent OnSpawnObject;
+		public delegate void OnRemoveObjectEvent( GameObject _object, out bool _removed );
+		public event OnRemoveObjectEvent OnRemoveObject;
+		public delegate void OnDestroyObjectEvent( GameObject _object, out bool _removed );
+		public event OnDestroyObjectEvent OnDestroyObject;
+
 		public virtual void Register( GameObject _object )
 		{
 		}
@@ -82,18 +89,55 @@ namespace ICE.World
 			return true;
 		}
 
-		public virtual void Remove( GameObject _object )
+		/// <summary>
+		/// Spawn the specified _reference, _position and _rotation.
+		/// </summary>
+		/// <param name="_reference">Reference.</param>
+		/// <param name="_position">Position.</param>
+		/// <param name="_rotation">Rotation.</param>
+		public virtual GameObject Spawn( GameObject _reference, Vector3 _position, Quaternion _rotation )
 		{
-			DestroyObject( _object );
+			if( _reference == null )
+				return null;
+
+			GameObject _object = null;
+			if( OnSpawnObject != null )
+				OnSpawnObject( out _object, _reference, _position, _rotation );
+			else
+				_object = (GameObject)Object.Instantiate( _reference, _position, _rotation );
+
+			return _object;
 		}
 
+		/// <summary>
+		/// Tries to remove the specified _object from a potential list. Override this method 
+		/// to remove the object from a list.
+		/// </summary>
+		/// <param name="_object">Object.</param>
+		public virtual bool Remove( GameObject _object )
+		{
+			if( _object == null )
+				return false;
+
+			bool _removed = false;
+			if( OnRemoveObject != null )
+				OnRemoveObject( _object, out _removed );
+			else
+			{
+				_removed = true;
+				WorldManager.Destroy( _object );
+			}
+
+			return _removed;
+		}
+			
 		public virtual Color GetDebugDefaultColor( GameObject _object )
 		{
 			return Color.red;
 		}
 	}
 
-	public class WorldRegister{
+	public class WorldManager{
 
 		public static void Register( GameObject _object )
 		{
@@ -107,11 +151,27 @@ namespace ICE.World
 				ICEWorldRegister.Instance.Deregister( _object );
 		}
 
+		public static GameObject Spawn( GameObject _object, Vector3 _position, Quaternion _rotation  )
+		{
+			if( ICEWorldRegister.Instance != null )
+				return ICEWorldRegister.Instance.Spawn( _object, _position, _rotation );
+			else
+				return (GameObject)GameObject.Instantiate( _object, _position, _rotation );
+		}
+
 		public static void Remove( GameObject _object )
 		{
 			if( ICEWorldRegister.Instance != null )
 				ICEWorldRegister.Instance.Remove( _object );
+			else
+				WorldManager.Destroy( _object );
 		}
+
+		public static void Destroy( GameObject _object )
+		{
+			GameObject.Destroy( _object );
+		}
+
 
 		/// <summary>
 		/// Gets the default color of the gizmo.

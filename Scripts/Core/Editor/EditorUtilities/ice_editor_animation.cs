@@ -68,7 +68,7 @@ namespace ICE.World.EditorUtilities
 			int _selected = 0;
 			if( _count > 0 )
 			{
-				foreach (AnimationState _state in _animation )
+				foreach( AnimationState _state in _animation )
 				{
 					if( _state == null || _i >= _count )
 						continue;

@@ -172,9 +172,16 @@ namespace ICE.World.Objects
 			if( _effect != null )
 			{
 				_effect.name = ReferenceObject.name;
-				_effect.transform.rotation = Rotation;
 
-				if( Detach == false )
+				if( m_MountPointTransform != null )
+					_effect.transform.rotation = m_MountPointTransform.rotation * Rotation;
+				else
+					_effect.transform.rotation = Rotation;
+
+				if( Detach )
+				{
+				}
+				else
 				{
 					_effect.transform.SetParent( m_MountPointTransform, true );
 

@@ -428,6 +428,25 @@ namespace ICE.World.Utilities
 		}
 
 		/// <summary>
+		/// Gets the specified root component.
+		/// </summary>
+		/// <returns>The root.</returns>
+		/// <param name="_transform">Transform.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T GetRoot<T>( Transform _transform ) where T : Component
+		{
+			if( _transform == null || _transform.root == _transform )
+				return null;
+			
+			T[] _components = _transform.GetComponentsInParent<T>();
+			foreach(  T _component in _components )
+				if( _component.transform.root == _component.transform )
+					return _component;
+
+			return null;
+		}
+
+		/// <summary>
 		/// Gets all children.
 		/// </summary>
 		/// <returns>The all children.</returns>

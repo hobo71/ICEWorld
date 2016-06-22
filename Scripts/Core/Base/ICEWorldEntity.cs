@@ -99,15 +99,6 @@ namespace ICE.World
 			get{ return m_Registry = ( m_Registry == null?ICEWorldRegister.Instance:m_Registry ); }
 		}
 
-		protected Transform m_Transform = null;
-		/// <summary>
-		/// Gets the cached object transform.
-		/// </summary>
-		/// <value>The object transform.</value>
-		public Transform ObjectTransform {
-			get{ return m_Transform  = ( m_Transform == null?GetComponent<Transform>():m_Transform ); }
-		}
-
 		/// <summary>
 		/// m root entity contains the stored root entity or null in cases that this entity is the root entity
 		/// you should use RootEntity or GetRootEntity() instead of the stored value because the parent could 
@@ -183,34 +174,32 @@ namespace ICE.World
 			DoLateUpdate();
 		}
 
+		/// <summary>
+		/// Register this instance.
+		/// </summary>
 		protected virtual void Register(){
-			WorldRegister.Register( transform.gameObject );
+			WorldManager.Register( transform.gameObject );
 		}
 
+		/// <summary>
+		/// Deregister this instance.
+		/// </summary>
 		protected virtual void Deregister(){
-			WorldRegister.Deregister( transform.gameObject );
+			WorldManager.Deregister( transform.gameObject );
 		}
 
 		/// <summary>
 		/// Removes this instance according to the defined reference group settings of the 
-		/// WorldRegister. In cases UseSoftRespawn is active the target will be dactivate, 
+		/// WorldManager. In cases UseSoftRespawn is active the target will be dactivate, 
 		/// stored and prepared for its next action, otherwise the object will be destroyed.
 		/// </summary>
 		protected virtual void Remove(){
-			WorldRegister.Remove( transform.gameObject );
+			WorldManager.Remove( transform.gameObject );
 		}
 
 		public virtual void Reset()
 		{
 			Status.Reset();
-		}
-
-		/// <summary>
-		/// Damage the specified _damage.
-		/// </summary>
-		/// <param name="_damage">Damage.</param>
-		public virtual void Damage( float _damage ){
-			ApplyDamage( _damage, Vector3.zero, Vector3.zero, null, 0 );
 		}
 
 		/// <summary>
@@ -229,13 +218,13 @@ namespace ICE.World
 		/// <param name="_attacker_position">Attacker position.</param>
 		/// <param name="_attacker">Attacker.</param>
 		/// <param name="_force">Force.</param>
-		protected virtual void ApplyDamage( float _damage, Vector3 _damage_direction, Vector3 _attacker_position, Transform _attacker, float _force = 0  )
+		public virtual void ApplyDamage( float _damage, Vector3 _damage_direction, Vector3 _attacker_position, Transform _attacker, float _force = 0  )
 		{
 			// use RootEntity instead of m_RootEntity to make sure that the values will be up-to-date
 			if( RootEntity != null ) 
-				m_RootEntity.Status.ApplyDamage( _damage );
+				m_RootEntity.Status.AddDamage( _damage );
 			else
-				Status.ApplyDamage( _damage );				
+				Status.AddDamage( _damage );				
 		}
 
 		public virtual void OnCollisionEnter(Collision _collision) {}

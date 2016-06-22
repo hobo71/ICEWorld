@@ -1,6 +1,6 @@
 ﻿// ##############################################################################
 //
-// ICE.World.ICEEntity.cs
+// ice_objects_corpse.cs | CorpseObject
 // Version 1.2.10
 //
 // Copyrights © Pit Vetterick, ICE Technologies Consulting LTD. All Rights Reserved.
@@ -26,24 +26,61 @@
 //
 // ##############################################################################
 
-
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
 
 using ICE;
 using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
 
-public class NewBehaviourScript : ICEWorldBehaviour {
+namespace ICE.World.Objects
+{
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	[System.Serializable]
+	public class CorpseObject : ICEOwnerObject {
+
+		public CorpseObject(){}
+		public CorpseObject( ICEWorldBehaviour _component ) : base( _component )
+		{
+			Init( _component );
+		}
+
+		public override void Init( ICEWorldBehaviour _component )
+		{
+			base.Init( _component );
+			m_Corpse = null;
+		}
+
+		public void Reset()
+		{
+			m_Corpse = null;
+		}
+
+		[XmlIgnore]
+		public GameObject CorpseReferencePrefab = null;
+		public float CorpseRemovingDelay = 20.0f;
+		public float CorpseRemovingDelayMaximum = 20.0f;
+		public float CorpseRemovingDelayVariance = 0.25f;
+
+
+		private GameObject m_Corpse = null;
+		public void SpawnCorpse()
+		{
+			if( Enabled == false || m_Corpse != null || m_Owner.activeInHierarchy == false || CorpseReferencePrefab == null )
+				return;
+
+			m_Corpse = WorldManager.Spawn( CorpseReferencePrefab, m_Owner.transform.position, m_Owner.transform.rotation );
+
+			m_Corpse.name = CorpseReferencePrefab.name;
+			SystemTools.CopyTransforms( m_Owner.transform, m_Corpse.transform );
+
+			if( CorpseRemovingDelay > 0 )
+				GameObject.Destroy( m_Corpse, CorpseRemovingDelay + ( CorpseRemovingDelay * Random.Range( - CorpseRemovingDelayVariance, CorpseRemovingDelayVariance ) ) ); 
+		}
 	}
 }
+	

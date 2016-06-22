@@ -67,6 +67,12 @@ namespace ICE.World
 				Debug.Log( name + " (" + ObjectInstanceID + ") - " + _log );
 		}
 
+		public void PrintError( string _log )
+		{
+			if( UseDebugLogs )
+				Debug.LogError( name + " (" + ObjectInstanceID + ") - " + _log );
+		}
+
 		/// <summary>
 		/// Activates or deactivates 'Dont Destroy On Load'.
 		/// </summary>
@@ -82,6 +88,16 @@ namespace ICE.World
 		/// <value>The ID.</value>
 		public int ObjectInstanceID{
 			get{  return m_ObjectInstanceID = ( m_ObjectInstanceID == 0 ? transform.gameObject.GetInstanceID():m_ObjectInstanceID ); }
+		}
+
+
+		protected Transform m_Transform = null;
+		/// <summary>
+		/// Gets the cached object transform.
+		/// </summary>
+		/// <value>The object transform.</value>
+		public Transform ObjectTransform {
+			get{ return m_Transform  = ( m_Transform == null?GetComponent<Transform>():m_Transform ); }
 		}
 			
 		/// <summary>

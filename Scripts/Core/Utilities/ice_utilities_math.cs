@@ -32,6 +32,13 @@ namespace ICE.World.Utilities
 {
 	public static class MathTools 
 	{
+		public static float FixedPercent( float _value )
+		{
+			if( _value < 0 ) _value = 0;
+			if( _value > 100 ) _value = 100;
+
+			return (float)System.Math.Round( _value, 2 );
+		}
 
 		/// <summary>
 		/// Normalize the specified _value by using _min and _max.

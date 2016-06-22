@@ -93,6 +93,16 @@ namespace ICE.World.EditorInfos
 			"the X button, this will removes both the listed event template and the assigned AnimationEvent.";
 		public static readonly string ANIMATION_EVENTS_METHOD_TIME = "The time at which the event will be fired off.";
 
+
+		public static readonly string CORPSE = "If Use Corpse is flagged you can assign a GameObject which will be used if your creature dies " +
+			"(e.g. a Ragdoll Object of your creature which will be used instead of the original model). The corpse object have to be a prefab which will be " +
+			"instantiate automatically if your creature dies.";
+		public static readonly string CORPSE_REMOVING_DELAY = "Corpse Removing Delay defines the delay time in seconds until the spawned corpse object will " +
+			"be removed from scene. You can adjust this value to zero to handle the removing process by using external scripts or to keep the spawned corpse durable " +
+			"into your scene.";
+		public static readonly string CORPSE_REMOVING_DELAY_VARIANCE = "The Variance Multiplier defines the threshold variance value, which will be used to " +
+			"randomize the associated delay time during the runtime.";
+		
 		public static readonly string INPUT_POPUP = "TODO";
 
 		public static readonly string EVENTS = "TODO";
@@ -127,6 +137,10 @@ namespace ICE.World.EditorInfos
 			"initial durability value. \n\nThe Initial Durability based on a minimum and maximum value, which allows you to define a random range. If you prefer to " +
 			"define a fixed value, simply set minimum and maximum to the same value, also you can adapt the third field to modify the range of the slider. ";
 
+		public static readonly string BODYPART = "TODO";
+
+		public static readonly string BODYPART_DAMAGE_TRANSFER = "TODO";
+
 		public static readonly string DURABILITY_PERCENT = "TODO";
 
 		public static readonly string COLLIDER = "TODO";
@@ -137,6 +151,9 @@ namespace ICE.World.EditorInfos
 		public static readonly string LIFESPAN = "Lifespan defines a default runtime limit (in seconds). If this limit is reached the object will remove itself.";
 		public static readonly string LIFESPAN_INTERVAL = "TODO";
 		public static readonly string LIFESPAN_DETACH = "TODO";
+
+
+
 	}
 }
 
