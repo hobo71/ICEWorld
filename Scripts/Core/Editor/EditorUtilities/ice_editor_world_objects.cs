@@ -237,7 +237,10 @@ namespace ICE.World.EditorUtilities
 				return;
 
 			EditorGUI.indentLevel++;
-				_corpse.CorpseReferencePrefab = (GameObject)EditorGUILayout.ObjectField( "Corpse Prefab", _corpse.CorpseReferencePrefab, typeof(GameObject), false );
+				ICEEditorLayout.BeginHorizontal();
+					_corpse.CorpseReferencePrefab = (GameObject)EditorGUILayout.ObjectField( "Corpse Prefab", _corpse.CorpseReferencePrefab, typeof(GameObject), false );
+					_corpse.UseCorpseScaling = ICEEditorLayout.ButtonCheck( "SCALE", "", _corpse.UseCorpseScaling, ICEEditorStyle.ButtonMiddle );
+				ICEEditorLayout.EndHorizontal( Info.CORPSE_REFERENCE );
 				_corpse.CorpseRemovingDelay = ICEEditorLayout.MaxDefaultSlider("Corpse Removing Delay (secs.)","Defines how long the corpse will be visible after dying.", _corpse.CorpseRemovingDelay, 0.5f, 0, ref _corpse.CorpseRemovingDelayMaximum, 0, Info.CORPSE_REMOVING_DELAY );
 				EditorGUI.indentLevel++;
 					_corpse.CorpseRemovingDelayVariance = ICEEditorLayout.DefaultSlider("Variance Multiplier","", _corpse.CorpseRemovingDelayVariance,0.025f, 0,1, 0.25f, Info.CORPSE_REMOVING_DELAY_VARIANCE );

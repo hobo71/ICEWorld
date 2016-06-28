@@ -97,6 +97,8 @@ namespace ICE.World.EditorInfos
 		public static readonly string CORPSE = "If Use Corpse is flagged you can assign a GameObject which will be used if your creature dies " +
 			"(e.g. a Ragdoll Object of your creature which will be used instead of the original model). The corpse object have to be a prefab which will be " +
 			"instantiate automatically if your creature dies.";
+		public static readonly string CORPSE_REFERENCE = "The Corpse Prefab defines the prefab which will be used to replace the original object. Activate SCALE to allow" +
+			"scaling the corpse according to the original object, but please note that this could results funny effects while scaling ragdolls.";
 		public static readonly string CORPSE_REMOVING_DELAY = "Corpse Removing Delay defines the delay time in seconds until the spawned corpse object will " +
 			"be removed from scene. You can adjust this value to zero to handle the removing process by using external scripts or to keep the spawned corpse durable " +
 			"into your scene.";

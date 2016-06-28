@@ -65,7 +65,7 @@ namespace ICE.World.Objects
 		public float CorpseRemovingDelay = 20.0f;
 		public float CorpseRemovingDelayMaximum = 20.0f;
 		public float CorpseRemovingDelayVariance = 0.25f;
-
+		public bool UseCorpseScaling = false;
 
 		private GameObject m_Corpse = null;
 		public void SpawnCorpse()
@@ -77,6 +77,9 @@ namespace ICE.World.Objects
 
 			m_Corpse.name = CorpseReferencePrefab.name;
 			SystemTools.CopyTransforms( m_Owner.transform, m_Corpse.transform );
+
+			if( UseCorpseScaling )
+				m_Corpse.transform.localScale = m_Owner.transform.localScale;
 
 			if( CorpseRemovingDelay > 0 )
 				GameObject.Destroy( m_Corpse, CorpseRemovingDelay + ( CorpseRemovingDelay * Random.Range( - CorpseRemovingDelayVariance, CorpseRemovingDelayVariance ) ) ); 

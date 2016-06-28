@@ -548,6 +548,7 @@ namespace ICE.World.Utilities
 
 			_target_transform.position = _source_transform.position;
 			_target_transform.rotation = _source_transform.rotation;
+			//_target_transform.localScale = _source_transform.localScale; // nice locking effect but not the right way :)
 			
 			foreach( Transform _child in _target_transform) 
 			{
