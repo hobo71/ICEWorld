@@ -27,6 +27,8 @@
 // ##############################################################################
 
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ICE.World.Utilities
 {
@@ -129,6 +131,22 @@ namespace ICE.World.Utilities
 				return null;
 		}
 
+		public static GameObject[] GetObjectsByName( string _name )
+		{
+			if( _name.Trim() == "" )
+				return null;
+
+			List<GameObject> _results = new List<GameObject>();
+			GameObject[] _objects = GameObject.FindObjectsOfType<GameObject>();
+
+			foreach( GameObject _object in _objects ){
+				if( _object != null && _object.name == _name )
+					_results.Add( _object );
+			}
+
+			return _results.ToArray();
+		}
+
 		/// <summary>
 		/// Gets the random name of the object by.
 		/// </summary>
@@ -139,10 +157,16 @@ namespace ICE.World.Utilities
 			if( _name.Trim() == "" )
 				return null;
 
+			List<GameObject> _results = new List<GameObject>();
 			GameObject[] _objects = GameObject.FindObjectsOfType<GameObject>();
 
-			if( _objects != null && _objects.Length > 0 ) 
-				return _objects[ (int)Random.Range( 0, _objects.Length ) ];
+			foreach( GameObject _object in _objects ){
+				if( _object != null && _object.name == _name )
+					_results.Add( _object );
+			}
+				
+			if( _results != null && _results.Count > 0 ) 
+				return _results[ (int)Random.Range( 0, _results.Count ) ];
 			else
 				return GameObject.Find( _name );
 		}
