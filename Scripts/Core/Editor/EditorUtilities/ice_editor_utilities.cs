@@ -34,6 +34,7 @@ using ICE.World;
 using ICE.World.Objects;
 using ICE.World.Utilities;
 using ICE.World.EnumTypes;
+using ICE.World.EditorUtilities;
 
 namespace ICE.World.EditorUtilities
 {
@@ -153,7 +154,9 @@ namespace ICE.World.EditorUtilities
 
 
 
-
+		public static string ObjectTitleSuffix( GameObject _object ){
+			return (_object != null?(IsPrefab( _object )?"(prefab)":"(scene)"):"(null)");
+		}
 
 		public static bool IsPrefab( GameObject _object )
 		{
