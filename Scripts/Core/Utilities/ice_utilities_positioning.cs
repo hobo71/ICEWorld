@@ -140,7 +140,7 @@ namespace ICE.World.Utilities
 		public static float GetGroundLevel( Vector3 _position, GroundCheckType _type, LayerMask _layerMask, float _min_offset = 0.5f, float _max_offset = 1000, float _base_offset = 0 )
 		{
 			if( _type == GroundCheckType.NONE )
-				return _position.y;
+				return _position.y + _base_offset;
 			
 			if( _type == GroundCheckType.RAYCAST )
 			{
@@ -156,7 +156,7 @@ namespace ICE.World.Utilities
 			else if( Terrain.activeTerrain != null )
 				_position.y = Terrain.activeTerrain.SampleHeight( _position );
 			
-			return _position.y;
+			return _position.y + _base_offset;
 		}
 
 		public static float GetGroundLevel( Vector3 _position, float _min_offset = 0.5f, float _max_offset = 1000, float _base_offset = 0 )
