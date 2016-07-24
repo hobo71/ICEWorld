@@ -36,7 +36,7 @@ namespace ICE.World
 	private GUIText m_LabelText = null;
 
 
-	void Awake()
+	public override void Awake()
 	{
 		if( m_Label == null )
 		{
@@ -67,7 +67,7 @@ namespace ICE.World
 		m_LabelText.enabled = false;
 	}
 
-	void Update () {
+		public override void Update () {
 	
 		m_LabelText.text = LabelText;
 

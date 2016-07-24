@@ -67,7 +67,7 @@ namespace ICE.World.EditorUtilities
 
 				// CONTENT BEGIN
 				guid = AssetDatabase.CreateFolder( _template_path, "Content");
-				string _content_path = AssetDatabase.GUIDToAssetPath(guid);
+				//string _content_path = AssetDatabase.GUIDToAssetPath(guid);
 				{
 				}
 				// CONTENT END
@@ -82,7 +82,7 @@ namespace ICE.World.EditorUtilities
 					{
 						// COMPONENTS DEBUG BEGIN
 						guid = AssetDatabase.CreateFolder( _scripts_components_path, "Debug");
-						string _scripts_components_debug_path = AssetDatabase.GUIDToAssetPath(guid);
+					//string _scripts_components_debug_path = AssetDatabase.GUIDToAssetPath(guid);
 						{
 						}
 						// COMPONENTS DEBUG END
@@ -109,13 +109,13 @@ namespace ICE.World.EditorUtilities
 					string _scripts_core_path = AssetDatabase.GUIDToAssetPath(guid);
 					{
 						guid = AssetDatabase.CreateFolder( _scripts_core_path, "Base");
-						string _scripts_core_base_path = AssetDatabase.GUIDToAssetPath(guid);
+						//string _scripts_core_base_path = AssetDatabase.GUIDToAssetPath(guid);
 
 						guid = AssetDatabase.CreateFolder( _scripts_core_path, "Objects");
-						string _scripts_core_objects_path = AssetDatabase.GUIDToAssetPath(guid);
+						//string _scripts_core_objects_path = AssetDatabase.GUIDToAssetPath(guid);
 
 						guid = AssetDatabase.CreateFolder( _scripts_core_path, "Utilities");
-						string _scripts_core_utilities_path = AssetDatabase.GUIDToAssetPath(guid);
+						//string _scripts_core_utilities_path = AssetDatabase.GUIDToAssetPath(guid);
 
 						// EDITOR BEGIN
 						guid = AssetDatabase.CreateFolder( _scripts_core_path, "Editor");
@@ -123,27 +123,29 @@ namespace ICE.World.EditorUtilities
 						{
 							guid = AssetDatabase.CreateFolder( _editor_path, "Components");
 							string _editor_components_path = AssetDatabase.GUIDToAssetPath(guid);
-
+							{
 								guid = AssetDatabase.CreateFolder( _editor_components_path, "Debug");
-								string _editor_components_debug_path = AssetDatabase.GUIDToAssetPath(guid);
+								//string _editor_components_debug_path = AssetDatabase.GUIDToAssetPath(guid);
+							}
 
 							guid = AssetDatabase.CreateFolder( _editor_path, "Configuration");
 							string _editor_configuration_path = AssetDatabase.GUIDToAssetPath(guid);
-
+							{
 								CreateInfoFile( _data, _editor_configuration_path );
 								CreateInitFile( _data, _editor_configuration_path );
+							}
 
 							guid = AssetDatabase.CreateFolder( _editor_path, "EditorUtilities");
-							string _editor_utilities_path = AssetDatabase.GUIDToAssetPath(guid);
+							//string _editor_utilities_path = AssetDatabase.GUIDToAssetPath(guid);
 
 							guid = AssetDatabase.CreateFolder( _editor_path, "Menu");
-							string _editor_menu_path = AssetDatabase.GUIDToAssetPath(guid);
+							//string _editor_menu_path = AssetDatabase.GUIDToAssetPath(guid);
 
 							guid = AssetDatabase.CreateFolder( _editor_path, "Windows");
-							string _editor_windows_path = AssetDatabase.GUIDToAssetPath(guid);
+							//string _editor_windows_path = AssetDatabase.GUIDToAssetPath(guid);
 
 							guid = AssetDatabase.CreateFolder( _editor_path, "Recources");
-							string _editor_recources_path = AssetDatabase.GUIDToAssetPath(guid);
+							//string _editor_recources_path = AssetDatabase.GUIDToAssetPath(guid);
 						}
 						// EDITOR END
 					}

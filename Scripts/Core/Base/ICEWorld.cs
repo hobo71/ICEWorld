@@ -68,6 +68,18 @@ namespace ICE.World
 			get{ return m_ObstacleLayerMask = ( m_ObstacleLayerMask == -1 ? SystemTools.GetLayerMask( ObstacleLayers, m_ObstacleLayerMask ) : m_ObstacleLayerMask ); }
 		}
 
+		[SerializeField]
+		private List<string> m_WaterLayers = new List<string>();
+		public List<string> WaterLayers{
+			get{ return m_WaterLayers; }
+		}
+
+		public WaterCheckType WaterCheck = WaterCheckType.DEFAULT;
+		private LayerMask m_WaterLayerMask = -1;
+		public LayerMask WaterLayerMask{
+			get{ return m_WaterLayerMask = ( m_WaterLayerMask == -1 ? SystemTools.GetLayerMask( WaterLayers, m_WaterLayerMask ) : m_WaterLayerMask ); }
+		}
+
 		protected static new ICEWorldRegister m_Instance = null;
 		public static new ICEWorldRegister Instance{
 			get{ return m_Instance = ( m_Instance == null?GameObject.FindObjectOfType<ICEWorldRegister>():m_Instance ); }
@@ -77,8 +89,8 @@ namespace ICE.World
 		public event OnSpawnObjectEvent OnSpawnObject;
 		public delegate void OnRemoveObjectEvent( GameObject _object, out bool _removed );
 		public event OnRemoveObjectEvent OnRemoveObject;
-		public delegate void OnDestroyObjectEvent( GameObject _object, out bool _removed );
-		public event OnDestroyObjectEvent OnDestroyObject;
+		//TODO: public delegate void OnDestroyObjectEvent( GameObject _object, out bool _removed );
+		//TODO: public event OnDestroyObjectEvent OnDestroyObject;
 
 		public virtual void Register( GameObject _object )
 		{

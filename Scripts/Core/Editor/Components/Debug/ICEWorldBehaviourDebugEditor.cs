@@ -55,37 +55,6 @@ namespace ICE.World
 			DrawDefaultFooter( _target );
 
 		}
-
-		/// <summary>
-		/// Draws the default header.
-		/// </summary>
-		/// <returns>The default header.</returns>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public virtual T DrawDefaultHeader<T>() where T : ICEWorldBehaviour
-		{
-			ICEEditorLayout.SetDefaults();
-			T _target = (T)target;
-
-			GUI.changed = false;
-			Info.HelpButtonIndex = 0;
-
-			EditorGUILayout.Separator();
-			return _target;
-		}
-
-		/// <summary>
-		/// Draws the default footer.
-		/// </summary>
-		/// <param name="_target">Target.</param>
-		public virtual void DrawDefaultFooter( ICEWorldBehaviour _target )
-		{
-			if( _target == null )
-				return;
-
-			EditorGUILayout.Separator();
-			if( GUI.changed )
-				EditorUtility.SetDirty( _target );
-		}
 	}
 }
 

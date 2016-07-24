@@ -44,7 +44,7 @@ namespace ICE.World.Objects
 		private bool m_DefaultFogEnabled;
 		private Color m_DefaultFogColor;
 		private float m_DefaultFogDensity;
-		private Color m_DefaultBackgroundColor;
+		//TODO: private Color m_DefaultBackgroundColor;
 		private Material m_DefaultSkybox;
 
 		private Camera m_Camera = null;
@@ -57,7 +57,7 @@ namespace ICE.World.Objects
 			Init( _component );
 		}
 
-		public void Init( ICEWorldBehaviour _component )
+		public override void Init( ICEWorldBehaviour _component )
 		{
 			base.Init( _component );
 
@@ -76,7 +76,7 @@ namespace ICE.World.Objects
 
 			if( m_Camera != null )
 			{
-				m_DefaultBackgroundColor = m_Camera.backgroundColor;
+				//TODO: m_DefaultBackgroundColor = m_Camera.backgroundColor;
 				m_Camera.backgroundColor = UnderwaterBackgroundColor;
 			}
 

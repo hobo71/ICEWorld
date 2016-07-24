@@ -36,6 +36,15 @@ namespace ICE.World.Utilities
 	/// </summary>
 	public static class CustomGizmos 
 	{
+		public static void Box( Transform _transform, Vector3 _size, float _offset = 0 )
+		{ 
+
+
+			Gizmos.matrix = Matrix4x4.TRS( _transform.position + new Vector3(0, _offset ,0), _transform.rotation, Vector3.one );
+			Gizmos.DrawWireCube( Vector3.zero, _size );
+			Gizmos.matrix = Matrix4x4.TRS( Vector3.zero, Quaternion.identity, Vector3.one );
+		}
+
 		public static void Text( string _text, Vector3 _world_position, Color _color, float _font_size = 14, FontStyle _font_style = FontStyle.Normal ) {
 
 			#if UNITY_EDITOR

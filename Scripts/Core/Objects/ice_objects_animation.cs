@@ -534,7 +534,7 @@ namespace ICE.World.Objects
 				{			
 					try{
 
-						m_Animator.CrossFade( _data.Animator.StateName, _data.Animator.TransitionDuration, -1, 0); 
+						m_Animator.CrossFade( _data.Animator.StateName, _data.Animator.TransitionDuration, -1, Random.Range( 0f, 1f ) ); 
 						m_Animator.speed = _data.Animator.Speed;
 					}
 					catch{

@@ -559,6 +559,31 @@ namespace ICE.World.EditorUtilities
 		}
 
 		/// <summary>
+		/// Draws the water check.
+		/// </summary>
+		/// <param name="_type">Type.</param>
+		/// <param name="_layers">Layers.</param>
+		/// <param name="_help">Help.</param>
+		public static void DrawWaterCheck( ref WaterCheckType _type, List<string> _layers, string _help = "" )
+		{
+			ICEEditorLayout.BeginHorizontal();
+			_type = (WaterCheckType)ICEEditorLayout.EnumPopup("Water Check", "Method to handle water related checks and movements", _type );
+			if( _type == WaterCheckType.CUSTOM )
+			{
+				if (GUILayout.Button("Add Layer", ICEEditorStyle.ButtonMiddle ))
+					_layers.Add( (LayerMask.NameToLayer("Water") != -1?"Water":"Default") );
+			}				
+			ICEEditorLayout.EndHorizontal( _help );
+
+			if( _type == WaterCheckType.CUSTOM )
+			{
+				EditorGUI.indentLevel++;
+					DrawLayersList( _layers );
+				EditorGUI.indentLevel--;
+			}
+		}
+
+		/// <summary>
 		/// Draws the ground check.
 		/// </summary>
 		/// <param name="_type">Type.</param>
@@ -605,11 +630,9 @@ namespace ICE.World.EditorUtilities
 					ICEEditorLayout.BeginHorizontal();
 					GUI.backgroundColor = new Vector4( 0.7f, 0.9f, 0.9f, 0.5f);
 
-					string _title = "Layer";
-					if( _layers[i] == "Water" )
-						_title = "Water Layer";
-
 					int _layer = LayerMask.NameToLayer(_layers[i]);
+
+					string _title = "Layer #" + _layer;
 
 					if( _layer == -1 )
 					{
@@ -634,6 +657,8 @@ namespace ICE.World.EditorUtilities
 					}
 					ICEEditorLayout.EndHorizontal();
 				}
+
+				EditorGUILayout.Separator();
 			}
 		}
 

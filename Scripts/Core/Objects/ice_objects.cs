@@ -145,11 +145,24 @@ namespace ICE.World.Objects
 			get{ return m_EntityGameObject = ( m_EntityGameObject == null ?( m_EntityComponent != null ? m_EntityComponent.gameObject:null ):m_EntityGameObject ); }
 		}
 
+		/// <summary>
+		/// Sets the entity game object.
+		/// </summary>
+		/// <param name="_object">Object.</param>
 		public void SetEntityGameObject( GameObject _object )
 		{
 			m_EntityGameObject = _object;
 			m_EntityComponent = ( m_EntityGameObject != null ? m_EntityGameObject.GetComponent<ICEWorldEntity>():null );
 		}
+
+		/// <summary>
+		/// Compares the GameObject.
+		/// </summary>
+		/// <returns><c>true</c>, if GameObject was compared, <c>false</c> otherwise.</returns>
+		/// <param name="_object">Object.</param>
+		public bool CompareGameObject( GameObject _object ){
+			return ( _object != null && _object.GetInstanceID() == ID ? true : false );
+		}   
 
 		[SerializeField, XmlIgnore]
 		protected ICEWorldEntity m_EntityComponent = null;
@@ -173,7 +186,7 @@ namespace ICE.World.Objects
 		public int ID{
 			get{ return ( EntityGameObject != null ? EntityGameObject.GetInstanceID():0 ); }
 		}
-
+			
 	}
 
 

@@ -47,8 +47,9 @@ namespace ICE.World
 		public float DamageMultiplier = 10;
 		public float DamageMultiplierMaximum = 100;
 
-		void Start()
+		public override void Start()
 		{
+			base.Start();
 			if( transform.GetComponent<Collider>() == null )
 				PrintError( "Start - Collider required!" );
 
@@ -121,10 +122,6 @@ namespace ICE.World
 			// runtime.
 			else
 				return SystemTools.GetRoot<ICEWorldEntity>( ObjectTransform );
-
-			// if there are no higher entities within the hierarchy we assume that this entity is the root entity
-			// so we return null to repeat the check if required.
-			return null;
 		}
 	}
 }

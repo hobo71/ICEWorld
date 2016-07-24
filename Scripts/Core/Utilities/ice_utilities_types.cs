@@ -200,6 +200,16 @@ namespace ICE.World.EnumTypes
 		BASIC
 	}
 
+	/// <summary>
+	/// Overlap type.
+	/// </summary>
+	public enum OverlapType
+	{
+		NONE,
+		SPHERE,
+		CUBE
+	}
+
 	// *** P *** 
 	// *** Q *** 
 	// *** R *** 
@@ -250,5 +260,12 @@ namespace ICE.World.EnumTypes
 	// *** U *** 
 	// *** V *** 
 	// *** W *** 
+
+	public enum WaterCheckType
+	{
+		DEFAULT,
+		CUSTOM
+	}
+
 	// *** XYZ *** 
 }

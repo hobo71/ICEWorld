@@ -176,7 +176,13 @@ namespace ICE.World.Utilities
 
 
 
+		public static float LevelDeviation( Transform _transform, Vector3 _position )
+		{
+			Vector3 _heading = new Vector3( 0, _position.y - _transform.position.y , 0 );
+			//Vector3 _forward = _transform.TransformDirection(Vector3.forward) - _heading.normalized;
 
+			return AngleDirection( Vector3.forward, Vector3.right, _heading );
+		}
 
 		public static float CourseDeviation( Transform _transform, Vector3 _position )
 		{
