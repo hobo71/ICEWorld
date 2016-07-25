@@ -268,7 +268,7 @@ namespace ICE.World.Utilities
 		/// </summary>
 		/// <returns>The angle in degree.</returns>
 		/// <param name="_vector">Vector.</param>
-		public static float GetAngleInDegree( Vector3 _vector ){ 
+		public static float GetVectorAngleInDegree( Vector3 _vector ){ 
 			return Mathf.Atan2( _vector.x, _vector.z ) * Mathf.Rad2Deg;
 		}
 
@@ -277,8 +277,8 @@ namespace ICE.World.Utilities
 		/// </summary>
 		/// <returns>The normalized angle.</returns>
 		/// <param name="_vector">Vector.</param>
-		public static float GetNormalizedAngle( Vector3 _vector ){ 
-			return MathTools.NormalizeAngle( GetAngleInDegree( _vector ) );
+		public static float GetNormalizedVectorAngle( Vector3 _vector ){ 
+			return MathTools.NormalizeAngle( GetVectorAngleInDegree( _vector ) );
 		}
 
 		/// <summary>
@@ -287,12 +287,12 @@ namespace ICE.World.Utilities
 		/// <returns>The direction angle.</returns>
 		/// <param name="_transform">Transform.</param>
 		/// <param name="_position">Position.</param>
-		public static float GetDirectionAngle( Transform _transform, Vector3 _position )
+		public static float GetSignedDirectionAngle( Transform _transform, Vector3 _position )
 		{
 			if( _transform != null )
 				return 0;
 
-			float _angle = MathTools.NormalizeAngle( PositionTools.GetNormalizedAngle( _position - _transform.position ) - _transform.eulerAngles.y );
+			float _angle = MathTools.NormalizeAngle( PositionTools.GetNormalizedVectorAngle( _position - _transform.position ) - _transform.eulerAngles.y );
 
 			if( _angle > 180 )
 				_angle -= 360; 
@@ -308,7 +308,7 @@ namespace ICE.World.Utilities
 		/// <param name="_position">Position.</param>
 		public static float GetPositionAngle( Transform _transform, Vector3 _position )
 		{ 
-			return GetNormalizedAngle( GetRelativePosition( _transform, _position ) );
+			return GetNormalizedVectorAngle( GetRelativePosition( _transform, _position ) );
 		}
 
 		/// <summary>

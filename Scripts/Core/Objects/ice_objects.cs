@@ -202,6 +202,11 @@ namespace ICE.World.Objects
 		public bool EnableDebugLog = false;
 
 		/// <summary>
+		/// The enable debug ray.
+		/// </summary>
+		public bool EnableDebugRay = false;
+
+		/// <summary>
 		/// Prints the debug log.
 		/// </summary>
 		/// <param name="_log">Log.</param>
@@ -210,6 +215,34 @@ namespace ICE.World.Objects
 #if UNITY_EDITOR
 			if( EnableDebugLog || OwnerEnabledDebugLog )
 				Debug.Log( OwnerName + " (" + OwnerInstanceID + ") - " + ( _object != null?_object.GetType().ToString() + " ":"" ) + _log );
+#endif
+		}
+
+		/// <summary>
+		/// Draws debug rays.
+		/// </summary>
+		/// <param name="_origin">Origin.</param>
+		/// <param name="_direction">Direction.</param>
+		/// <param name="_color">Color.</param>
+		public void DebugRay( Vector3 _origin, Vector3 _direction, Color _color )
+		{
+#if UNITY_EDITOR
+			if( EnableDebugRay || OwnerEnabledDebugRay )
+				Debug.DrawRay( _origin, _direction, _color);
+#endif
+		}
+
+		/// <summary>
+		/// Draws debug line.
+		/// </summary>
+		/// <param name="_from">From.</param>
+		/// <param name="_to">To.</param>
+		/// <param name="_color">Color.</param>
+		public void DebugLine( Vector3 _from, Vector3 _to, Color _color )
+		{
+#if UNITY_EDITOR
+			if( EnableDebugRay || OwnerEnabledDebugRay )
+				Debug.DrawLine( _from, _to, _color);
 #endif
 		}
 
@@ -271,6 +304,14 @@ namespace ICE.World.Objects
 		/// <value><c>true</c> if parent print debug log; otherwise, <c>false</c>.</value>
 		public bool OwnerEnabledDebugLog{
 			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.UseDebugLogs:false ); }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="ICE.World.Objects.ICEOwnerObject"/> owner enabled debug ray.
+		/// </summary>
+		/// <value><c>true</c> if owner enabled debug ray; otherwise, <c>false</c>.</value>
+		public bool OwnerEnabledDebugRay{
+			get{ return ( m_OwnerComponent != null ? m_OwnerComponent.UseDebugRays:false ); }
 		}
 			
 		public ICEOwnerObject(){}

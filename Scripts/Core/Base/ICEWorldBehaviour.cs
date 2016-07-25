@@ -68,10 +68,16 @@ namespace ICE.World
 		}
 
 		public bool UseDebugRays = false;
-		public void PrintDebugRays( Vector3 _origin, Vector3 _direction, Color _color )
+		public void DebugRay( Vector3 _origin, Vector3 _direction, Color _color )
 		{
 			if( UseDebugRays )
 				Debug.DrawRay( _origin, _direction, _color);
+		}
+
+		public void DebugLine( Vector3 _from, Vector3 _to, Color _color )
+		{
+			if( UseDebugRays )
+				Debug.DrawLine( _from, _to, _color);
 		}
 
 		public void PrintError( string _log )

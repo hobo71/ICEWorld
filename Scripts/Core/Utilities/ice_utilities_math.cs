@@ -120,5 +120,12 @@ namespace ICE.World.Utilities
 			if( _angle < 0 ) _angle += 360;  // if angle negative, convert to 0..360
 			return _angle;
 		}
+
+		public static float SignedVectorAngle( Vector3 _v1, Vector3 _v2  )
+		{
+			float _angle = Vector3.Angle( _v1, _v2 );
+			Vector3 _cross = Vector3.Cross( _v1, _v2 );
+			return ( _cross.y < 0 ? -_angle : _angle );
+		}
 	}
 }

@@ -36,11 +36,9 @@ namespace ICE.World.Utilities
 	/// </summary>
 	public static class CustomGizmos 
 	{
-		public static void Box( Transform _transform, Vector3 _size, float _offset = 0 )
+		public static void Box( Transform _transform, Vector3 _size, Vector3 _center )
 		{ 
-
-
-			Gizmos.matrix = Matrix4x4.TRS( _transform.position + new Vector3(0, _offset ,0), _transform.rotation, Vector3.one );
+			Gizmos.matrix = Matrix4x4.TRS( _transform.TransformPoint( _center ), _transform.rotation, Vector3.one );
 			Gizmos.DrawWireCube( Vector3.zero, _size );
 			Gizmos.matrix = Matrix4x4.TRS( Vector3.zero, Quaternion.identity, Vector3.one );
 		}
@@ -237,7 +235,7 @@ namespace ICE.World.Utilities
 
 		public static void Orbit( Vector3 _creature, Vector3 _center, float _radius, float _degress, float _shift, float _min, float _max, float _level )
 		{ 
-			float _angle = PositionTools.GetNormalizedAngle( _creature - _center );
+			float _angle = PositionTools.GetNormalizedVectorAngle( _creature - _center );
 
 			Vector3 _last_position = Vector3.zero;
 

@@ -144,7 +144,9 @@ namespace ICE.World.EnumTypes
 	{
 		NONE,
 		RAYCAST,
-		SAMPLEHEIGHT
+		SAMPLEHEIGHT,
+		CUSTOM,
+		ZERO
 	}
 
 	// *** H *** 
@@ -197,7 +199,8 @@ namespace ICE.World.EnumTypes
 	public enum ObstacleCheckType
 	{
 		NONE,
-		BASIC
+		BASIC,
+		ADVANCED
 	}
 
 	/// <summary>

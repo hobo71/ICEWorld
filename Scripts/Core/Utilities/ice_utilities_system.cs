@@ -40,7 +40,11 @@ namespace ICE.World.Utilities
 {
 	public static class SystemTools 
 	{
-
+		public static Color ColorA( Color _color, float _alpha )
+		{
+			_color.a = _alpha;
+			return _color;
+		}
 
 		public static BehaviourEventParameterType GetMethodParameterType( ICEWorldBehaviour _control, string _method )
 		{
