@@ -67,11 +67,19 @@ namespace ICE.World
 				Debug.Log( name + " (" + ObjectInstanceID + ") - " + _log );
 		}
 
+		public bool UseDebugRays = false;
+		public void PrintDebugRays( Vector3 _origin, Vector3 _direction, Color _color )
+		{
+			if( UseDebugRays )
+				Debug.DrawRay( _origin, _direction, _color);
+		}
+
 		public void PrintError( string _log )
 		{
 			if( UseDebugLogs )
 				Debug.LogError( name + " (" + ObjectInstanceID + ") - " + _log );
 		}
+			
 
 		/// <summary>
 		/// Activates or deactivates 'Dont Destroy On Load'.
